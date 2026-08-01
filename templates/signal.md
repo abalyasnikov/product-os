@@ -3,9 +3,6 @@ schema_version: 1
 id: signal_<stable-id>
 type: signal
 title: <concise evidence title>
-created_at: <ISO-8601 timestamp>
-updated_at: <ISO-8601 timestamp>
-authors: [<owner>]
 relationships: {}
 summary: <one falsifiable observation>
 sources:

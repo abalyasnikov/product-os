@@ -6,7 +6,9 @@ Read this contract completely before any Product Decision OS repository write. C
 
 1. Determine the artifact type from the active workflow. Never infer it from a title or filename.
 2. Read `.product-os/templates/<type>.md` and `.product-os/schemas/<type>.schema.json` before drafting. `outcome_contract` uses `outcome-contract.md` and `outcome-contract.schema.json`; `product_update` uses `product-update.md` and `product-update.schema.json`.
-3. Write only to the canonical directory:
+3. Treat Markdown as the primary human surface. Frontmatter contains only machine identity and graph fields by default: `schema_version`, `id`, `type`, `title`, and `relationships`. Evidence and workflow artifacts may add structured provenance, results, or decision events when the validator must execute them. Git provides authorship, timestamps, and version history. In PRDs and Initiatives, keep product reasoning, journeys, requirements, risks, and GTM in the canonical readable sections; do not rename or omit their headings, and record an explicit gap instead of leaving a section empty.
+4. Keep the Outcome Contract in the named `````yaml product-os:outcome````` block under `## Outcome Contract`. This is structured because agents and validators must execute it; do not move the rest of the PRD or Initiative into YAML.
+5. Write only to the canonical directory:
 
    | Type | Typed prefix | Directory |
    |---|---|---|
@@ -19,8 +21,8 @@ Read this contract completely before any Product Decision OS repository write. C
    | Learning | `learning_` | `product/learnings/` |
    | Product Update | `update_` | `product/updates/` |
 
-4. Generate every new artifact ID as its typed prefix plus a new UUID4 hexadecimal value, uppercased: for example `signal_` + 32 uppercase UUID4 hex characters. Generate decision IDs as `decision_` plus a new uppercase UUID4 hex value. Never derive an ID from a title, filename, user text, timestamp, or mutable provider label. Preserve existing IDs on update.
-5. Choose a short human-readable filename independently of identity. Before writing, scan all artifacts for duplicate IDs and resolve relationships by stable ID.
+6. Generate every new artifact ID as its typed prefix plus a new UUID4 hexadecimal value, uppercased: for example `signal_` + 32 uppercase UUID4 hex characters. Generate decision IDs as `decision_` plus a new uppercase UUID4 hex value. Never derive an ID from a title, filename, user text, timestamp, or mutable provider label. Preserve existing IDs on update.
+7. Choose a short human-readable filename independently of identity. Before writing, scan all artifacts for duplicate IDs and resolve relationships by stable ID.
 
 ## Pasted or local evidence
 

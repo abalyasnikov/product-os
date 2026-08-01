@@ -130,7 +130,7 @@ An optional meta-layer representing a multi-PRD Product Bet around one shared us
 
 It contains the target outcome, product thesis, initiative-level evidence and business impact, GTM hypothesis, initiative-level Outcome Contract, barriers, child PRDs, dependencies, sequencing, and accumulated learnings. It does not duplicate child PRD requirements.
 
-The reference implementation includes a curated, anonymized historical Zerion example showing how one outcome can be decomposed into six problem-specific PRDs. Its provider links are sanitized and its measurement data is explicitly synthetic because the source repository contains no trustworthy post-release result. The private Zerion product repository is never a runtime dependency.
+The reference implementation includes a curated historical Zerion example showing how one outcome can be decomposed into four problem-specific PRDs: Cross-chain Swap, Skip Signing Screen for Native Transactions, Transaction Toasters, and Bridge Progress Tracking. It preserves real product reasoning while omitting personal names, private workspace links, and unsupported outcome claims. It is a set of normal product documents, separate from the synthetic technical fixture. The private Zerion product repository is never a runtime dependency.
 
 ### PRD
 
@@ -164,7 +164,7 @@ The absence of an Implementation Plan does not block Linear Project creation unl
 
 ### Outcome Contract
 
-A logically first-class contract defining what better means, how it will be observed, and which result will trigger which product decision. It is colocated inside the PRD or Initiative by default. Large case sets or reusable contracts may use a separate linked file.
+A logically first-class contract defining what better means, how it will be observed, and which result will trigger which product decision. It is colocated under the readable `## Outcome Contract` section of the PRD or Initiative by default, in one named machine-readable block. Large case sets or reusable contracts may use a separate linked file.
 
 Every Product Bet requires an Outcome Contract, but the proof method depends on the work:
 
@@ -232,14 +232,11 @@ schema_version: 1
 id: prd_01JEXAMPLE
 type: prd
 title: Example
-created_at: 2026-08-01
-updated_at: 2026-08-01
 relationships:
-  - type: derives_from
-    id: opp_01JEXAMPLE
+  opportunity: opportunity_01JEXAMPLE
 ```
 
-Filenames remain human-readable and may change. Schemas constrain valid relationship types for each artifact. Relationships use stable IDs; Markdown links may be generated for navigation but are not identity. Agents maintain IDs, timestamps, and links rather than asking PMs to edit metadata.
+Filenames remain human-readable and may change. Schemas constrain valid relationship types for each artifact. Relationships use stable IDs; Markdown links may be generated for navigation but are not identity. Agents maintain IDs and links rather than asking PMs to edit metadata. Git records author, time, and version.
 
 An Initiative Outcome Contract measures the shared user outcome. Child PRD contracts measure whether each intervention removes its specific barrier. Passing every child contract does not automatically prove the Initiative outcome; the Outcome Review workflow must measure both levels when both exist.
 
@@ -451,15 +448,19 @@ product/
 └── updates/            # deliberately published updates only
 
 examples/
-└── fixtures/
-    ├── best-in-class-trading-experience/  # primary worked journey
-    └── valid-workspace/                   # compact validator fixture
+└── best-in-class-trading-experience/      # human-readable historical docs
+
+tests/fixtures/
+├── reference-journey/                     # deterministic end-to-end proof
+└── valid-workspace/                       # compact validator fixture
 
 .agents/skills/          # generated adapter
 .claude/skills/          # generated adapter
 ```
 
-Every artifact uses validated YAML frontmatter, a stable typed ID independent of filename, explicit relationships by ID, a human-readable Markdown body, schema version, timestamps, and authorship. Generated client directories include their canonical-source version and content hash, are never hand-edited, and never become competing sources of truth.
+Every artifact uses a lean common YAML envelope with only `schema_version`, stable `id`, `type`, indexable `title`, and explicit `relationships` required. Git is the source of authorship, timestamps, and version history. Narrative-first artifacts—especially PRDs and Initiatives—keep product reasoning, evidence interpretation, journeys, requirements, risks, and GTM in the human-readable Markdown body. Evidence and workflow artifacts may add structured fields only when provenance, decisions, results, or cited claims must be validated mechanically. The Outcome Contract remains one named structured block inside its readable section. Generated client directories include their canonical-source version and content hash, are never hand-edited, and never become competing sources of truth.
+
+PRD and Initiative templates define a small required set of readable headings. Validation requires each section to contain either product content or an explicit named gap; an empty heading or unexpanded placeholder is invalid. A lean Initiative must link at least two child PRDs, and Initiative↔PRD relationships are bidirectional. A lean PRD links either to that parent Initiative or directly to an Opportunity. Legacy large-frontmatter documents remain readable for migration, but a single document cannot keep competing Outcome Contracts in both locations.
 
 ## One-link setup
 
@@ -596,20 +597,19 @@ experience** example. It must run from a clean Git repository for every supporte
 client:
 
 1. verify the release manifest, preview the complete install plan, confirm its hash, and install without overwriting target files;
-2. materialize six pre-authored sanitized Granola, product-observation, research, and discovery input fixtures plus their linked Signals without storing a full transcript; input-to-Signal agent quality is evaluated separately;
+2. materialize four pre-authored sanitized research and product-observation input fixtures plus their linked Signals without storing a full transcript; input-to-Signal agent quality is evaluated separately;
 3. preserve both supporting and contradictory evidence in two Patterns and one undecided Opportunity;
 4. commit the draft, then append a synthetic human-role `pursue` event bound to that reachable commit; a real human gate is outside deterministic proof;
-5. create one Initiative with six child PRDs: Cross-chain Swap, Send Flow Redesign, Skip Redundant Confirmation, Non-blocking Transaction Status, Bridge Progress Tracking, and Token Approval Management;
-6. keep the rejected “bridge inside Send” alternative in the decision record because discovery exposed CEX deposit risk;
-7. materialize method-appropriate Outcome Contracts and GTM hypotheses, then create explicitly synthetic solo-review records with real Git version boundaries and bind delivery plus optional Implementation Plan references to those versions;
-8. preserve sanitized Linear or Jira-style delivery records, including idempotent retry behavior where exercised;
-9. record an explicit measurement anchor and provenance-preserving synthetic analytics result with baseline, post-release behavior, at least two slices, guardrails, and an unmistakable non-production label;
-10. materialize a pre-authored Outcome Review and Learning through a draft commit plus a synthetic decision commit;
-11. materialize a pre-authored Product Update in which every material claim has a structured artifact, delivery, or analytics reference;
-12. pass final validation and smoke tests in clean Codex, Claude Code, and OpenClaw workspaces.
+5. create one Initiative with four child PRDs matching the human-readable historical example;
+6. materialize method-appropriate Outcome Contracts and GTM hypotheses, then create explicitly synthetic solo-review records with real Git version boundaries and bind delivery plus optional Implementation Plan references to those versions;
+7. preserve sanitized Linear or Jira-style delivery records, including idempotent retry behavior where exercised;
+8. record an explicit measurement anchor and provenance-preserving synthetic analytics result with baseline, post-release behavior, at least two slices, guardrails, and an unmistakable non-production label;
+9. materialize a pre-authored Outcome Review and Learning through a draft commit plus a synthetic decision commit;
+10. materialize a pre-authored Product Update in which every material claim has a structured artifact, delivery, or analytics reference;
+11. pass final validation and smoke tests in clean Codex, Claude Code, and OpenClaw workspaces.
 
 The compact `valid-workspace` fixture remains for focused validator and material-change
-tests. Neither fixture is evidence that live Granola authorization, external delivery writes,
+tests. No fixture is evidence that live Granola authorization, external delivery writes,
 analytics execution, or model judgment quality passed. Those capabilities require separate
 environment-specific checks and must be reported independently.
 

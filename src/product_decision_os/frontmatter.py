@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+import re
 from typing import Any
 
 import yaml
@@ -63,6 +64,12 @@ class MarkdownDocument:
     raw: str
 
 
+STRUCTURED_BLOCK_RE = re.compile(
+    r"(?ms)^```ya?ml[ \t]+product-os:(?P<name>[a-z][a-z0-9_-]*)[ \t]*\n"
+    r"(?P<payload>.*?)^```[ \t]*$"
+)
+
+
 def parse_markdown(path: Path, *, max_bytes: int = 2_000_000) -> MarkdownDocument:
     """Parse UTF-8 Markdown with a required, safe YAML frontmatter mapping."""
     try:
@@ -108,3 +115,41 @@ def parse_markdown_text(raw: str, *, path: Path = Path("<memory>")) -> MarkdownD
 def load_yaml_strict(raw: str) -> Any:
     """Load YAML without aliases and with bounded composition."""
     return yaml.load(raw, Loader=_StrictSafeLoader)
+
+
+def structured_blocks(document: MarkdownDocument) -> dict[str, Any]:
+    """Parse explicitly named machine-readable blocks from a Markdown body.
+
+    Narrative stays in Markdown. Only data that must be consumed reliably by
+    agents and validators belongs in a named block such as
+    `````yaml product-os:outcome`````.
+    """
+    blocks: dict[str, Any] = {}
+    normalized_body = document.body.replace("\r\n", "\n").replace("\r", "\n")
+    for match in STRUCTURED_BLOCK_RE.finditer(normalized_body):
+        name = match.group("name")
+        if name in blocks:
+            raise FrontmatterError(f"duplicate product-os:{name} structured block")
+        try:
+            value = load_yaml_strict(match.group("payload"))
+        except FrontmatterError:
+            raise
+        except yaml.YAMLError as exc:
+            raise FrontmatterError(f"invalid YAML in product-os:{name} block: {exc}") from exc
+        if not isinstance(value, dict):
+            raise FrontmatterError(f"product-os:{name} block must contain a YAML object")
+        blocks[name] = value
+    return blocks
+
+
+def markdown_sections(document: MarkdownDocument) -> dict[str, str]:
+    """Return case-insensitive H2 sections without imposing an AST dependency."""
+    normalized_body = document.body.replace("\r\n", "\n").replace("\r", "\n")
+    headings = list(re.finditer(r"(?m)^##[ \t]+(?P<title>[^\n#].*?)[ \t]*$", normalized_body))
+    sections: dict[str, str] = {}
+    for index, match in enumerate(headings):
+        title = match.group("title").strip().casefold()
+        start = match.end()
+        end = headings[index + 1].start() if index + 1 < len(headings) else len(normalized_body)
+        sections[title] = normalized_body[start:end].strip()
+    return sections

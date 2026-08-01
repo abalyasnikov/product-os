@@ -24,6 +24,6 @@ Product Decision OS is an agent-native, Git-backed product decision system.
 
 ```bash
 python -m pytest
-python -m product_decision_os.cli validate examples/fixtures/valid-workspace
-python -m product_decision_os.cli smoke-test examples/fixtures/valid-workspace
+python -m product_decision_os.cli validate tests/fixtures/valid-workspace
+python -m product_decision_os.cli smoke-test tests/fixtures/valid-workspace
 ```

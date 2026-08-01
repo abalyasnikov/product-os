@@ -4,7 +4,7 @@ client: codex
 canonical_source:
   version: 1.0.0
   hash_algorithm: sha256
-  content_hash: 4934e5b1fa2af31dfd85502445337662fc07d2fd4b50a57873a1c0d0b383c596
+  content_hash: a163e23b21dcd78ece65fea6fb9418692a7eb2682cd7f6be96548560af9dd6f4
   includes: [skills/**, integrations/**]
 projection:
   client_skill_location: .agents/skills

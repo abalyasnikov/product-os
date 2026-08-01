@@ -8,7 +8,26 @@ import yaml
 
 from product_decision_os.frontmatter import parse_markdown
 from product_decision_os.validator import validate_workspace
-from scripts.run_reference_journey import EXAMPLE_ROOT, run_journey
+from scripts.run_reference_journey import REFERENCE_FIXTURE_ROOT, run_journey
+
+
+HUMAN_EXAMPLE_ROOT = Path(__file__).resolve().parents[2] / "examples" / "best-in-class-trading-experience"
+
+
+def test_human_trading_example_uses_lean_readable_documents() -> None:
+    report = validate_workspace(HUMAN_EXAMPLE_ROOT)
+    assert report.ok, [error.to_dict() for error in report.errors]
+
+    documents = [
+        parse_markdown(path)
+        for path in sorted((HUMAN_EXAMPLE_ROOT / "product").glob("*/*.md"))
+    ]
+    assert len(documents) == 5
+    assert {document.metadata["type"] for document in documents} == {"initiative", "prd"}
+    assert sum(document.metadata["type"] == "prd" for document in documents) == 4
+    for document in documents:
+        assert set(document.metadata) == {"schema_version", "id", "type", "title", "relationships"}
+        assert len(document.body) > 1_000
 
 
 def _artifacts(workspace: Path) -> dict[str, dict[str, object]]:
@@ -19,11 +38,11 @@ def _artifacts(workspace: Path) -> dict[str, dict[str, object]]:
     return artifacts
 
 
-def test_curated_trading_example_is_a_complete_multi_prd_product_bet() -> None:
-    report = validate_workspace(EXAMPLE_ROOT, command="smoke-test")
+def test_reference_fixture_is_a_complete_multi_prd_product_bet() -> None:
+    report = validate_workspace(REFERENCE_FIXTURE_ROOT, command="smoke-test")
     assert report.ok, [error.to_dict() for error in report.errors]
 
-    artifacts = _artifacts(EXAMPLE_ROOT)
+    artifacts = _artifacts(REFERENCE_FIXTURE_ROOT)
     by_type: dict[str, list[dict[str, object]]] = {}
     for artifact in artifacts.values():
         by_type.setdefault(str(artifact["type"]), []).append(artifact)
@@ -33,13 +52,13 @@ def test_curated_trading_example_is_a_complete_multi_prd_product_bet() -> None:
         "learning": 1,
         "opportunity": 1,
         "pattern": 2,
-        "prd": 6,
+        "prd": 4,
         "product_update": 1,
-        "signal": 6,
+        "signal": 4,
     }
     initiative = by_type["initiative"][0]
     assert initiative["title"] == "Best-in-class trading experience"
-    assert len(initiative["child_prd_ids"]) == 6
+    assert len(initiative["child_prd_ids"]) == 4
     assert set(initiative["child_prd_ids"]) == {
         artifact["id"] for artifact in by_type["prd"]
     }
@@ -70,8 +89,8 @@ def test_clean_install_reaches_final_learning_for_every_agent_client(
 
     assert result["status"] == "passed"
     assert result["scope"] == "deterministic_offline_reference"
-    assert result["child_prds"] == 6
-    assert result["artifacts"] == 18
+    assert result["child_prds"] == 4
+    assert result["artifacts"] == 14
     assert result["final_decision"] in {"iterate", "complete"}
     assert result["validation"]["errors"] == 0
     assert result["smoke_test"]["errors"] == 0

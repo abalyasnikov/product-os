@@ -2,8 +2,8 @@
 """Run the deterministic clean-install-to-learning reference journey.
 
 This runner proves the repository-controlled path without live provider credentials.
-It installs Product Decision OS into a new Git repository, materializes the curated
-historical example through real commits, replaces fixture-only versions with reachable
+It installs Product Decision OS into a new Git repository, materializes the technical
+reference fixture through real commits, replaces fixture-only versions with reachable
 commit SHAs, and runs final validation and smoke checks.
 """
 
@@ -36,7 +36,7 @@ else:
     from install_workspace import apply_plan, plan_install, write_plan  # noqa: E402
     from manifest import verify  # noqa: E402
 
-EXAMPLE_ROOT = REPOSITORY_ROOT / "examples" / "fixtures" / "best-in-class-trading-experience"
+REFERENCE_FIXTURE_ROOT = REPOSITORY_ROOT / "tests" / "fixtures" / "reference-journey"
 CLIENTS = ("codex", "claude-code", "openclaw")
 
 
@@ -85,13 +85,13 @@ def _write_document(path: Path, metadata: dict[str, Any], body: str) -> None:
     path.write_text(f"---\n{frontmatter}\n---\n{body.lstrip()}", encoding="utf-8")
 
 
-def _documents(example: Path) -> list[MarkdownDocument]:
-    return [parse_markdown(path) for path in sorted((example / "product").glob("*/*.md"))]
+def _documents(fixture: Path) -> list[MarkdownDocument]:
+    return [parse_markdown(path) for path in sorted((fixture / "product").glob("*/*.md"))]
 
 
-def _copy_external_example(example: Path, target: Path) -> None:
+def _copy_external_fixture(fixture: Path, target: Path) -> None:
     for directory in ("external", "inputs"):
-        source = example / directory
+        source = fixture / directory
         if source.is_dir():
             shutil.copytree(source, target / directory)
 
@@ -133,8 +133,8 @@ def _rewrite_learning_review_version(target: Path, learning_id: str, learning_sh
     path.write_text(yaml.safe_dump(document, sort_keys=False), encoding="utf-8")
 
 
-def _configured_example(example: Path, destination: Path, client: str) -> Path:
-    config = yaml.safe_load((example / ".product-os" / "config.yaml").read_text(encoding="utf-8"))
+def _configured_fixture(fixture: Path, destination: Path, client: str) -> Path:
+    config = yaml.safe_load((fixture / ".product-os" / "config.yaml").read_text(encoding="utf-8"))
     config["selected_client"] = client
     config["review"] = {
         "mode": "solo",
@@ -149,13 +149,13 @@ def _configured_example(example: Path, destination: Path, client: str) -> Path:
     return destination
 
 
-def _actual_review_state(example: Path, approved_versions: dict[str, str]) -> dict[str, Any]:
+def _actual_review_state(fixture: Path, approved_versions: dict[str, str]) -> dict[str, Any]:
     state = yaml.safe_load(
-        (example / ".product-os" / "review-state.yaml").read_text(encoding="utf-8")
+        (fixture / ".product-os" / "review-state.yaml").read_text(encoding="utf-8")
     )
     approved = state.get("approved_artifacts")
     if not isinstance(approved, dict) or not approved:
-        raise JourneyError("example review-state has no approved_artifacts")
+        raise JourneyError("reference fixture review-state has no approved_artifacts")
     for artifact_id in list(approved):
         if artifact_id not in approved_versions:
             del approved[artifact_id]
@@ -176,35 +176,35 @@ def _actual_review_state(example: Path, approved_versions: dict[str, str]) -> di
     return state
 
 
-def _materialize_product_history(example: Path, target: Path) -> dict[str, str]:
-    documents = _documents(example)
+def _materialize_product_history(fixture: Path, target: Path) -> dict[str, str]:
+    documents = _documents(fixture)
     by_type: dict[str, list[MarkdownDocument]] = {}
     for document in documents:
         by_type.setdefault(str(document.metadata["type"]), []).append(document)
 
     required = {
-        "signal": 6,
+        "signal": 4,
         "pattern": 2,
         "opportunity": 1,
         "initiative": 1,
-        "prd": 6,
+        "prd": 4,
         "learning": 1,
         "product_update": 1,
     }
     observed = {kind: len(by_type.get(kind, [])) for kind in required}
     if observed != required:
-        raise JourneyError(f"example graph is incomplete: expected {required}, observed {observed}")
+        raise JourneyError(f"reference graph is incomplete: expected {required}, observed {observed}")
 
     for kind in ("signal", "pattern"):
         for document in by_type[kind]:
-            relative = document.path.relative_to(example)
+            relative = document.path.relative_to(fixture)
             _write_document(target / relative, copy.deepcopy(document.metadata), document.body)
 
     opportunity = by_type["opportunity"][0]
     opportunity_draft = copy.deepcopy(opportunity.metadata)
     final_opportunity_events = copy.deepcopy(opportunity_draft["decision_events"])
     opportunity_draft["decision_events"] = []
-    opportunity_path = target / opportunity.path.relative_to(example)
+    opportunity_path = target / opportunity.path.relative_to(fixture)
     _write_document(opportunity_path, opportunity_draft, opportunity.body)
     evidence_sha = _commit(target, "docs: capture trading evidence and opportunity draft")
 
@@ -214,12 +214,12 @@ def _materialize_product_history(example: Path, target: Path) -> dict[str, str]:
     pursue_sha = _commit(target, "docs: pursue best-in-class trading experience")
 
     for document in by_type["initiative"]:
-        relative = document.path.relative_to(example)
+        relative = document.path.relative_to(fixture)
         _write_document(target / relative, copy.deepcopy(document.metadata), document.body)
 
     final_prd_metadata: dict[Path, dict[str, Any]] = {}
     for document in by_type["prd"]:
-        relative = document.path.relative_to(example)
+        relative = document.path.relative_to(fixture)
         metadata = copy.deepcopy(document.metadata)
         final_prd_metadata[relative] = copy.deepcopy(metadata)
         metadata["implementation_refs"] = []
@@ -232,7 +232,7 @@ def _materialize_product_history(example: Path, target: Path) -> dict[str, str]:
     )
 
     for document in by_type["prd"]:
-        relative = document.path.relative_to(example)
+        relative = document.path.relative_to(fixture)
         metadata = final_prd_metadata[relative]
         for reference in metadata.get("implementation_refs", []):
             reference["based_on_prd_version"] = approved_sha
@@ -247,10 +247,10 @@ def _materialize_product_history(example: Path, target: Path) -> dict[str, str]:
         *(str(document.metadata["id"]) for document in by_type["prd"]),
     }
     approved_versions = {artifact_id: approved_sha for artifact_id in approved_artifact_ids}
-    state = _actual_review_state(example, approved_versions)
+    state = _actual_review_state(fixture, approved_versions)
     state_path = target / ".product-os" / "review-state.yaml"
     state_path.write_text(yaml.safe_dump(state, sort_keys=False), encoding="utf-8")
-    _copy_external_example(example, target)
+    _copy_external_fixture(fixture, target)
     _rewrite_external_versions(target, approved_sha)
     handoff_sha = _commit(target, "test: record synthetic delivery handoff")
 
@@ -258,12 +258,12 @@ def _materialize_product_history(example: Path, target: Path) -> dict[str, str]:
     learning_metadata = copy.deepcopy(learning.metadata)
     final_learning_events = copy.deepcopy(learning_metadata["decision_events"])
     learning_metadata["decision_events"] = []
-    _write_document(target / learning.path.relative_to(example), learning_metadata, learning.body)
+    _write_document(target / learning.path.relative_to(fixture), learning_metadata, learning.body)
     measurement_sha = _commit(target, "docs: stage synthetic outcome review")
 
     final_learning_events[-1]["based_on_version"] = measurement_sha
     learning_metadata["decision_events"] = final_learning_events
-    _write_document(target / learning.path.relative_to(example), learning_metadata, learning.body)
+    _write_document(target / learning.path.relative_to(fixture), learning_metadata, learning.body)
     learning_sha = _commit(
         target,
         "test: self-attest synthetic outcome decision",
@@ -271,7 +271,7 @@ def _materialize_product_history(example: Path, target: Path) -> dict[str, str]:
     )
 
     approved_versions[str(learning.metadata["id"])] = learning_sha
-    state = _actual_review_state(example, approved_versions)
+    state = _actual_review_state(fixture, approved_versions)
     state_path.write_text(yaml.safe_dump(state, sort_keys=False), encoding="utf-8")
     _rewrite_learning_review_version(
         target,
@@ -285,7 +285,7 @@ def _materialize_product_history(example: Path, target: Path) -> dict[str, str]:
         for reference in claim.get("source_references", []):
             if reference.get("kind") == "artifact":
                 reference["version"] = learning_sha
-    _write_document(target / update.path.relative_to(example), update_metadata, update.body)
+    _write_document(target / update.path.relative_to(fixture), update_metadata, update.body)
     final_sha = _commit(target, "docs: publish reference product update")
 
     return {
@@ -315,7 +315,11 @@ def run_journey(target: Path, client: str) -> dict[str, Any]:
 
     with tempfile.TemporaryDirectory(prefix="product-os-reference-") as temporary:
         temporary_root = Path(temporary)
-        config_path = _configured_example(EXAMPLE_ROOT, temporary_root / "config.yaml", client)
+        config_path = _configured_fixture(
+            REFERENCE_FIXTURE_ROOT,
+            temporary_root / "config.yaml",
+            client,
+        )
         plan_path = temporary_root / "install-plan.json"
         plan = plan_install(
             REPOSITORY_ROOT,
@@ -331,7 +335,7 @@ def run_journey(target: Path, client: str) -> dict[str, Any]:
         apply_plan(plan)
 
     install_sha = _commit(target, "chore: install Product Decision OS")
-    history = _materialize_product_history(EXAMPLE_ROOT, target)
+    history = _materialize_product_history(REFERENCE_FIXTURE_ROOT, target)
 
     validation = validate_workspace(target, command="validate")
     smoke = validate_workspace(target, command="smoke-test")
@@ -348,7 +352,7 @@ def run_journey(target: Path, client: str) -> dict[str, Any]:
     )
     child_prds = initiative.metadata.get("child_prd_ids", [])
     final_decision = learning.metadata.get("decision_events", [])[-1].get("choice")
-    if len(child_prds) != 6 or final_decision not in {"scale", "iterate", "complete"}:
+    if len(child_prds) != 4 or final_decision not in {"scale", "iterate", "complete"}:
         raise JourneyError("reference journey did not close the intended multi-PRD learning loop")
 
     return {

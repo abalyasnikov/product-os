@@ -6,7 +6,6 @@
     { "$ref": "https://productdecisionos.org/schemas/common.schema.json" },
     {
       "type": "object",
-      "required": ["opportunity_id", "target_outcome", "product_thesis", "evidence_ids", "business_impact", "gtm_hypothesis", "outcome", "barriers", "child_prd_ids", "dependencies", "learnings"],
       "properties": {
         "id": { "type": "string", "pattern": "^initiative_[0-9A-HJKMNP-TV-Z]{8,32}$" },
         "type": { "const": "initiative" },
@@ -40,7 +39,15 @@
           "type": "array",
           "items": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/implementationReference" }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": { "required": ["outcome"] },
+          "then": {
+            "required": ["opportunity_id", "target_outcome", "product_thesis", "evidence_ids", "business_impact", "gtm_hypothesis", "barriers", "child_prd_ids", "dependencies", "learnings"]
+          }
+        }
+      ]
     }
   ],
   "unevaluatedProperties": false

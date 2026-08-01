@@ -3,9 +3,6 @@ schema_version: 1
 id: outcome_<stable-id>
 type: outcome_contract
 title: <reusable or extracted outcome contract>
-created_at: <ISO-8601 timestamp>
-updated_at: <ISO-8601 timestamp>
-authors: [<owner>]
 relationships:
   initiative: initiative_<id>
 owner_artifact_ids: [initiative_<id>]

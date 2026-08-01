@@ -13,13 +13,13 @@
     },
     {
       "path": "AGENTS.md",
-      "sha256": "5340dff877f864a02a8048e8bd0125b268aadaf70f556d30f24fd06d745f7ae6",
-      "size": 1136
+      "sha256": "048a6a31bcc8a84512463299e47100b95d273d5ca9eb698391b818284c4ae30c",
+      "size": 1130
     },
     {
       "path": "IMPLEMENTATION_PLAN.md",
-      "sha256": "5a05096f61cd77f5090ef2b1336f3867fba6cc5135e546463533ad563ae1160e",
-      "size": 3863
+      "sha256": "d1d00c8e99950aefee37eb8979870285f5e34f4bcba5696aa6a2c713dd77b689",
+      "size": 4028
     },
     {
       "path": "INSTALL.md",
@@ -33,8 +33,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "9e0539059e0b53c75cf066b01d0549ae15ce41df919b61915f56e3e426c6e895",
-      "size": 8949
+      "sha256": "d9649796f674d661db73b5c0fe25d3cae605d533cd73c49c7113ee94458f4f65",
+      "size": 9165
     },
     {
       "path": "SECURITY.md",
@@ -48,12 +48,12 @@
     },
     {
       "path": "adapters/claude-code/ADAPTER.md",
-      "sha256": "3fd9798214b1e17853184976d604558eb5d12c0a2d835876418391c2e510c3ac",
+      "sha256": "5609e0243f56a9812ab80913263cee27f36bf0cded699dfc63c8eb99e8f0c158",
       "size": 1178
     },
     {
       "path": "adapters/claude-code/manifest.yaml",
-      "sha256": "cdc92c9f0bdd46bc98e2214c91011ed9e444771a29a4b2d623021fad8f67eadd",
+      "sha256": "f39c6ff3e14a96ca98a99657b00c1f9713e76de8f7fa8f6ffb657e02e655aa3c",
       "size": 2671
     },
     {
@@ -103,12 +103,12 @@
     },
     {
       "path": "adapters/codex/ADAPTER.md",
-      "sha256": "e6c7fd5d4db0271c1af88270f570cf43b4ab449551d74cba4f64a3606da9393c",
+      "sha256": "8229bc988533e1177fadaf8a87579e0cca92bdca1042de4832c044808883e915",
       "size": 1155
     },
     {
       "path": "adapters/codex/manifest.yaml",
-      "sha256": "cb37294fe9fffa67b81260b9e6d8d91ba279fec38f9f2c2787c1f26a7823c1fb",
+      "sha256": "23453825f0b495b6ab143e27d82922170207220055146b76d01b506f81c73384",
       "size": 2611
     },
     {
@@ -158,12 +158,12 @@
     },
     {
       "path": "adapters/openclaw/ADAPTER.md",
-      "sha256": "cb4b84a6c869f2dabcc2b93d4b59c382bc89c0f98e369526feb02f280ea87638",
+      "sha256": "022327c01929f7f49dc73c9a630a4b512adc9dc30d9979c1dffa493f8d436908",
       "size": 1075
     },
     {
       "path": "adapters/openclaw/manifest.yaml",
-      "sha256": "62165ae5b1de546c4ce66eff2d1f127c58447a96a115e68e4e88b4c38923e575",
+      "sha256": "d5bc28b6c5c45cc1a86d2b8831985d26e336885f9fb4305ad0e7c5a3430a586d",
       "size": 2561
     },
     {
@@ -228,8 +228,8 @@
     },
     {
       "path": "docs/getting-started.md",
-      "sha256": "a27ee85f2926ff078348b7aa1efac8604c1750c0785479d3520649104f0986ad",
-      "size": 3009
+      "sha256": "8d4b9a77133150af263528342f8886042946d255d74eb357b38dba0dd253aade",
+      "size": 3134
     },
     {
       "path": "docs/release-checklist.md",
@@ -243,508 +243,43 @@
     },
     {
       "path": "docs/spec/product-decision-os.md",
-      "sha256": "6ee1e8fab5d4221f5298f99a73466653964bac0652237692de0793bd9b1673a7",
-      "size": 48698
+      "sha256": "6ff7f975dd2254e8c292d22c7d6372a9e166f3ac42ddb47cb8eaa3b901146672",
+      "size": 49745
     },
     {
       "path": "docs/verification.md",
-      "sha256": "368b278133838c9fd3689fe54c9a8a74118c18df278247fbccf2445e516b78ea",
-      "size": 3350
+      "sha256": "3c5f21c83c03e8b72c11e275351bd90edd56725bb714cd1b9ab3c3ab328c9e9f",
+      "size": 3431
     },
     {
-      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-decision-queue/SKILL.md",
-      "sha256": "c84ee594db11b3a15f7c09b5cc993d108f39fec6191dd3e214d12bfc08bfa139",
-      "size": 496
+      "path": "examples/best-in-class-trading-experience/README.md",
+      "sha256": "e8dcb24fb6432d634b33e0409c81e174de79b9601223ada900e19004e3be9fff",
+      "size": 1303
     },
     {
-      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-discovery/SKILL.md",
-      "sha256": "012ad7a545e5795eb2e5345dfec1b356ff8d060979bddefe986cdde5ad44c371",
-      "size": 550
+      "path": "examples/best-in-class-trading-experience/product/initiatives/best-in-class-trading-experience.md",
+      "sha256": "6c958b071db29bda4980f57696be6d2bb106030e2a4ef073a05c160d1763a97e",
+      "size": 6339
     },
     {
-      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-initiative/SKILL.md",
-      "sha256": "eb5b73c511454c518d7351ed2b3f8c0fc862c81908a3c7b329db84ca3c7e3d40",
-      "size": 529
+      "path": "examples/best-in-class-trading-experience/product/prds/bridge-progress-tracking.md",
+      "sha256": "29fa464988b8c7367504a33c761bdb9de7552461f9b925a4d0c27b011720235a",
+      "size": 6268
     },
     {
-      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-outcome-review/SKILL.md",
-      "sha256": "fd6f83ab691f2f86547ba8f81718a7034b8ecb82ff5f29e750dbfebbeca6e7df",
-      "size": 552
+      "path": "examples/best-in-class-trading-experience/product/prds/cross-chain-swap.md",
+      "sha256": "3afcda921e1cbe3cdb96f528a936adcac935631882e0a78c0dfe39f0927613af",
+      "size": 5892
     },
     {
-      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-prd-handoff/SKILL.md",
-      "sha256": "2e8c48eeed844b06977d2898f248d61ebbab56af93585278d8f9ec7268f65d2a",
-      "size": 548
+      "path": "examples/best-in-class-trading-experience/product/prds/skip-signing-screen-for-native-transactions.md",
+      "sha256": "4f78f5a659090a227a2d147b9b42985b0abb96515f8da2a15babad77cc0473bc",
+      "size": 5491
     },
     {
-      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-prd-interrogation/SKILL.md",
-      "sha256": "65f8d9ec8b6e36aa136c84929b09bd5a22eb4218994580c7c1a9cb2a6afc4c2d",
-      "size": 557
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-prd-review/SKILL.md",
-      "sha256": "bf0d92b9cff22074e69ad511fc204ec9b454447afb8ee0e985a9a5156eca69dc",
-      "size": 544
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-product-update/SKILL.md",
-      "sha256": "f3322ced5bdbdc3c5d9ca54bc1f23f2517db172ed6add839b71e015a154a4368",
-      "size": 550
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-setup/SKILL.md",
-      "sha256": "5f1a7649dd1868d6fda92725a0d3325f5ffae75756e5065a4a09a4fa19a2d15a",
-      "size": 532
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/.product-os/config.yaml",
-      "sha256": "dbbd285f7f87dc55388865fe13d3f1b5b30dc07635cf5db1e4fac83cccd12235",
-      "size": 452
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/.product-os/review-state.yaml",
-      "sha256": "a9fef4c11c079cb058362bcf2b1fac2d64b238cb9ecc2a0902fb357084b0a976",
-      "size": 3831
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/README.md",
-      "sha256": "d02c78d596c613019fe43e12044678cb0a0bf99ba6277a583fe37269fff22b9c",
-      "size": 2785
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/external/analytics/amplitude-result.yaml",
-      "sha256": "1109d3a4f52e849bd5cfe5f74b7b28d0cfee62f9b4490b8511ec6b36aa02822a",
-      "size": 1105
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/external/code-repositories/trading-wallet/specs/cross-chain-swap/implementation-plan.md",
-      "sha256": "5e5ab3eb5c6c3b59b1aaede0d9fa9d993eab4547d5e4e0576e6ca5c2ba1d58fe",
-      "size": 1275
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/external/delivery/projects.yaml",
-      "sha256": "20349c5b0ec95c2c6584cfffb55824f0a2ad44d8867671791b90b0e2938900bb",
-      "size": 1768
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/external/git/rejected-cross-chain-send.yaml",
-      "sha256": "516f9e849724ac8fae10da32582f228f3e4daa9213ae97c7fb35167340f8fc74",
-      "size": 551
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/external/git/reviews.yaml",
-      "sha256": "f4fc0dedf51d1a280b3d9d5ed0a14dd4556635c4e49028b6176694c9bb717767",
-      "size": 1948
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/inputs/granola/trading-01.json",
-      "sha256": "a2c22360851b8b1ab5bdf97ed8799a19e684367f9a889e1acb4eb72d2f9732ab",
-      "size": 403
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/inputs/granola/trading-02.json",
-      "sha256": "48e51eea85b25219a2477c6cfb89d53dcb47d22accfc1e8a5ea8d5a9230e4757",
-      "size": 431
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/inputs/granola/trading-03.json",
-      "sha256": "1f826a08ce2fe1ddf4a09be3adba324b88d3a5235539c1d9a119eecfda9dc233",
-      "size": 417
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/inputs/pasted/bridge-progress.json",
-      "sha256": "4e870bcba02ac26912d92ce6b1cc008e19f2abbe16089435b8ba979ea9108103",
-      "size": 331
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/inputs/pasted/destination-risk.json",
-      "sha256": "3c10282cfd5885b592577e2ad3e12c3bd06e1a290a20bd9dfb9be01123e2c723",
-      "size": 350
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/inputs/pasted/token-approval.json",
-      "sha256": "bdf37d3211ba769df4d9d291dd0ac79a2a23c252b36b588c47c9be8b25a2ca1d",
-      "size": 358
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/initiatives/best-in-class-trading-experience.md",
-      "sha256": "83e7b5760279b10f959cbea745f7437ae4e55abcb470f629b8d3a853bb33b5a8",
-      "size": 4501
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/learnings/trading-experience-outcome.md",
-      "sha256": "34ebbd6caadc2a1658461878f5008efaa4877c3c6ced78fa01ee40eda127de5e",
-      "size": 3380
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/opportunities/best-in-class-trading.md",
-      "sha256": "49b01f42d42eaa0d3f1b6a55a0d7ce4794b612a9bbe9e0195e41969cb3acdbf4",
-      "size": 2809
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/patterns/trading-continuity.md",
-      "sha256": "01931f0a16c6d077cb0f3b8855feccc11d53483ec0aa4466fee8db583aa65771",
-      "size": 1322
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/patterns/transaction-trust-gaps.md",
-      "sha256": "dd94b3ec82b0e466eef9936cf621ed0cdf94815c7fae04203dcf305e7e2422d2",
-      "size": 1567
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/prds/bridge-progress-tracking.md",
-      "sha256": "e0a9ba095c6eb4778e331ab6f71ce318519e9cf0237fb9788cc24b83c6894c0d",
-      "size": 3742
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/prds/cross-chain-swap.md",
-      "sha256": "e31f65cb6333247b47117dffc06109cb0ea6ef4621c61eb313e404aca7dbf98a",
-      "size": 3854
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/prds/non-blocking-transaction-status.md",
-      "sha256": "7018ac9f2b0b8f1df087aec6e544099c934d661ac8b59306ad53967db70c45ab",
-      "size": 3311
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/prds/send-flow-redesign.md",
-      "sha256": "bee29298ece1d8c6ec8b2b00dd5f375ba98f13c9dc83a3e968bbe7e409b04cef",
-      "size": 3833
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/prds/skip-redundant-native-confirmation.md",
-      "sha256": "609255c8aff23058d2f887739be8c34d9b5b6c3d24efad3afe5fd27845e1a2dd",
-      "size": 3636
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/prds/token-approval-management.md",
-      "sha256": "46e208b5c234c8d50777bfd2df2d0ea04c27da01b5b21d4f3837163a07c5feb2",
-      "size": 3611
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/signals/blocking-status.md",
-      "sha256": "ff0c34c441fcac86dcbc9eaeffa4ab05b0c7ededf41977a3076757a5823dec72",
-      "size": 1106
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/signals/bridge-progress-ambiguity.md",
-      "sha256": "8970b2d6bd87360d6c0f92d63751397e88ae8d4ae232ecccaaf5eb58c6d8f752",
-      "size": 958
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/signals/cross-chain-swap-friction.md",
-      "sha256": "3ff1928d03b791079a9a9d35ae8f01a56e374c255ff14254afca0f7b3f267d31",
-      "size": 1101
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/signals/redundant-confirmation.md",
-      "sha256": "e70c50c7db8b83f00b215b109a8510472abe8d50b6662c7fe274af339b55447a",
-      "size": 1122
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/signals/send-destination-risk.md",
-      "sha256": "94e3d8d58532c2cd5201b24b1053d99e8a4432c3b708464f2f1491fc1944f9ed",
-      "size": 1007
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/signals/token-approval-control.md",
-      "sha256": "100f748d9f47bb224674fc454374b53ce5e305dcf0e6f0991974f9752a9a8320",
-      "size": 945
-    },
-    {
-      "path": "examples/fixtures/best-in-class-trading-experience/product/updates/2025-05.md",
-      "sha256": "18b963dad68b7ffec0efcf5a0ab127624c81352d04c5f625c93bd6382c4654b9",
-      "size": 2492
-    },
-    {
-      "path": "examples/fixtures/config/README.md",
-      "sha256": "6637fc1d89ece4ccc863af9c66b6a2593b2825a2808683de4c0fc6c87a2f2abf",
-      "size": 356
-    },
-    {
-      "path": "examples/fixtures/config/invalid/missing-approver.yaml",
-      "sha256": "82290acfe7cf1674558e175705cafc2360178b4fc257a4c3b1cd2f492962ebad",
-      "size": 289
-    },
-    {
-      "path": "examples/fixtures/config/invalid/provider-allows-solo.yaml",
-      "sha256": "13a7adf2681c3e752657655b3e110e77f26981df01aab5dc530872209a69d401",
-      "size": 313
-    },
-    {
-      "path": "examples/fixtures/config/invalid/solo-uses-provider-review.yaml",
-      "sha256": "eacdce5e3310412198b1c8a73ade83c5bbbb8310f799be9e11acdb19931d218e",
-      "size": 293
-    },
-    {
-      "path": "examples/fixtures/config/invalid/unknown-git-capability.yaml",
-      "sha256": "80b79e81f59498823ce2948b36b77bd13477b1c2d90411c97362ae5047b84a9e",
-      "size": 314
-    },
-    {
-      "path": "examples/fixtures/config/valid-provider.yaml",
-      "sha256": "dbbd285f7f87dc55388865fe13d3f1b5b30dc07635cf5db1e4fac83cccd12235",
-      "size": 452
-    },
-    {
-      "path": "examples/fixtures/config/valid-solo.yaml",
-      "sha256": "4af373b390e700d2a12ab8790fe062d29b906b66e2f40e269f87a910b82d4654",
-      "size": 369
-    },
-    {
-      "path": "examples/fixtures/invalid/broken-reference/product/signals/broken.md",
-      "sha256": "72d45d09510e9b44d5592111c09a09d4bec97f87a01582f958efaa5b97fba411",
-      "size": 605
-    },
-    {
-      "path": "examples/fixtures/invalid/credential-like-content/product/signals/credential.md",
-      "sha256": "121ec405e2ae51f9b6049fefa90aa5769cbc4b67a3dcaa23e7d398de67af47c0",
-      "size": 592
-    },
-    {
-      "path": "examples/fixtures/invalid/duplicate-ids/product/signals/first.md",
-      "sha256": "89034aa5c33807ffa812b552c0fd2a98ea38cc0b334f60e89784b13639d6fd9e",
-      "size": 501
-    },
-    {
-      "path": "examples/fixtures/invalid/duplicate-ids/product/signals/second.md",
-      "sha256": "59083c5d016c8ba6f6ba800f8093745ccb3c2b1b8904c8d954e2c3d14728c297",
-      "size": 503
-    },
-    {
-      "path": "examples/fixtures/invalid/incomplete-evidence-waiver/product/opportunities/incomplete-waiver.md",
-      "sha256": "067d30c7e43cc5a5c925675c856c72b49c1fdb4a069ad37c2ba8e85e9be1c3d8",
-      "size": 933
-    },
-    {
-      "path": "examples/fixtures/invalid/missing-measurement-anchor/product/learnings/missing-anchor.md",
-      "sha256": "26fb3eba9efc94536bf81f03021fdf7e2d82ec46229ca7118066e55d09902181",
-      "size": 1142
-    },
-    {
-      "path": "examples/fixtures/invalid/oversized-excerpt/product/signals/oversized.md",
-      "sha256": "b9c19bb6108849e81ec410d026e0eb03f715b08aa76a72927ac47db7f162a02c",
-      "size": 1284
-    },
-    {
-      "path": "examples/fixtures/invalid/stale-adapter-hash/adapters/codex/ADAPTER.md",
-      "sha256": "aff4c226cf313d79550db89b0bdfbeacdb11d7685d6845636aa0f3a0f790f45c",
-      "size": 111
-    },
-    {
-      "path": "examples/fixtures/invalid/stale-adapter-hash/adapters/codex/manifest.yaml",
-      "sha256": "ee2384ca1a4c792b1331a45d88efc43e6f49c8fe8b647e015d76447b0c08d273",
-      "size": 523
-    },
-    {
-      "path": "examples/fixtures/invalid/stale-adapter-hash/integrations/capabilities.yaml",
-      "sha256": "f4d7ef7acd50e75e3447dc3a839ce4384db110d54331667c356715c1fab96ce9",
-      "size": 147
-    },
-    {
-      "path": "examples/fixtures/invalid/stale-adapter-hash/skills/discovery/SKILL.md",
-      "sha256": "18832797a67b22b165c4c5f823384d346e67ea3e55fd1760169a4e2816e69e44",
-      "size": 189
-    },
-    {
-      "path": "examples/fixtures/invalid/stale-implementation-reference/.product-os/review-state.yaml",
-      "sha256": "99e0bd9b00b88a11b0182fd28109493ec02decad0886d56eede6c63619caac56",
-      "size": 166
-    },
-    {
-      "path": "examples/fixtures/invalid/stale-implementation-reference/product/prds/stale-plan.md",
-      "sha256": "8b3ccb0d6735075c464fb8902592f7a671d9138f16c7d6ab0470a0681e116220",
-      "size": 1588
-    },
-    {
-      "path": "examples/fixtures/invalid/stale-outcome-definition/product/opportunities/opportunity.md",
-      "sha256": "e6e74a9d7c001f1a3d695ed74b515d93a2e4ca43c26866a99b548a094ebef64e",
-      "size": 1003
-    },
-    {
-      "path": "examples/fixtures/invalid/stale-outcome-definition/product/outcome-contracts/stale-definition.md",
-      "sha256": "645ed0e744e9d924cdc1a6515e64a33ac2b979df9a558cad6b98ca502500ea4a",
-      "size": 956
-    },
-    {
-      "path": "examples/fixtures/invalid/stale-outcome-definition/product/prds/owner.md",
-      "sha256": "3c9683a373bd5b6b5798ff28aee7509d12c8bd82314d93bace73b56e4682cbe7",
-      "size": 1213
-    },
-    {
-      "path": "examples/fixtures/invalid/stale-outcome-definition/product/signals/source.md",
-      "sha256": "fa01d1450db83a54aa4b90a145a4e5284bfb76e7c40526dd9ddd59b73025c0a2",
-      "size": 618
-    },
-    {
-      "path": "examples/fixtures/invalid/transcript-sized-content/product/signals/transcript-sized.md",
-      "sha256": "3b13cf6a2ac3fbb1a106eac818135468aa3153499292e17ce98c71924fc1698d",
-      "size": 15084
-    },
-    {
-      "path": "examples/fixtures/invalid/type-mismatch/product/signals/mismatch.md",
-      "sha256": "a7754760523cd211ae2f66f38f360d1d5cf773a6f9d0dde1a1e6aa243d7d008d",
-      "size": 545
-    },
-    {
-      "path": "examples/fixtures/invalid/unverified-executable-binding/product/outcome-contracts/unverified.md",
-      "sha256": "8a29ad3776c573e40b9bb57c824453f1764650ffc284619f1ee6dfbe464d9f2c",
-      "size": 830
-    },
-    {
-      "path": "examples/fixtures/valid-waiver-workspace/product/opportunities/waived-opportunity.md",
-      "sha256": "f5464be2d9a82fcac2ab7e5ccdb351f36fc84588186c5a55aa74dc103d9732a2",
-      "size": 1848
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/.agents/skills/product-os-decision-queue/SKILL.md",
-      "sha256": "c84ee594db11b3a15f7c09b5cc993d108f39fec6191dd3e214d12bfc08bfa139",
-      "size": 496
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/.agents/skills/product-os-discovery/SKILL.md",
-      "sha256": "012ad7a545e5795eb2e5345dfec1b356ff8d060979bddefe986cdde5ad44c371",
-      "size": 550
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/.agents/skills/product-os-initiative/SKILL.md",
-      "sha256": "eb5b73c511454c518d7351ed2b3f8c0fc862c81908a3c7b329db84ca3c7e3d40",
-      "size": 529
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/.agents/skills/product-os-outcome-review/SKILL.md",
-      "sha256": "fd6f83ab691f2f86547ba8f81718a7034b8ecb82ff5f29e750dbfebbeca6e7df",
-      "size": 552
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/.agents/skills/product-os-prd-handoff/SKILL.md",
-      "sha256": "2e8c48eeed844b06977d2898f248d61ebbab56af93585278d8f9ec7268f65d2a",
-      "size": 548
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/.agents/skills/product-os-prd-interrogation/SKILL.md",
-      "sha256": "65f8d9ec8b6e36aa136c84929b09bd5a22eb4218994580c7c1a9cb2a6afc4c2d",
-      "size": 557
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/.agents/skills/product-os-prd-review/SKILL.md",
-      "sha256": "bf0d92b9cff22074e69ad511fc204ec9b454447afb8ee0e985a9a5156eca69dc",
-      "size": 544
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/.agents/skills/product-os-product-update/SKILL.md",
-      "sha256": "f3322ced5bdbdc3c5d9ca54bc1f23f2517db172ed6add839b71e015a154a4368",
-      "size": 550
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/.agents/skills/product-os-setup/SKILL.md",
-      "sha256": "5f1a7649dd1868d6fda92725a0d3325f5ffae75756e5065a4a09a4fa19a2d15a",
-      "size": 532
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/.product-os/config.yaml",
-      "sha256": "dbbd285f7f87dc55388865fe13d3f1b5b30dc07635cf5db1e4fac83cccd12235",
-      "size": 452
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/.product-os/review-state.yaml",
-      "sha256": "0be937bdf94fc83e79196f4796467134d549a00b47979743d64de772672d9e79",
-      "size": 2155
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/external/analytics/amplitude-result.yaml",
-      "sha256": "32a944132846122b2590e1c0db7a2bcae438d3d9fef60a786ab29cbfefd253a1",
-      "size": 578
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/external/code-repositories/transaction-app/specs/route-comparison/implementation-plan.md",
-      "sha256": "7883cb5ac47bf37e50f156fc439aa7067ba8ff56e9481aff519d86680f625bc8",
-      "size": 399
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/external/git/prd-recovery-v2-material-change.yaml",
-      "sha256": "647caa8b0c554113768177ccce748f9f5f00ea16b3b5ac5aed8fe416442af4e6",
-      "size": 416
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/external/git/reviews.yaml",
-      "sha256": "a8c404a33b339ed856de1886fa178f0f8c15f2f2e82d3f83770e2411c4d79a78",
-      "size": 921
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/external/linear/projects.yaml",
-      "sha256": "aea2e15f78988f2f2bbbeafbd8afbf33f3da4e344e094027ed4e6dee47d19b6b",
-      "size": 1160
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/inputs/granola/meeting-fixture-a.json",
-      "sha256": "93987491ea361bf9a806a71918c947fff1efba771b2c3dbfc25faa0e43629e25",
-      "size": 336
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/inputs/granola/meeting-fixture-b.json",
-      "sha256": "a32b9a879735f69eebc06d0843de2cbc3b59a0fa628ea475408c079d309cf61b",
-      "size": 355
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/inputs/pasted/contradictory-note.json",
-      "sha256": "a2f1694ab94e3264c1c4d2e840c601af9d87753fae6a857ec27bba4f1db360d4",
-      "size": 325
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/product/initiatives/trustworthy-transaction.md",
-      "sha256": "a7d7dfa1c9421059782ea1612992f7bace832f3197a040f1bba9f2040bf504e0",
-      "size": 2671
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/product/learnings/transaction-completion.md",
-      "sha256": "34f00903dcff1fdbf55451f83cdc7ad867d93cd02dc5dd50fcda0c75b029f764",
-      "size": 1918
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/product/opportunities/trustworthy-first-transaction.md",
-      "sha256": "e8ec8bdb1e7b30cf0fad69b8733ef1a9c1832714a3dc9e086dd9a627c5515223",
-      "size": 2132
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/product/patterns/transaction-confidence.md",
-      "sha256": "0c477f82796bea90f4031e9f6a28fd6b24d793f6f4a89b3ef46dd394fc66e0b7",
-      "size": 1274
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/product/prds/failure-recovery.md",
-      "sha256": "57fe1a97ecc4d2b3ac1d085bf5535a401234d79ccf26fbe83941575e5480526c",
-      "size": 2897
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/product/prds/route-comparison.md",
-      "sha256": "4c6f1b68c6f7db682653087500ec6ec0ff6ba662c9aafffa41aebedf7acd682a",
-      "size": 4025
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/product/signals/confirmation-friction.md",
-      "sha256": "03895d28b819255e69cdaee8e29a3f28d70966a5bd8cc908175c33554345fc68",
-      "size": 866
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/product/signals/meeting-routing-friction.md",
-      "sha256": "abd2b2d98b0fe6187221c52b118c2c9bb7fdc5bf349d68f635b6cce4842fdfc2",
-      "size": 1009
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/product/signals/new-evidence-challenges-assumption.md",
-      "sha256": "f44447db74ea117d14d93d2fe340f4ab05a1e8158eb335dbed909e23f5b9d271",
-      "size": 837
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/product/signals/power-user-contradiction.md",
-      "sha256": "c9fb8496d5a95e16deb704bbfdf8da95a2a325d3b00f0b5ba6973b76f5c1ec0a",
-      "size": 819
-    },
-    {
-      "path": "examples/fixtures/valid-workspace/product/updates/2026-07.md",
-      "sha256": "f9694b65cbab3751bc5699b3b1d175fd8466623f7c7768bd30ba43cffdd2d123",
-      "size": 1602
+      "path": "examples/best-in-class-trading-experience/product/prds/transaction-toasters.md",
+      "sha256": "587f13c5ea6f60f446a4be15368bf7d29196391d9927cadb3c4e4a9a30103e75",
+      "size": 5109
     },
     {
       "path": "integrations/README.md",
@@ -798,8 +333,8 @@
     },
     {
       "path": "schemas/common.schema.json",
-      "sha256": "54f868af2ce54444f6ab798bccbf083a969f8e040eb94ba3c2e8b523b538c32f",
-      "size": 17284
+      "sha256": "7d0cd934385e08745bd229a33a1e6ee9f81f32909d71d18bd2566435a45f83ee",
+      "size": 17233
     },
     {
       "path": "schemas/config.schema.json",
@@ -808,8 +343,8 @@
     },
     {
       "path": "schemas/initiative.schema.json",
-      "sha256": "97d5a5bde5fde4521e646c47bc535704cb99a71dc32cb7d8f339afc69228d5d1",
-      "size": 2355
+      "sha256": "89077ca1101f2b285ec565b464550686788c58d38b957753bfdd098e7ef0a0ad",
+      "size": 2472
     },
     {
       "path": "schemas/learning.schema.json",
@@ -833,8 +368,8 @@
     },
     {
       "path": "schemas/prd.schema.json",
-      "sha256": "d689ae6fc8f2595c4614870faf07a3dbbfc8641b11f90049f73a0e98a618f4e6",
-      "size": 2630
+      "sha256": "59d86b4b5c85fb8c41f6ac28a7221605c5c99d9c8ef8e4506807cfb37f9d6a0f",
+      "size": 2747
     },
     {
       "path": "schemas/product-update.schema.json",
@@ -863,8 +398,8 @@
     },
     {
       "path": "scripts/run_reference_journey.py",
-      "sha256": "463bce01d9bcf0e6719dd72ada30b78451475792b5424b7ad32c5d0404faa69d",
-      "size": 16600
+      "sha256": "cd742fdfb64b144c710ad5e81912e61e1602857fa58d29300332f28fd7493974",
+      "size": 16672
     },
     {
       "path": "skills/README.md",
@@ -873,8 +408,8 @@
     },
     {
       "path": "skills/_shared/authoring-contract.md",
-      "sha256": "7f18a69409c6096d311724cf9780ba6c1ba8d05c011c9fc321c460a4caed904d",
-      "size": 3640
+      "sha256": "f9c54a7bb0911c4f1130481282a2ab6ae39dcb34458d810bdc280cbcf146bc16",
+      "size": 4468
     },
     {
       "path": "skills/_shared/trust-boundary.md",
@@ -938,13 +473,13 @@
     },
     {
       "path": "src/product_decision_os/frontmatter.py",
-      "sha256": "f28128fe47ba5f7214c74c6272317588391fceb2a59390c51b7fc5b56b2fed3e",
-      "size": 3958
+      "sha256": "4685c58700fdc5019247ce5d85a7f75ebecaa301e0de00331ea2eab88509a3ad",
+      "size": 5867
     },
     {
       "path": "src/product_decision_os/validator.py",
-      "sha256": "d26dd44c786582dfe304dcbeb13a3eb04649fa4093af446f1f59fda4f8c025af",
-      "size": 139220
+      "sha256": "b143367e88891f8ef039ba7268fd50bca9f95a28a71485929da29d251dbc80de",
+      "size": 150136
     },
     {
       "path": "templates/config.yaml",
@@ -953,43 +488,43 @@
     },
     {
       "path": "templates/initiative.md",
-      "sha256": "799a2ceec0e17486434932e985c5df8057b63076891306a6ad753cbdabfaae5b",
-      "size": 1208
+      "sha256": "19e0dd047405419e232b9129b239fda1bc7caf4ac9adf65ef47cdaf5163d30f7",
+      "size": 1522
     },
     {
       "path": "templates/learning.md",
-      "sha256": "79b22520d7cdd3e2154980a6db9caab7be17b7378bf48da3dd37583e9d4875a9",
-      "size": 1309
+      "sha256": "379afc891164b516ec07a92af5e9172241baf9d597de7528cf4df4f5faf36abf",
+      "size": 1217
     },
     {
       "path": "templates/opportunity.md",
-      "sha256": "888b163b086909517e891633b6ad81f899949acf393ec499a8fce1a34c2f7b3b",
-      "size": 717
+      "sha256": "26850924cd6d11df04c24daec044bcfca5110683d3772d03e0809b9857d94eb7",
+      "size": 625
     },
     {
       "path": "templates/outcome-contract.md",
-      "sha256": "9be8a84568dc2d7cbd6ab4a975b2c64b6739110e9b8d17129501764e177d31c7",
-      "size": 759
+      "sha256": "44ba5ae03af8b82951d5707b7e2cb1f3848ad470a91b2af467adf87e1b9371aa",
+      "size": 674
     },
     {
       "path": "templates/pattern.md",
-      "sha256": "8afb99176906dc3b68789d231ae8bcec44971c2a2c00172daa27b4f45d9b7ea4",
-      "size": 619
+      "sha256": "36cffa9860d936c78675757600b8dd08860662fbe4f711d8a3d8cb36dc1e66f4",
+      "size": 534
     },
     {
       "path": "templates/prd.md",
-      "sha256": "9a3d765edcb6c5e9c61097603cd5d1cf28eb6434a5f6841acbec3963d5ed1526",
-      "size": 1480
+      "sha256": "a1a051f72c9e5c35aea3bb6ce379290c4bad73e23c00a618cc357c10676ede47",
+      "size": 1738
     },
     {
       "path": "templates/product-update.md",
-      "sha256": "91409b9bf89c31f88530fd21920d868108be78de17141eaf52bccb91ecdf74b9",
-      "size": 561
+      "sha256": "e8bfaffcc1c33d91da9fa1ff2f61ca11faab1d000fcbe0a23e2343a8c8279ac3",
+      "size": 476
     },
     {
       "path": "templates/signal.md",
-      "sha256": "b6a8e1753e20eb01d409d97576d43161e8b09a75bc9f983fd10284e728daf8e9",
-      "size": 597
+      "sha256": "6fd3caa205798101b4b7253c46031f1642f26cb53c14cd3bf844ab5385e7c791",
+      "size": 512
     },
     {
       "path": "tests/conftest.py",
@@ -998,18 +533,478 @@
     },
     {
       "path": "tests/e2e/test_best_in_class_trading_example.py",
-      "sha256": "726f78afad4a324f282ae29c43cd70eda04e8e58ea92a51f919cd61726834ec4",
-      "size": 4546
+      "sha256": "08d2cf9f488d7974a9528c4998e4c1ad243fa9e65221e51abcd8e5df3afd53e4",
+      "size": 5377
     },
     {
       "path": "tests/e2e/test_distribution.py",
-      "sha256": "c3f92b0c41e9b66d16f5a8420a7622d50d084a3339346a1da4b332d4e62d8817",
-      "size": 9559
+      "sha256": "a6e5c26f5a8994156181c69a9d679c3625e6910de7c868d58286c8a3ed42b74e",
+      "size": 9550
     },
     {
       "path": "tests/e2e/test_reference_journey.py",
-      "sha256": "65e7121da934e622c09333dab26c3c526df2e669ed4077adcc3de13e64d3eb51",
-      "size": 3941
+      "sha256": "bdfbdc964aa12e94af4e2986d36a0cca46d994a361c4b743b761ed8bc0567766",
+      "size": 3932
+    },
+    {
+      "path": "tests/fixtures/config/README.md",
+      "sha256": "6637fc1d89ece4ccc863af9c66b6a2593b2825a2808683de4c0fc6c87a2f2abf",
+      "size": 356
+    },
+    {
+      "path": "tests/fixtures/config/invalid/missing-approver.yaml",
+      "sha256": "82290acfe7cf1674558e175705cafc2360178b4fc257a4c3b1cd2f492962ebad",
+      "size": 289
+    },
+    {
+      "path": "tests/fixtures/config/invalid/provider-allows-solo.yaml",
+      "sha256": "13a7adf2681c3e752657655b3e110e77f26981df01aab5dc530872209a69d401",
+      "size": 313
+    },
+    {
+      "path": "tests/fixtures/config/invalid/solo-uses-provider-review.yaml",
+      "sha256": "eacdce5e3310412198b1c8a73ade83c5bbbb8310f799be9e11acdb19931d218e",
+      "size": 293
+    },
+    {
+      "path": "tests/fixtures/config/invalid/unknown-git-capability.yaml",
+      "sha256": "80b79e81f59498823ce2948b36b77bd13477b1c2d90411c97362ae5047b84a9e",
+      "size": 314
+    },
+    {
+      "path": "tests/fixtures/config/valid-provider.yaml",
+      "sha256": "dbbd285f7f87dc55388865fe13d3f1b5b30dc07635cf5db1e4fac83cccd12235",
+      "size": 452
+    },
+    {
+      "path": "tests/fixtures/config/valid-solo.yaml",
+      "sha256": "4af373b390e700d2a12ab8790fe062d29b906b66e2f40e269f87a910b82d4654",
+      "size": 369
+    },
+    {
+      "path": "tests/fixtures/invalid/broken-reference/product/signals/broken.md",
+      "sha256": "72d45d09510e9b44d5592111c09a09d4bec97f87a01582f958efaa5b97fba411",
+      "size": 605
+    },
+    {
+      "path": "tests/fixtures/invalid/credential-like-content/product/signals/credential.md",
+      "sha256": "121ec405e2ae51f9b6049fefa90aa5769cbc4b67a3dcaa23e7d398de67af47c0",
+      "size": 592
+    },
+    {
+      "path": "tests/fixtures/invalid/duplicate-ids/product/signals/first.md",
+      "sha256": "89034aa5c33807ffa812b552c0fd2a98ea38cc0b334f60e89784b13639d6fd9e",
+      "size": 501
+    },
+    {
+      "path": "tests/fixtures/invalid/duplicate-ids/product/signals/second.md",
+      "sha256": "59083c5d016c8ba6f6ba800f8093745ccb3c2b1b8904c8d954e2c3d14728c297",
+      "size": 503
+    },
+    {
+      "path": "tests/fixtures/invalid/incomplete-evidence-waiver/product/opportunities/incomplete-waiver.md",
+      "sha256": "067d30c7e43cc5a5c925675c856c72b49c1fdb4a069ad37c2ba8e85e9be1c3d8",
+      "size": 933
+    },
+    {
+      "path": "tests/fixtures/invalid/missing-measurement-anchor/product/learnings/missing-anchor.md",
+      "sha256": "26fb3eba9efc94536bf81f03021fdf7e2d82ec46229ca7118066e55d09902181",
+      "size": 1142
+    },
+    {
+      "path": "tests/fixtures/invalid/oversized-excerpt/product/signals/oversized.md",
+      "sha256": "b9c19bb6108849e81ec410d026e0eb03f715b08aa76a72927ac47db7f162a02c",
+      "size": 1284
+    },
+    {
+      "path": "tests/fixtures/invalid/stale-adapter-hash/adapters/codex/ADAPTER.md",
+      "sha256": "aff4c226cf313d79550db89b0bdfbeacdb11d7685d6845636aa0f3a0f790f45c",
+      "size": 111
+    },
+    {
+      "path": "tests/fixtures/invalid/stale-adapter-hash/adapters/codex/manifest.yaml",
+      "sha256": "ee2384ca1a4c792b1331a45d88efc43e6f49c8fe8b647e015d76447b0c08d273",
+      "size": 523
+    },
+    {
+      "path": "tests/fixtures/invalid/stale-adapter-hash/integrations/capabilities.yaml",
+      "sha256": "f4d7ef7acd50e75e3447dc3a839ce4384db110d54331667c356715c1fab96ce9",
+      "size": 147
+    },
+    {
+      "path": "tests/fixtures/invalid/stale-adapter-hash/skills/discovery/SKILL.md",
+      "sha256": "18832797a67b22b165c4c5f823384d346e67ea3e55fd1760169a4e2816e69e44",
+      "size": 189
+    },
+    {
+      "path": "tests/fixtures/invalid/stale-implementation-reference/.product-os/review-state.yaml",
+      "sha256": "99e0bd9b00b88a11b0182fd28109493ec02decad0886d56eede6c63619caac56",
+      "size": 166
+    },
+    {
+      "path": "tests/fixtures/invalid/stale-implementation-reference/product/prds/stale-plan.md",
+      "sha256": "8b3ccb0d6735075c464fb8902592f7a671d9138f16c7d6ab0470a0681e116220",
+      "size": 1588
+    },
+    {
+      "path": "tests/fixtures/invalid/stale-outcome-definition/product/opportunities/opportunity.md",
+      "sha256": "e6e74a9d7c001f1a3d695ed74b515d93a2e4ca43c26866a99b548a094ebef64e",
+      "size": 1003
+    },
+    {
+      "path": "tests/fixtures/invalid/stale-outcome-definition/product/outcome-contracts/stale-definition.md",
+      "sha256": "645ed0e744e9d924cdc1a6515e64a33ac2b979df9a558cad6b98ca502500ea4a",
+      "size": 956
+    },
+    {
+      "path": "tests/fixtures/invalid/stale-outcome-definition/product/prds/owner.md",
+      "sha256": "3c9683a373bd5b6b5798ff28aee7509d12c8bd82314d93bace73b56e4682cbe7",
+      "size": 1213
+    },
+    {
+      "path": "tests/fixtures/invalid/stale-outcome-definition/product/signals/source.md",
+      "sha256": "fa01d1450db83a54aa4b90a145a4e5284bfb76e7c40526dd9ddd59b73025c0a2",
+      "size": 618
+    },
+    {
+      "path": "tests/fixtures/invalid/transcript-sized-content/product/signals/transcript-sized.md",
+      "sha256": "651eb976c3bc964b8d49bfd65e440f5dd51a24e1701a6f1a74d45d6d95ffb2b6",
+      "size": 15365
+    },
+    {
+      "path": "tests/fixtures/invalid/type-mismatch/product/signals/mismatch.md",
+      "sha256": "a7754760523cd211ae2f66f38f360d1d5cf773a6f9d0dde1a1e6aa243d7d008d",
+      "size": 545
+    },
+    {
+      "path": "tests/fixtures/invalid/unverified-executable-binding/product/outcome-contracts/unverified.md",
+      "sha256": "8a29ad3776c573e40b9bb57c824453f1764650ffc284619f1ee6dfbe464d9f2c",
+      "size": 830
+    },
+    {
+      "path": "tests/fixtures/reference-journey/.agents/skills/product-os-decision-queue/SKILL.md",
+      "sha256": "c84ee594db11b3a15f7c09b5cc993d108f39fec6191dd3e214d12bfc08bfa139",
+      "size": 496
+    },
+    {
+      "path": "tests/fixtures/reference-journey/.agents/skills/product-os-discovery/SKILL.md",
+      "sha256": "012ad7a545e5795eb2e5345dfec1b356ff8d060979bddefe986cdde5ad44c371",
+      "size": 550
+    },
+    {
+      "path": "tests/fixtures/reference-journey/.agents/skills/product-os-initiative/SKILL.md",
+      "sha256": "eb5b73c511454c518d7351ed2b3f8c0fc862c81908a3c7b329db84ca3c7e3d40",
+      "size": 529
+    },
+    {
+      "path": "tests/fixtures/reference-journey/.agents/skills/product-os-outcome-review/SKILL.md",
+      "sha256": "fd6f83ab691f2f86547ba8f81718a7034b8ecb82ff5f29e750dbfebbeca6e7df",
+      "size": 552
+    },
+    {
+      "path": "tests/fixtures/reference-journey/.agents/skills/product-os-prd-handoff/SKILL.md",
+      "sha256": "2e8c48eeed844b06977d2898f248d61ebbab56af93585278d8f9ec7268f65d2a",
+      "size": 548
+    },
+    {
+      "path": "tests/fixtures/reference-journey/.agents/skills/product-os-prd-interrogation/SKILL.md",
+      "sha256": "65f8d9ec8b6e36aa136c84929b09bd5a22eb4218994580c7c1a9cb2a6afc4c2d",
+      "size": 557
+    },
+    {
+      "path": "tests/fixtures/reference-journey/.agents/skills/product-os-prd-review/SKILL.md",
+      "sha256": "bf0d92b9cff22074e69ad511fc204ec9b454447afb8ee0e985a9a5156eca69dc",
+      "size": 544
+    },
+    {
+      "path": "tests/fixtures/reference-journey/.agents/skills/product-os-product-update/SKILL.md",
+      "sha256": "f3322ced5bdbdc3c5d9ca54bc1f23f2517db172ed6add839b71e015a154a4368",
+      "size": 550
+    },
+    {
+      "path": "tests/fixtures/reference-journey/.agents/skills/product-os-setup/SKILL.md",
+      "sha256": "5f1a7649dd1868d6fda92725a0d3325f5ffae75756e5065a4a09a4fa19a2d15a",
+      "size": 532
+    },
+    {
+      "path": "tests/fixtures/reference-journey/.product-os/config.yaml",
+      "sha256": "dbbd285f7f87dc55388865fe13d3f1b5b30dc07635cf5db1e4fac83cccd12235",
+      "size": 452
+    },
+    {
+      "path": "tests/fixtures/reference-journey/.product-os/review-state.yaml",
+      "sha256": "1566065d3c1620ca6febf0876e70476139171c7037bf13bbd82bee0c0b357fab",
+      "size": 2993
+    },
+    {
+      "path": "tests/fixtures/reference-journey/README.md",
+      "sha256": "c114563cb82fdc3f4fbfad2615834cb6869065a00b6f8ed00a8abdd429148913",
+      "size": 480
+    },
+    {
+      "path": "tests/fixtures/reference-journey/external/analytics/amplitude-result.yaml",
+      "sha256": "b180c74b1222288b39fe2bd3678a693ac91dfb1e3c3438fc3fba60be5636f277",
+      "size": 990
+    },
+    {
+      "path": "tests/fixtures/reference-journey/external/code-repositories/trading-wallet/specs/cross-chain-swap/implementation-plan.md",
+      "sha256": "5e5ab3eb5c6c3b59b1aaede0d9fa9d993eab4547d5e4e0576e6ca5c2ba1d58fe",
+      "size": 1275
+    },
+    {
+      "path": "tests/fixtures/reference-journey/external/delivery/projects.yaml",
+      "sha256": "9adba546dfd94c235120ba9e960832c9fa2c21cc1aaf61fbb8971ec675d49936",
+      "size": 1254
+    },
+    {
+      "path": "tests/fixtures/reference-journey/external/git/reviews.yaml",
+      "sha256": "b7e558884295e988b0f3555ff43b23dba388621d151ff712459c2d4a4f159b3b",
+      "size": 1471
+    },
+    {
+      "path": "tests/fixtures/reference-journey/inputs/granola/trading-01.json",
+      "sha256": "a2c22360851b8b1ab5bdf97ed8799a19e684367f9a889e1acb4eb72d2f9732ab",
+      "size": 403
+    },
+    {
+      "path": "tests/fixtures/reference-journey/inputs/granola/trading-02.json",
+      "sha256": "48e51eea85b25219a2477c6cfb89d53dcb47d22accfc1e8a5ea8d5a9230e4757",
+      "size": 431
+    },
+    {
+      "path": "tests/fixtures/reference-journey/inputs/granola/trading-03.json",
+      "sha256": "1f826a08ce2fe1ddf4a09be3adba324b88d3a5235539c1d9a119eecfda9dc233",
+      "size": 417
+    },
+    {
+      "path": "tests/fixtures/reference-journey/inputs/pasted/bridge-progress.json",
+      "sha256": "4e870bcba02ac26912d92ce6b1cc008e19f2abbe16089435b8ba979ea9108103",
+      "size": 331
+    },
+    {
+      "path": "tests/fixtures/reference-journey/product/initiatives/best-in-class-trading-experience.md",
+      "sha256": "4461221d4b7dcc349350e722c3f5d4f4695223a8ccac16c8ad71cd524583d104",
+      "size": 3572
+    },
+    {
+      "path": "tests/fixtures/reference-journey/product/learnings/trading-experience-outcome.md",
+      "sha256": "ebb3014bbdcc9fbd3bb7293c6958c036aea8305d9d064f5f3aceb136902d0860",
+      "size": 2913
+    },
+    {
+      "path": "tests/fixtures/reference-journey/product/opportunities/best-in-class-trading.md",
+      "sha256": "40d3ddb7e43e2ca76ce6979bc87fce8f36afdd3936e3bfdd8b166f9cbddc2b6d",
+      "size": 2490
+    },
+    {
+      "path": "tests/fixtures/reference-journey/product/patterns/trading-continuity.md",
+      "sha256": "01931f0a16c6d077cb0f3b8855feccc11d53483ec0aa4466fee8db583aa65771",
+      "size": 1322
+    },
+    {
+      "path": "tests/fixtures/reference-journey/product/patterns/transaction-trust-gaps.md",
+      "sha256": "7eacaa03f4d287e001702f7c3af8f02559332cd7140224d4c0ad4af1e488d71a",
+      "size": 1312
+    },
+    {
+      "path": "tests/fixtures/reference-journey/product/prds/bridge-progress-tracking.md",
+      "sha256": "b8fe257664aa11fa1ac787f1f66a7bdc2d292584d4e1f44517b1a08ebb39725e",
+      "size": 3714
+    },
+    {
+      "path": "tests/fixtures/reference-journey/product/prds/cross-chain-swap.md",
+      "sha256": "e31f65cb6333247b47117dffc06109cb0ea6ef4621c61eb313e404aca7dbf98a",
+      "size": 3854
+    },
+    {
+      "path": "tests/fixtures/reference-journey/product/prds/non-blocking-transaction-status.md",
+      "sha256": "7018ac9f2b0b8f1df087aec6e544099c934d661ac8b59306ad53967db70c45ab",
+      "size": 3311
+    },
+    {
+      "path": "tests/fixtures/reference-journey/product/prds/skip-redundant-native-confirmation.md",
+      "sha256": "609255c8aff23058d2f887739be8c34d9b5b6c3d24efad3afe5fd27845e1a2dd",
+      "size": 3636
+    },
+    {
+      "path": "tests/fixtures/reference-journey/product/signals/blocking-status.md",
+      "sha256": "ff0c34c441fcac86dcbc9eaeffa4ab05b0c7ededf41977a3076757a5823dec72",
+      "size": 1106
+    },
+    {
+      "path": "tests/fixtures/reference-journey/product/signals/bridge-progress-ambiguity.md",
+      "sha256": "8970b2d6bd87360d6c0f92d63751397e88ae8d4ae232ecccaaf5eb58c6d8f752",
+      "size": 958
+    },
+    {
+      "path": "tests/fixtures/reference-journey/product/signals/cross-chain-swap-friction.md",
+      "sha256": "3ff1928d03b791079a9a9d35ae8f01a56e374c255ff14254afca0f7b3f267d31",
+      "size": 1101
+    },
+    {
+      "path": "tests/fixtures/reference-journey/product/signals/redundant-confirmation.md",
+      "sha256": "e70c50c7db8b83f00b215b109a8510472abe8d50b6662c7fe274af339b55447a",
+      "size": 1122
+    },
+    {
+      "path": "tests/fixtures/reference-journey/product/updates/2025-05.md",
+      "sha256": "ee71a280943fe9dbc9f6b5533cf7eb5b7cbb348020ef690686809e781356c5f7",
+      "size": 1881
+    },
+    {
+      "path": "tests/fixtures/valid-waiver-workspace/product/opportunities/waived-opportunity.md",
+      "sha256": "f5464be2d9a82fcac2ab7e5ccdb351f36fc84588186c5a55aa74dc103d9732a2",
+      "size": 1848
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/.agents/skills/product-os-decision-queue/SKILL.md",
+      "sha256": "c84ee594db11b3a15f7c09b5cc993d108f39fec6191dd3e214d12bfc08bfa139",
+      "size": 496
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/.agents/skills/product-os-discovery/SKILL.md",
+      "sha256": "012ad7a545e5795eb2e5345dfec1b356ff8d060979bddefe986cdde5ad44c371",
+      "size": 550
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/.agents/skills/product-os-initiative/SKILL.md",
+      "sha256": "eb5b73c511454c518d7351ed2b3f8c0fc862c81908a3c7b329db84ca3c7e3d40",
+      "size": 529
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/.agents/skills/product-os-outcome-review/SKILL.md",
+      "sha256": "fd6f83ab691f2f86547ba8f81718a7034b8ecb82ff5f29e750dbfebbeca6e7df",
+      "size": 552
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/.agents/skills/product-os-prd-handoff/SKILL.md",
+      "sha256": "2e8c48eeed844b06977d2898f248d61ebbab56af93585278d8f9ec7268f65d2a",
+      "size": 548
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/.agents/skills/product-os-prd-interrogation/SKILL.md",
+      "sha256": "65f8d9ec8b6e36aa136c84929b09bd5a22eb4218994580c7c1a9cb2a6afc4c2d",
+      "size": 557
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/.agents/skills/product-os-prd-review/SKILL.md",
+      "sha256": "bf0d92b9cff22074e69ad511fc204ec9b454447afb8ee0e985a9a5156eca69dc",
+      "size": 544
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/.agents/skills/product-os-product-update/SKILL.md",
+      "sha256": "f3322ced5bdbdc3c5d9ca54bc1f23f2517db172ed6add839b71e015a154a4368",
+      "size": 550
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/.agents/skills/product-os-setup/SKILL.md",
+      "sha256": "5f1a7649dd1868d6fda92725a0d3325f5ffae75756e5065a4a09a4fa19a2d15a",
+      "size": 532
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/.product-os/config.yaml",
+      "sha256": "dbbd285f7f87dc55388865fe13d3f1b5b30dc07635cf5db1e4fac83cccd12235",
+      "size": 452
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/.product-os/review-state.yaml",
+      "sha256": "0be937bdf94fc83e79196f4796467134d549a00b47979743d64de772672d9e79",
+      "size": 2155
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/external/analytics/amplitude-result.yaml",
+      "sha256": "32a944132846122b2590e1c0db7a2bcae438d3d9fef60a786ab29cbfefd253a1",
+      "size": 578
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/external/code-repositories/transaction-app/specs/route-comparison/implementation-plan.md",
+      "sha256": "7883cb5ac47bf37e50f156fc439aa7067ba8ff56e9481aff519d86680f625bc8",
+      "size": 399
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/external/git/prd-recovery-v2-material-change.yaml",
+      "sha256": "647caa8b0c554113768177ccce748f9f5f00ea16b3b5ac5aed8fe416442af4e6",
+      "size": 416
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/external/git/reviews.yaml",
+      "sha256": "a8c404a33b339ed856de1886fa178f0f8c15f2f2e82d3f83770e2411c4d79a78",
+      "size": 921
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/external/linear/projects.yaml",
+      "sha256": "aea2e15f78988f2f2bbbeafbd8afbf33f3da4e344e094027ed4e6dee47d19b6b",
+      "size": 1160
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/inputs/granola/meeting-fixture-a.json",
+      "sha256": "93987491ea361bf9a806a71918c947fff1efba771b2c3dbfc25faa0e43629e25",
+      "size": 336
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/inputs/granola/meeting-fixture-b.json",
+      "sha256": "a32b9a879735f69eebc06d0843de2cbc3b59a0fa628ea475408c079d309cf61b",
+      "size": 355
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/inputs/pasted/contradictory-note.json",
+      "sha256": "a2f1694ab94e3264c1c4d2e840c601af9d87753fae6a857ec27bba4f1db360d4",
+      "size": 325
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/product/initiatives/trustworthy-transaction.md",
+      "sha256": "a7d7dfa1c9421059782ea1612992f7bace832f3197a040f1bba9f2040bf504e0",
+      "size": 2671
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/product/learnings/transaction-completion.md",
+      "sha256": "34f00903dcff1fdbf55451f83cdc7ad867d93cd02dc5dd50fcda0c75b029f764",
+      "size": 1918
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/product/opportunities/trustworthy-first-transaction.md",
+      "sha256": "e8ec8bdb1e7b30cf0fad69b8733ef1a9c1832714a3dc9e086dd9a627c5515223",
+      "size": 2132
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/product/patterns/transaction-confidence.md",
+      "sha256": "0c477f82796bea90f4031e9f6a28fd6b24d793f6f4a89b3ef46dd394fc66e0b7",
+      "size": 1274
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/product/prds/failure-recovery.md",
+      "sha256": "57fe1a97ecc4d2b3ac1d085bf5535a401234d79ccf26fbe83941575e5480526c",
+      "size": 2897
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/product/prds/route-comparison.md",
+      "sha256": "4c6f1b68c6f7db682653087500ec6ec0ff6ba662c9aafffa41aebedf7acd682a",
+      "size": 4025
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/product/signals/confirmation-friction.md",
+      "sha256": "03895d28b819255e69cdaee8e29a3f28d70966a5bd8cc908175c33554345fc68",
+      "size": 866
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/product/signals/meeting-routing-friction.md",
+      "sha256": "abd2b2d98b0fe6187221c52b118c2c9bb7fdc5bf349d68f635b6cce4842fdfc2",
+      "size": 1009
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/product/signals/new-evidence-challenges-assumption.md",
+      "sha256": "f44447db74ea117d14d93d2fe340f4ab05a1e8158eb335dbed909e23f5b9d271",
+      "size": 837
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/product/signals/power-user-contradiction.md",
+      "sha256": "c9fb8496d5a95e16deb704bbfdf8da95a2a325d3b00f0b5ba6973b76f5c1ec0a",
+      "size": 819
+    },
+    {
+      "path": "tests/fixtures/valid-workspace/product/updates/2026-07.md",
+      "sha256": "f9694b65cbab3751bc5699b3b1d175fd8466623f7c7768bd30ba43cffdd2d123",
+      "size": 1602
     },
     {
       "path": "tests/security/test_installer.py",
@@ -1058,19 +1053,19 @@
     },
     {
       "path": "tests/validator/test_repository_fixtures.py",
-      "sha256": "7a5a6e35cd9207d0cb4a3923c2ed56ea944b02ee7b16597ef66ab382ffe5d621",
-      "size": 1335
+      "sha256": "4bb56083592548be3f2fff19cb673674de5bdcefe55410c0ee4c389322bf1616",
+      "size": 1332
     },
     {
       "path": "tests/validator/test_validator.py",
-      "sha256": "751a12a94d8959563540afa2d0c9bf5b461eb40b1c5e9ba126ba27163f9281e9",
-      "size": 57849
+      "sha256": "da543f4c7c57b5d171229a754323adbe94a0c8a8cdca61b215e0a7fdde10a373",
+      "size": 61918
     }
   ],
   "hash_algorithm": "sha256",
   "manifest_version": 1,
   "product": "product-decision-os",
-  "publisher": "Product Decision OS contributors",
+  "publisher": "unpublished",
   "release": "0.1.0",
-  "tree_digest": "6c4a2335a710c10afc0eae256c5178e705d6568331f24f6e1b81f1fb68786ab1"
+  "tree_digest": "d62b46fb9e66aef6f9d20f00cbf8a0246ed5bd931dc3b711ecd0569ef7544321"
 }

@@ -144,7 +144,7 @@ def test_real_release_clean_install_matrix_and_installed_manifest(
     target = tmp_path / "private-workspace"
     target.mkdir()
     subprocess.run(["git", "init", "-q", str(target)], check=True)
-    config = yaml.safe_load((source / "examples/fixtures/config/valid-solo.yaml").read_text())
+    config = yaml.safe_load((source / "tests/fixtures/config/valid-solo.yaml").read_text())
     config["selected_client"] = client
     config_path = tmp_path / "config.yaml"
     config_path.write_text(yaml.safe_dump(config, sort_keys=False), encoding="utf-8")
@@ -210,7 +210,7 @@ def test_plan_hash_is_stable_across_source_relocation(repo_root: Path, tmp_path:
     first = _relocated_release(repo_root, tmp_path / "first")
     second = _relocated_release(repo_root, tmp_path / "second")
     config = tmp_path / "config.yaml"
-    config.write_bytes((first / "examples/fixtures/config/valid-solo.yaml").read_bytes())
+    config.write_bytes((first / "tests/fixtures/config/valid-solo.yaml").read_bytes())
     first_target = tmp_path / "first-target"
     second_target = tmp_path / "second-target"
     first_target.mkdir()
@@ -229,7 +229,7 @@ def test_real_release_rejects_config_mismatch_and_confirmed_plan_drift(
     target.mkdir()
     subprocess.run(["git", "init", "-q", str(target)], check=True)
     config_path = tmp_path / "config.yaml"
-    config_path.write_bytes((source / "examples/fixtures/config/valid-solo.yaml").read_bytes())
+    config_path.write_bytes((source / "tests/fixtures/config/valid-solo.yaml").read_bytes())
     with pytest.raises(InstallError, match="selected_client.*does not match"):
         plan_install(source, target, "codex", config_path, allow_unpublished_local=True)
 

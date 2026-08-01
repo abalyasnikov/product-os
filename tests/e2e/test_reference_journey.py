@@ -17,7 +17,7 @@ def _artifacts(workspace: Path) -> dict[str, dict[str, object]]:
 
 
 def test_reference_journey_closes_the_evidence_to_learning_loop(repo_root: Path) -> None:
-    workspace = repo_root / "examples/fixtures/valid-workspace"
+    workspace = repo_root / "tests/fixtures/valid-workspace"
     report = validate_workspace(workspace, command="smoke-test")
     assert report.ok, [error.to_dict() for error in report.errors]
 
@@ -52,7 +52,7 @@ def test_reference_journey_closes_the_evidence_to_learning_loop(repo_root: Path)
 
 
 def test_reference_handoff_is_idempotent_and_uses_approved_versions(repo_root: Path) -> None:
-    external = repo_root / "examples/fixtures/valid-workspace/external"
+    external = repo_root / "tests/fixtures/valid-workspace/external"
     reviews = yaml.safe_load((external / "git/reviews.yaml").read_text(encoding="utf-8"))
     delivery = yaml.safe_load((external / "linear/projects.yaml").read_text(encoding="utf-8"))
 
@@ -78,7 +78,7 @@ def test_reference_handoff_is_idempotent_and_uses_approved_versions(repo_root: P
 
 
 def test_new_evidence_produces_a_reviewed_material_change(repo_root: Path) -> None:
-    workspace = repo_root / "examples/fixtures/valid-workspace"
+    workspace = repo_root / "tests/fixtures/valid-workspace"
     artifacts = _artifacts(workspace)
     challenging_signal = artifacts["signal_01JABCDE04"]
     assert challenging_signal["relationships"]["challenges"] == ["prd_01JABCDE02"]

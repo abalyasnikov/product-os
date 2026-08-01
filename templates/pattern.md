@@ -3,9 +3,6 @@ schema_version: 1
 id: pattern_<stable-id>
 type: pattern
 title: <repeated or conflicting behavior>
-created_at: <ISO-8601 timestamp>
-updated_at: <ISO-8601 timestamp>
-authors: [<owner>]
 relationships:
   signals: [signal_<id>]
 interpretation: <agent interpretation, distinct from source facts>

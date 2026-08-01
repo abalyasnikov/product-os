@@ -3,9 +3,6 @@ schema_version: 1
 id: learning_<stable-id>
 type: learning
 title: <measured learning>
-created_at: <ISO-8601 timestamp>
-updated_at: <ISO-8601 timestamp>
-authors: [<product lead>]
 relationships:
   initiative: initiative_<id>
 product_bet_id: initiative_<id>

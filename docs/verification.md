@@ -20,7 +20,7 @@ empty directory and proves:
 3. active skill projection for the selected client;
 4. a real Git commit containing pre-authored normalized evidence and an undecided Opportunity;
 5. a second commit containing the human-owned `pursue` event bound to the first commit;
-6. an Initiative with six child PRDs and synthetic review records bound to reachable commits;
+6. an Initiative with four child PRDs and synthetic review records bound to reachable commits;
 7. delivery and optional Implementation Plan references bound to the same reachable approval version;
 8. an explicit measurement anchor and synthetic analytics result;
 9. pre-authored Outcome Review, Learning decision, and sourced Product Update artifacts materialized through real version boundaries;
@@ -30,8 +30,9 @@ For every decision or implementation handoff, the validator checks more than SHA
 reachability: the referenced commit must contain the exact artifact. Solo review additionally
 requires the configured approval trailer in that commit; a review-state cache cannot invent it.
 
-The product example is synthetic where source history contains no trustworthy measurement.
-That is deliberate: it tests the operating contract without inventing Zerion production facts.
+The technical fixture uses synthetic measurement where source history contains no trustworthy
+result. That is deliberate: it tests the operating contract without inventing Zerion production
+facts. The human-readable historical example contains no fabricated result.
 The runner does not judge source material, execute agent skills, interrogate a PM, or generate
 the artifacts; those behaviors require an agent-quality eval and are not inferred from this
 deterministic journey.

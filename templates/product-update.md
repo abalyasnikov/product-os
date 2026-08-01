@@ -3,9 +3,6 @@ schema_version: 1
 id: update_<stable-id>
 type: product_update
 title: <period> product update
-created_at: <ISO-8601 timestamp>
-updated_at: <ISO-8601 timestamp>
-authors: [<owner>]
 relationships:
   learnings: [learning_<id>]
 period_start: <YYYY-MM-DD>

@@ -16,7 +16,15 @@ from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import SchemaError, ValidationError
 from referencing import Registry, Resource
 
-from .frontmatter import FrontmatterError, MarkdownDocument, load_yaml_strict, parse_markdown, parse_markdown_text
+from .frontmatter import (
+    FrontmatterError,
+    MarkdownDocument,
+    load_yaml_strict,
+    markdown_sections,
+    parse_markdown,
+    parse_markdown_text,
+    structured_blocks,
+)
 
 
 TYPE_CONFIG: dict[str, tuple[str, str]] = {
@@ -554,6 +562,7 @@ class WorkspaceValidator:
         self._index_ids()
         self._validate_relationships()
         self._validate_typed_references()
+        self._validate_product_graph_contracts()
         self.report.check("ids-and-relationships", before, f"indexed {len(self.by_id)} unique artifact ID(s)")
 
         before = len(self.report.errors)
@@ -574,6 +583,8 @@ class WorkspaceValidator:
         before = len(self.report.errors)
         for document in self.documents:
             artifact_type = _normalize_type(document.metadata.get("type"))
+            if artifact_type in {"prd", "initiative"}:
+                self._validate_readable_document_contract(document)
             if artifact_type in {"prd", "initiative", "outcome_contract"}:
                 self._validate_outcome(document)
             if artifact_type == "learning":
@@ -714,7 +725,7 @@ class WorkspaceValidator:
     def _validate_envelope(self, document: MarkdownDocument) -> None:
         metadata = document.metadata
         path = _relative(document.path, self.workspace)
-        required = ("schema_version", "id", "type", "title", "created_at", "updated_at", "authors", "relationships")
+        required = ("schema_version", "id", "type", "title", "relationships")
         for field_name in required:
             if field_name not in metadata:
                 self.report.error(
@@ -1079,6 +1090,153 @@ class WorkspaceValidator:
             if _normalize_type(metadata.get("type")) == "product_update":
                 self._validate_update_sources(document)
 
+    def _validate_product_graph_contracts(self) -> None:
+        for document in self.documents:
+            metadata = document.metadata
+            artifact_type = _normalize_type(metadata.get("type"))
+            legacy_fields = {"outcome", "outcome_contract", "problem", "product_thesis", "child_prd_ids"}
+            if artifact_type not in {"prd", "initiative"} or legacy_fields.intersection(metadata):
+                continue
+            relationships = metadata.get("relationships")
+            if not isinstance(relationships, Mapping):
+                continue
+            path = _relative(document.path, self.workspace)
+            artifact_id = metadata.get("id")
+            if artifact_type == "initiative":
+                child_ids = relationships.get("prds")
+                if not isinstance(child_ids, list) or len(child_ids) < 2:
+                    self.report.error(
+                        "INITIATIVE_CHILDREN_INCOMPLETE",
+                        "An Initiative requires at least two distinct child PRDs; otherwise use a standalone PRD.",
+                        path=path,
+                        artifact_id=artifact_id if isinstance(artifact_id, str) else None,
+                        field="relationships.prds",
+                        hint="Link at least two real child PRDs or remove the unnecessary Initiative.",
+                    )
+                    continue
+                for child_id in child_ids:
+                    child = self.by_id.get(child_id) if isinstance(child_id, str) else None
+                    if child is None or _normalize_type(child.metadata.get("type")) != "prd":
+                        continue
+                    child_relationships = child.metadata.get("relationships")
+                    back_reference = (
+                        child_relationships.get("initiative")
+                        if isinstance(child_relationships, Mapping)
+                        else None
+                    )
+                    if back_reference != artifact_id:
+                        self.report.error(
+                            "INITIATIVE_PRD_LINK_NOT_BIDIRECTIONAL",
+                            f"Child PRD '{child_id}' does not point back to Initiative '{artifact_id}'.",
+                            path=_relative(child.path, self.workspace),
+                            artifact_id=child_id,
+                            field="relationships.initiative",
+                            hint="Keep Initiative and child PRD relationships bidirectional.",
+                        )
+            elif artifact_type == "prd":
+                initiative_id = relationships.get("initiative")
+                opportunity_id = relationships.get("opportunity")
+                if not isinstance(initiative_id, str) and not isinstance(opportunity_id, str):
+                    self.report.error(
+                        "PRD_PRODUCT_BET_LINK_MISSING",
+                        "A PRD must link either to its parent Initiative or directly to its Opportunity.",
+                        path=path,
+                        artifact_id=artifact_id if isinstance(artifact_id, str) else None,
+                        field="relationships",
+                        hint="Use relationships.initiative for a child PRD or relationships.opportunity for a standalone Product Bet.",
+                    )
+                if isinstance(initiative_id, str):
+                    parent = self.by_id.get(initiative_id)
+                    parent_relationships = parent.metadata.get("relationships") if parent else None
+                    parent_children = (
+                        parent_relationships.get("prds")
+                        if isinstance(parent_relationships, Mapping)
+                        else None
+                    )
+                    if parent is not None and (
+                        not isinstance(parent_children, list) or artifact_id not in parent_children
+                    ):
+                        self.report.error(
+                            "PRD_INITIATIVE_LINK_NOT_BIDIRECTIONAL",
+                            f"Parent Initiative '{initiative_id}' does not list PRD '{artifact_id}'.",
+                            path=_relative(parent.path, self.workspace),
+                            artifact_id=initiative_id,
+                            field="relationships.prds",
+                            hint="Keep Initiative and child PRD relationships bidirectional.",
+                        )
+
+    def _validate_readable_document_contract(self, document: MarkdownDocument) -> None:
+        metadata = document.metadata
+        artifact_type = _normalize_type(metadata.get("type"))
+        legacy_fields = {"outcome", "outcome_contract", "problem", "product_thesis", "child_prd_ids"}
+        if legacy_fields.intersection(metadata):
+            return  # backward-compatible large-frontmatter artifact
+        required_sections = {
+            "prd": (
+                "problem",
+                "evidence",
+                "jtbd",
+                "current and desired journey",
+                "scope",
+                "outcome contract",
+                "gtm hypothesis",
+                "risks and dependencies",
+                "delivery",
+            ),
+            "initiative": (
+                "vision",
+                "why this matters",
+                "evidence and confidence",
+                "shared outcome",
+                "child prds",
+                "sequencing and dependencies",
+                "outcome contract",
+                "gtm hypothesis",
+                "risks and open questions",
+            ),
+        }.get(artifact_type, ())
+        sections = markdown_sections(document)
+        path = _relative(document.path, self.workspace)
+        artifact_id = metadata.get("id")
+        title_match = re.search(r"(?m)^#[ \t]+([^#\n].*?)[ \t]*$", document.body)
+        expected_title = metadata.get("title")
+        if (
+            title_match is None
+            or not isinstance(expected_title, str)
+            or title_match.group(1).strip() != expected_title
+        ):
+            self.report.error(
+                "READABLE_TITLE_MISMATCH",
+                "The readable H1 must match the frontmatter title used for indexing.",
+                path=path,
+                artifact_id=artifact_id if isinstance(artifact_id, str) else None,
+                field="body.h1",
+                hint="Keep one H1 equal to the artifact title.",
+            )
+        for section_name in required_sections:
+            content = sections.get(section_name, "").strip()
+            if not content or re.search(r"<[^>\n]+>", content):
+                self.report.error(
+                    "READABLE_SECTION_MISSING",
+                    f"Readable {artifact_type} section '## {section_name.title()}' is missing or empty.",
+                    path=path,
+                    artifact_id=artifact_id if isinstance(artifact_id, str) else None,
+                    field=f"body.{section_name}",
+                    hint="Keep product reasoning in readable Markdown; an explicit named gap is valid, an empty section is not.",
+                )
+        if artifact_type == "prd":
+            scope = sections.get("scope", "")
+            for subsection in ("Requirements", "Non-goals"):
+                if not re.search(rf"(?mi)^###[ \t]+{re.escape(subsection)}[ \t]*$", scope):
+                    self.report.error(
+                        "READABLE_SECTION_MISSING",
+                        f"PRD Scope requires a '### {subsection}' subsection.",
+                        path=path,
+                        artifact_id=artifact_id if isinstance(artifact_id, str) else None,
+                        field=f"body.scope.{subsection.casefold()}",
+                        hint="State the product boundary in readable Markdown.",
+                    )
+
     def _validate_update_sources(self, document: MarkdownDocument) -> None:
         claims = document.metadata.get("claims")
         if not isinstance(claims, list):
@@ -1225,9 +1383,12 @@ class WorkspaceValidator:
             return self._fixture_synthetic_cache
         self._fixture_synthetic_cache = False
         distribution_root = self._distribution_root()
-        fixture_root = distribution_root / "examples" / "fixtures" if distribution_root else None
+        fixture_roots = (
+            distribution_root / "tests" / "fixtures",
+            distribution_root / "examples" / "fixtures",  # legacy distributions
+        ) if distribution_root else ()
         state_path = self.workspace / ".product-os" / "review-state.yaml"
-        if not fixture_root or not self._safe_contained_path(self.workspace, fixture_root):
+        if not any(self._safe_contained_path(self.workspace, root) for root in fixture_roots):
             return False
         if not state_path.is_file() or not self._safe_contained_path(state_path, self.workspace):
             return False
@@ -1513,14 +1674,14 @@ class WorkspaceValidator:
                     field=dotted,
                     hint="Externalize the transcript and keep a source reference plus a minimal approved excerpt.",
                 )
-        if len(document.body) >= 10_000:
+        if len(document.body) >= 5_000 and len(SPEAKER_LINE_RE.findall(document.body)) >= 8:
             self.report.error(
                 "TRANSCRIPT_SIZED_CONTENT",
-                f"Markdown body contains {len(document.body)} characters, exceeding the artifact content limit used to block transcript-sized payloads.",
+                f"Markdown body contains {len(document.body)} characters and repeated speaker turns, consistent with transcript-sized content.",
                 path=path,
                 artifact_id=artifact_id if isinstance(artifact_id, str) else None,
                 field="body",
-                hint="Externalize the transcript and summarize only the decision-relevant observation.",
+                hint="Externalize the transcript and keep only decision-relevant evidence in the product document.",
             )
         for label, pattern in CREDENTIAL_PATTERNS:
             if pattern.search(document.raw):
@@ -1532,11 +1693,40 @@ class WorkspaceValidator:
                     hint="Remove the secret, rotate it if real, and reference the configured provider connection instead.",
                 )
 
-    def _outcome_container(self, metadata: Mapping[str, Any]) -> Mapping[str, Any] | None:
+    def _outcome_container(self, document: MarkdownDocument) -> Mapping[str, Any] | None:
+        metadata = document.metadata
+        legacy: Mapping[str, Any] | None = None
         for key in ("outcome", "outcome_contract"):
             value = metadata.get(key)
             if isinstance(value, Mapping):
-                return value
+                legacy = value
+                break
+        try:
+            value = structured_blocks(document).get("outcome")
+        except FrontmatterError as exc:
+            self.report.error(
+                "STRUCTURED_BLOCK_INVALID",
+                str(exc),
+                path=_relative(document.path, self.workspace),
+                artifact_id=str(metadata.get("id", "")) or None,
+                field="body.product-os:outcome",
+                hint="Keep one valid YAML object in the named Outcome Contract block.",
+            )
+            return legacy
+        if legacy is not None and isinstance(value, Mapping):
+            self.report.error(
+                "OUTCOME_CONTRACT_DUPLICATED",
+                "Outcome Contract exists in both frontmatter and the Markdown body.",
+                path=_relative(document.path, self.workspace),
+                artifact_id=str(metadata.get("id", "")) or None,
+                field="body.product-os:outcome",
+                hint="Keep one canonical Outcome Contract; prefer the named block in the readable section.",
+            )
+            return legacy
+        if legacy is not None:
+            return legacy
+        if isinstance(value, Mapping):
+            return value
         return None
 
     def _validate_outcome(self, document: MarkdownDocument) -> None:
@@ -1545,7 +1735,7 @@ class WorkspaceValidator:
         path = _relative(document.path, self.workspace)
         artifact_id = metadata.get("id")
         if artifact_type == "outcome_contract":
-            found = self._outcome_container(metadata)
+            found = self._outcome_container(document)
             if found is None and ("definition" in metadata or "binding" in metadata):
                 # Validate legacy/invalid standalone shapes deeply enough to return the
                 # actionable binding error in addition to the canonical schema error.
@@ -1562,7 +1752,7 @@ class WorkspaceValidator:
                 return
             outcome = found
         else:
-            found = self._outcome_container(metadata)
+            found = self._outcome_container(document)
             if found is None:
                 relationships = metadata.get("relationships")
                 linked = isinstance(relationships, Mapping) and bool(
@@ -1575,11 +1765,32 @@ class WorkspaceValidator:
                     f"Every {artifact_type} Product Bet requires an embedded or linked Outcome Contract.",
                     path=path,
                     artifact_id=artifact_id if isinstance(artifact_id, str) else None,
-                    field="outcome",
-                    hint="Add outcome.definition and outcome.binding, or link an extracted Outcome Contract.",
+                    field="body.product-os:outcome",
+                    hint="Add an Outcome Contract block to the Markdown body, or link an extracted Outcome Contract.",
                 )
                 return
             outcome = found
+        schemas = self._load_schemas()
+        common_schema = schemas.get("common")
+        if isinstance(common_schema, Mapping) and isinstance(common_schema.get("$defs"), Mapping):
+            outcome_schema = {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/outcomeContract",
+            }
+            outcome_validator = self._validator_for("structured-outcome", outcome_schema, schemas)
+            if outcome_validator is not None:
+                for error in _actionable_schema_errors(
+                    outcome_validator.iter_errors(_json_value(outcome))
+                ):
+                    field_path = _schema_error_field(error)
+                    self.report.error(
+                        "OUTCOME_SCHEMA_INVALID",
+                        _safe_schema_message(error),
+                        path=path,
+                        artifact_id=artifact_id if isinstance(artifact_id, str) else None,
+                        field=f"body.product-os:outcome.{field_path}" if field_path else "body.product-os:outcome",
+                        hint="Correct the Outcome Contract using the canonical PRD or Initiative template.",
+                    )
         definition = outcome.get("definition")
         if not isinstance(definition, Mapping):
             self.report.error(
@@ -1737,7 +1948,7 @@ class WorkspaceValidator:
         owner = self.by_id.get(owner_id) if isinstance(owner_id, str) else None
         if owner is None:
             return  # typed-reference validation reports missing/wrong owners
-        outcome = owner.metadata.get("outcome")
+        outcome = self._outcome_container(owner)
         definition = outcome.get("definition") if isinstance(outcome, Mapping) else None
         owner_version = definition.get("version") if isinstance(definition, Mapping) else None
         if not isinstance(owner_version, str) or not owner_version:
@@ -1810,17 +2021,19 @@ class WorkspaceValidator:
             approved_version = selected_entry.get("approved_version")
             if selected_entry.get("synthetic") is True:
                 distribution_root = self._distribution_root()
-                fixture_root = distribution_root / "examples" / "fixtures" if distribution_root else None
+                fixture_roots = (
+                    distribution_root / "tests" / "fixtures",
+                    distribution_root / "examples" / "fixtures",  # legacy distributions
+                ) if distribution_root else ()
                 if (
-                    fixture_root
-                    and self._safe_contained_path(self.workspace, fixture_root)
+                    any(self._safe_contained_path(self.workspace, root) for root in fixture_roots)
                     and isinstance(approved_version, str)
                     and re.fullmatch(r"[0-9a-fA-F]{40}|[0-9a-fA-F]{64}", approved_version)
                 ):
                     return approved_version
                 self.report.error(
                     "IMPLEMENTATION_REVIEW_STATE_UNVERIFIED",
-                    "Synthetic review-state provenance is accepted only inside this distribution's examples/fixtures.",
+                    "Synthetic review-state provenance is accepted only inside this distribution's test fixtures.",
                     path=_relative(review_state_path, self.workspace),
                     artifact_id=artifact_id,
                     field="implementation_refs",

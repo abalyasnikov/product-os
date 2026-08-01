@@ -8,9 +8,10 @@ For the automated clean-install-to-final-Learning version of this walkthrough, u
 python scripts/run_reference_journey.py --client codex
 ```
 
-That journey uses the curated [Best-in-class trading experience](../examples/fixtures/best-in-class-trading-experience/README.md)
-fixture and real local Git commits. It does not claim to verify live provider authorization,
-provider mutations, or model judgment quality.
+That journey uses the technical `tests/fixtures/reference-journey` dataset and real local Git
+commits. It does not claim to verify live provider authorization, provider mutations, or model
+judgment quality. The separate [Best-in-class trading experience](../examples/best-in-class-trading-experience/README.md)
+example shows the resulting product documents in the form a PM would actually read.
 
 ## 1. Install locally
 

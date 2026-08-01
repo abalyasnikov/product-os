@@ -3,9 +3,6 @@ schema_version: 1
 id: opportunity_<stable-id>
 type: opportunity
 title: <blocked user value>
-created_at: <ISO-8601 timestamp>
-updated_at: <ISO-8601 timestamp>
-authors: [<product lead>]
 relationships:
   signals: [signal_<id>]
 blocked_value: <value users cannot realize>

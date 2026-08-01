@@ -8,7 +8,7 @@ from product_decision_os.validator import validate_workspace
 
 
 ROOT = Path(__file__).resolve().parents[2]
-FIXTURES = ROOT / "examples" / "fixtures"
+FIXTURES = ROOT / "tests" / "fixtures"
 
 
 def test_canonical_valid_workspace_passes() -> None:

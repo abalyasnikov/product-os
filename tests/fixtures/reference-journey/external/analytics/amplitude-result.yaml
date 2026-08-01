@@ -1,0 +1,25 @@
+schema_version: 1
+provider: amplitude
+synthetic: true
+illustrative_only: true
+query_reference: amp-synthetic-trading-initiative-v1
+definition_version: trading-initiative-metric-v1
+verified_by: analytics-lead
+verified_at: "2025-04-30T10:00:00Z"
+measurement_anchor:
+  type: exposure_event
+  reference: exposure-synthetic-trading-rollout-01
+  occurred_at: "2025-05-01T09:00:00Z"
+window_ended_at: "2025-05-29T09:00:00Z"
+baseline: "illustrative synthetic 42%"
+observed: "illustrative synthetic 64%"
+by_slice:
+  cross_chain_swap: "illustrative synthetic 61%"
+  native_asset_trade: "illustrative synthetic 72%"
+  transaction_status: "illustrative synthetic 63%"
+  bridge_settlement: "illustrative synthetic 60%"
+guardrails:
+  failed_transaction_rate: "illustrative synthetic no material regression"
+  signature_comprehension: "illustrative synthetic no material regression"
+retrieved_at: "2025-05-30T10:00:00Z"
+disclaimer: These values exercise the learning workflow and are not production facts.

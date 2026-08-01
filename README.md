@@ -39,9 +39,10 @@ skills/                  Canonical agent-neutral workflows
 adapters/                Generated client instructions and metadata
 integrations/            Capability mappings for existing provider MCPs
 src/product_decision_os/ Deterministic validation CLI
-examples/fixtures/       Reproducible reference, historical, and failure journeys
+examples/                Human-readable worked product documents
 docs/spec/               Normative product specification
 docs/architecture/       Durable implementation decisions
+tests/fixtures/           Reproducible technical and failure journeys
 tests/                    Validator, skill, and end-to-end coverage
 ```
 
@@ -53,8 +54,8 @@ Requirements: Python 3.11+.
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e '.[dev]'
-product-os validate examples/fixtures/valid-workspace
-product-os smoke-test examples/fixtures/valid-workspace
+product-os validate tests/fixtures/valid-workspace
+product-os smoke-test tests/fixtures/valid-workspace
 python -m pytest
 ```
 
@@ -68,7 +69,7 @@ python scripts/run_reference_journey.py --client codex
 
 The runner verifies the release manifest, binds apply to the exact saved install-plan hash,
 creates real Git commits for evidence and synthetic decision boundaries, materializes a
-six-PRD Product Bet, records delivery and synthetic measurement evidence, then validates the
+four-PRD Product Bet, records delivery and synthetic measurement evidence, then validates the
 final Learning and Product Update. The same journey runs in CI for Codex, Claude Code, and
 OpenClaw.
 
@@ -136,25 +137,27 @@ See the [five-minute solo walkthrough](docs/getting-started.md) for the complete
 
 ## Worked example: Best-in-class trading experience
 
-The [worked historical example](examples/fixtures/best-in-class-trading-experience/README.md)
-shows how one broad outcome becomes six problem-specific PRDs without turning the PRD into
-an implementation document:
+The [worked historical example](examples/best-in-class-trading-experience/README.md)
+shows how one broad outcome becomes four problem-specific PRDs without turning the PRD into
+an implementation document. These are normal, readable product documents derived from real
+Zerion work—not a tutorial or serialized test dataset:
 
 ```text
-6 Signals → 2 Patterns → Opportunity → Initiative
+Initiative: Best-in-class trading experience
   → Cross-chain Swap
-  → Send Flow Redesign
-  → Skip Redundant Confirmation
-  → Non-blocking Transaction Status
+  → Skip Signing Screen for Native Transactions
+  → Transaction Toasters
   → Bridge Progress Tracking
-  → Token Approval Management
-→ Outcome Review → Learning → Product Update
 ```
 
-It is derived from a historical Zerion product milestone. The old “bridge inside Send”
-proposal is retained as a rejected alternative because later discovery exposed CEX deposit
-risk. Provider URLs are sanitized and all outcome measurements are explicitly synthetic;
-the example demonstrates the operating model, not Zerion production performance.
+The product problems, evidence limits, JTBDs, journeys, requirements, decisions, risks, and
+open questions are real. Personal names, private workspace links, and unsupported outcome
+claims are omitted. Proposed metrics remain visibly proposed when no verified baseline or
+post-release result existed.
+
+Deterministic tests use a separate machine fixture under `tests/fixtures/reference-journey`.
+That fixture proves repository mechanics; the worked example demonstrates product-document
+quality. Neither is presented as proof of Zerion production performance.
 
 ## What the tests prove
 
@@ -169,8 +172,7 @@ the example demonstrates the operating model, not Zerion production performance.
 | LLM judgment quality across model providers | No — requires a separate eval suite |
 
 The repository never turns a fixture pass into a claim that a live provider workflow was
-verified. See the [verification model](docs/verification.md) and the example's verification
-notes for the exact boundary. The runner materializes pre-authored artifacts; it does not
+verified. See the [verification model](docs/verification.md) for the exact boundary. The runner materializes pre-authored artifacts; it does not
 prove agent interrogation, source interpretation, or document-generation quality.
 
 ## Product model

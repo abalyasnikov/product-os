@@ -25,7 +25,7 @@ def install_schemas(workspace: Path) -> None:
         schema = {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
             "type": "object",
-            "required": ["schema_version", "id", "type", "title", "created_at", "updated_at", "authors", "relationships"],
+            "required": ["schema_version", "id", "type", "title", "relationships"],
             "properties": {"schema_version": {"const": 1}},
         }
         (schemas / f"{artifact_type.replace('_', '-')}.schema.yaml").write_text(
@@ -100,12 +100,71 @@ def complete_outcome(status: str = "planned") -> dict:
     }
 
 
+def lean_prd_body(outcome: dict) -> str:
+    outcome_yaml = yaml.safe_dump(outcome, sort_keys=False)
+    return f"""# Test PRD
+
+## Problem
+
+A real user problem.
+
+## Evidence
+
+One explicit source with a named coverage gap.
+
+## JTBD
+
+When blocked, I want a reliable path, so that I can finish.
+
+## Current and desired journey
+
+Current behavior is blocked; desired behavior completes.
+
+## Scope
+
+### Requirements
+
+- Observable product behavior.
+
+### Non-goals
+
+- Engineering implementation design.
+
+## Outcome Contract
+
+```yaml product-os:outcome
+{outcome_yaml}```
+
+## GTM hypothesis
+
+Existing users discover the improvement in the current flow.
+
+## Risks and dependencies
+
+- Baseline coverage remains incomplete.
+
+## Delivery
+
+Linear owns engineering delivery.
+"""
+
+
 def test_valid_workspace_passes(workspace: Path) -> None:
     write_artifact(workspace, metadata())
     report = validate_workspace(workspace)
     assert report.exit_code == 0
     assert report.ok
     assert report.artifact_count == 1
+
+
+def test_git_owned_dates_and_authors_are_not_required(workspace: Path) -> None:
+    data = metadata()
+    data.pop("created_at")
+    data.pop("updated_at")
+    data.pop("authors")
+    write_artifact(workspace, data)
+
+    assert validate_workspace(workspace).ok
 
 
 def test_frontmatter_must_be_safe_mapping(workspace: Path) -> None:
@@ -302,6 +361,20 @@ def test_raw_transcript_and_transcript_sized_body_are_blocked(workspace: Path) -
     write_artifact(workspace, data, body=turns)
     assert "TRANSCRIPT_SIZED_CONTENT" in codes(validate_workspace(workspace))
 
+    turns = "\n".join(f"Speaker {index % 2 + 1}: " + "x" * 550 for index in range(10))
+    write_artifact(workspace, data, body=turns)
+    assert len(turns) < 10_000
+    assert "TRANSCRIPT_SIZED_CONTENT" in codes(validate_workspace(workspace))
+
+
+def test_long_non_transcript_markdown_is_allowed(workspace: Path) -> None:
+    data = metadata()
+    body = "# Detailed analysis\n\n" + ("Decision-relevant product analysis. " * 400)
+    assert len(body) > 10_000
+    write_artifact(workspace, data, body=body)
+
+    assert "TRANSCRIPT_SIZED_CONTENT" not in codes(validate_workspace(workspace))
+
 
 def test_known_credential_patterns_are_blocked(workspace: Path) -> None:
     data = metadata()
@@ -324,6 +397,79 @@ def test_prd_requires_complete_outcome_contract(workspace: Path) -> None:
     # The actual anchor may be absent before exposure/release; readiness is
     # enforced when work is marked delivered or when a Learning is created.
     assert "MEASUREMENT_ANCHOR_MISSING" not in report_codes
+
+
+def test_prd_outcome_contract_can_live_in_named_markdown_block(workspace: Path) -> None:
+    opportunity = metadata("opportunity", "opportunity_01TEST")
+    write_artifact(workspace, opportunity)
+    data = metadata("prd", "prd_01TEST")
+    data["title"] = "Test PRD"
+    data["relationships"] = {"opportunity": opportunity["id"]}
+    for field_name in ("created_at", "updated_at", "authors"):
+        data.pop(field_name)
+    write_artifact(workspace, data, body=lean_prd_body(complete_outcome()))
+
+    report = validate_workspace(workspace)
+    assert report.ok, [error.to_dict() for error in report.errors]
+
+
+def test_named_outcome_block_supports_crlf(workspace: Path) -> None:
+    opportunity = metadata("opportunity", "opportunity_01TEST")
+    write_artifact(workspace, opportunity)
+    data = metadata("prd", "prd_01TEST")
+    data["title"] = "Test PRD"
+    data["relationships"] = {"opportunity": opportunity["id"]}
+    path = write_artifact(workspace, data, body=lean_prd_body(complete_outcome()))
+    path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
+
+    assert validate_workspace(workspace).ok
+
+
+def test_invalid_named_outcome_block_is_actionable(workspace: Path) -> None:
+    data = metadata("prd", "prd_01TEST")
+    body = """# Test PRD
+
+## Outcome Contract
+
+```yaml product-os:outcome
+- not
+- an object
+```
+"""
+    write_artifact(workspace, data, body=body)
+
+    report = validate_workspace(workspace)
+    assert "STRUCTURED_BLOCK_INVALID" in codes(report)
+
+
+def test_frontmatter_and_body_outcome_cannot_both_be_canonical(workspace: Path) -> None:
+    data = metadata("prd", "prd_01TEST")
+    data["outcome"] = complete_outcome()
+    outcome_yaml = yaml.safe_dump(complete_outcome(), sort_keys=False)
+    body = f"""# Test PRD
+
+## Outcome Contract
+
+```yaml product-os:outcome
+{outcome_yaml}```
+"""
+    write_artifact(workspace, data, body=body)
+
+    assert "OUTCOME_CONTRACT_DUPLICATED" in codes(validate_workspace(workspace))
+
+
+def test_lean_prd_requires_readable_sections_and_product_bet_link(workspace: Path) -> None:
+    data = metadata("prd", "prd_01TEST")
+    outcome_yaml = yaml.safe_dump(complete_outcome(), sort_keys=False)
+    write_artifact(
+        workspace,
+        data,
+        body=f"# Empty PRD\n\n## Outcome Contract\n\n```yaml product-os:outcome\n{outcome_yaml}```\n",
+    )
+
+    report_codes = codes(validate_workspace(workspace))
+    assert "READABLE_SECTION_MISSING" in report_codes
+    assert "PRD_PRODUCT_BET_LINK_MISSING" in report_codes
 
 
 def test_verified_executable_binding_passes_and_unverified_fails(workspace: Path) -> None:

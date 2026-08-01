@@ -8,9 +8,6 @@
     "id",
     "type",
     "title",
-    "created_at",
-    "updated_at",
-    "authors",
     "relationships"
   ],
   "properties": {

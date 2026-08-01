@@ -1,9 +1,0 @@
-{
-  "schema_version": 1,
-  "provider": "pasted_note",
-  "external_id": "pasted-fixture-destination-risk",
-  "synthetic": true,
-  "occurred_at": "2025-02-03T14:00:00Z",
-  "approved_summary": "A generic bridge-inside-Send route could deliver an unsupported asset or network to an ambiguous CEX deposit destination.",
-  "sensitive_data_removed": true
-}

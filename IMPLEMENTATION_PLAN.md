@@ -20,9 +20,6 @@ schema_version: 1
 id: signal_01JEXAMPLE
 type: signal
 title: Concise title
-created_at: 2026-08-01T12:00:00Z
-updated_at: 2026-08-01T12:00:00Z
-authors: [product-lead]
 relationships: {}
 ```
 
@@ -39,7 +36,7 @@ Supported types and ID prefixes:
 | Learning | `learning_` | `product/learnings/` |
 | Product Update | `update_` | `product/updates/` |
 
-Outcome Contracts are embedded in PRDs or Initiatives by default. The standalone type supports extracted reusable contracts.
+Git provides authorship, timestamps, and version history. Narrative content for PRDs and Initiatives lives in Markdown sections. Outcome Contracts are embedded as named structured blocks in those sections by default. The standalone type supports extracted reusable contracts.
 
 ## Relationship contract
 
@@ -71,7 +68,7 @@ product-os adapter-check [workspace]
 
 ## Ownership
 
-- Worker A: `schemas/`, `templates/`, `examples/fixtures/`
+- Worker A: `schemas/`, `templates/`, `tests/fixtures/`
 - Worker B: `src/product_decision_os/`, `tests/validator/`
 - Worker C: `skills/`, `adapters/`, `integrations/`, `tests/skills/`
 - Integration owner: root files, `README.md`, installer, end-to-end tests, assets, cross-cutting fixes.
@@ -84,5 +81,5 @@ product-os adapter-check [workspace]
 - Re-running handoff projections creates no duplicate external object IDs.
 - No fixture contains real customer data or credentials.
 - `scripts/run_reference_journey.py` proves a clean install through final Learning for Codex, Claude Code, and OpenClaw using reachable Git version boundaries.
-- The curated Best-in-class trading experience example contains six focused PRDs and labels every non-historical measurement as synthetic.
+- The curated Best-in-class trading experience example contains four focused, human-readable PRDs derived from real product work and makes evidence gaps explicit. A separate technical fixture labels every non-historical measurement as synthetic.
 - Live MCP authorization, provider mutations, analytics execution, and model-quality evals are reported separately and are never inferred from fixture success.

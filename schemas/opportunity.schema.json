@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://productdecisionos.org/schemas/opportunity.schema.json",
+  "title": "Opportunity",
+  "allOf": [
+    { "$ref": "https://productdecisionos.org/schemas/common.schema.json" },
+    {
+      "type": "object",
+      "required": ["blocked_value", "evidence_ids", "affected_users", "impact", "urgency", "strategic_fit", "assumptions", "risks", "evidence_quality", "decision_events"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^opportunity_[0-9A-HJKMNP-TV-Z]{8,32}$" },
+        "type": { "const": "opportunity" },
+        "blocked_value": { "type": "string", "minLength": 1 },
+        "evidence_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^(signal|pattern)_[0-9A-HJKMNP-TV-Z]{8,32}$" }
+        },
+        "affected_users": { "type": "string", "minLength": 1 },
+        "impact": { "type": "string", "minLength": 1 },
+        "urgency": { "type": "string", "minLength": 1 },
+        "strategic_fit": { "type": "string", "minLength": 1 },
+        "assumptions": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/stringList" },
+        "risks": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/stringList" },
+        "evidence_quality": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/evidenceQuality" },
+        "evidence_waiver": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/evidenceWaiver" },
+        "decision_events": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/decisionEvent" },
+              { "properties": { "kind": { "const": "opportunity" } } }
+            ]
+          }
+        }
+      },
+      "anyOf": [
+        { "properties": { "evidence_ids": { "minItems": 1 } } },
+        { "required": ["evidence_waiver"] }
+      ]
+    }
+  ],
+  "unevaluatedProperties": false
+}

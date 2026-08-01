@@ -1,0 +1,34 @@
+schema_version: 1
+descriptor_kind: existing_provider_mcp_mapping
+provider: github
+canonical_version: 1.0.0
+existing_mcp_required: true
+implements_mcp: false
+credentials: provider_managed
+capability_mappings:
+  git.review.read:
+    access: read_only
+    match_existing_operation_by_semantics: Read a pull request's target branch, reviews, reviewer identities, approval times, last material change, merge state, and merge commit through an already configured GitHub MCP.
+    required_inputs: [repository, pull_request_identity, configured_default_branch]
+    required_outputs: [target_branch, reviews, merged, full_merge_commit_sha, observed_at]
+    verification:
+      - target_is_configured_default_branch
+      - configured_approver_is_present
+      - approval_is_after_last_material_change
+      - full_merge_commit_sha_is_resolved
+  git.commit.read:
+    access: read_only
+    match_existing_operation_by_semantics: Resolve immutable commit identity and metadata through an already configured GitHub MCP.
+    required_inputs: [repository, commit_reference]
+    required_outputs: [full_commit_sha, commit_metadata]
+guidance:
+  review_mode: Use this mapping only for configured provider review mode.
+  source_of_truth: GitHub retains reviewer identity, discussion, approval state, merge time, and merge commit.
+  cache: Local review-state files are cache only and never prove approval; refresh provider state for each decision.
+  commit_identity: Approval versions use the immutable full commit SHA; reject short SHAs, branches, tags, and aliases.
+  unknown: If any required review fact is unavailable, approval is unknown and delivery handoff stops.
+  solo_boundary: "A local `Product-Approval: explicit` trailer is valid only in configured solo mode; it cannot substitute for GitHub review."
+  forbidden: Never scrape GitHub, call an unofficial API, request credentials, or create a proxy/custom MCP.
+smoke_test:
+  mode: read_only
+  check: Discover mapped read operations; do not create, review, merge, or modify a pull request.

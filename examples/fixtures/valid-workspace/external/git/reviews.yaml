@@ -1,0 +1,27 @@
+schema_version: 1
+reviews:
+  - artifact_id: initiative_01JABCDE01
+    version: "2222222222222222222222222222222222222222"
+    target_branch: main
+    approved_by: product-manager
+    approved_at: "2026-05-15T12:00:00Z"
+    merged: true
+  - artifact_id: prd_01JABCDE01
+    version: "3333333333333333333333333333333333333333"
+    target_branch: main
+    approved_by: product-manager
+    approved_at: "2026-05-20T15:00:00Z"
+    merged: true
+  - artifact_id: prd_01JABCDE02
+    version: "4444444444444444444444444444444444444444"
+    target_branch: main
+    approved_by: product-manager
+    approved_at: "2026-05-21T15:00:00Z"
+    merged: true
+  - artifact_id: prd_01JABCDE02
+    version: "5555555555555555555555555555555555555555"
+    target_branch: main
+    approved_by: product-manager
+    approved_at: "2026-06-05T17:00:00Z"
+    material_change_summary: external/git/prd-recovery-v2-material-change.yaml
+    merged: true

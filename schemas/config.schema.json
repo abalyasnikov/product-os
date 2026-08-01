@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://productdecisionos.org/schemas/config.schema.json",
+  "title": "Product Decision OS workspace configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "selected_client", "default_branch", "review"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "workspace_profile": { "enum": ["core_workspace", "reference_pilot", "adapter_conformance"] },
+    "selected_client": { "enum": ["codex", "claude-code", "openclaw"] },
+    "default_branch": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "approver_rule", "solo_approval", "git_capability"],
+      "properties": {
+        "mode": { "enum": ["provider", "solo"] },
+        "approver_rule": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["initiative", "prd"],
+          "properties": {
+            "initiative": { "type": "string", "minLength": 1, "maxLength": 100 },
+            "prd": { "type": "string", "minLength": 1, "maxLength": 100 }
+          }
+        },
+        "solo_approval": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["allowed", "commit_trailer"],
+          "properties": {
+            "allowed": { "type": "boolean" },
+            "commit_trailer": { "const": "Product-Approval: explicit" }
+          }
+        },
+        "git_capability": { "enum": ["git.review.read", "git.commit.read"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "mode": { "const": "provider" } }, "required": ["mode"] },
+          "then": {
+            "properties": {
+              "git_capability": { "const": "git.review.read" },
+              "solo_approval": { "properties": { "allowed": { "const": false } } }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "mode": { "const": "solo" } }, "required": ["mode"] },
+          "then": {
+            "properties": {
+              "git_capability": { "const": "git.commit.read" },
+              "solo_approval": { "properties": { "allowed": { "const": true } } }
+            }
+          }
+        }
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "storage": { "const": "reference_only" },
+        "max_excerpt_chars": { "type": "integer", "minimum": 1, "maximum": 10000 }
+      }
+    },
+    "connectors": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "minLength": 1 }
+    }
+  }
+}

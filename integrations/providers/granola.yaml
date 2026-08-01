@@ -1,0 +1,27 @@
+schema_version: 1
+descriptor_kind: existing_provider_mcp_mapping
+provider: granola
+canonical_version: 1.0.0
+existing_mcp_required: true
+implements_mcp: false
+credentials: provider_managed
+capability_mappings:
+  transcript.search:
+    access: read_only
+    match_existing_operation_by_semantics: Search meetings/notes by text, participant-safe metadata, or time range and return stable meeting identities.
+    required_inputs: [query_or_time_range]
+    required_outputs: [external_id, title_or_safe_label, occurred_at]
+  transcript.read:
+    access: read_only
+    match_existing_operation_by_semantics: Retrieve the selected meeting content transiently by stable identity with source metadata.
+    required_inputs: [external_id]
+    required_outputs: [external_id, occurred_at, content, retrieved_at]
+guidance:
+  source_of_truth: Full transcripts remain in Granola.
+  storage_default: Commit source references and normalized Signals only.
+  excerpts: Explicit opt-in, anonymized, and no more than 500 characters.
+  unavailable: Use only user-supplied pasted/local evidence transiently and record the provenance gap.
+  forbidden: Never commit a full transcript, request credentials, scrape the UI, or create an unofficial Granola client.
+smoke_test:
+  mode: read_only
+  check: Discover mapped operations and, only when a safe fixture/source is configured, verify metadata retrieval without committing content.

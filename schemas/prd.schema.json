@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://productdecisionos.org/schemas/prd.schema.json",
+  "title": "PRD",
+  "allOf": [
+    { "$ref": "https://productdecisionos.org/schemas/common.schema.json" },
+    {
+      "type": "object",
+      "required": ["opportunity_id", "problem", "target_users", "evidence_ids", "current_journey", "desired_journey", "target_outcome", "requirements", "non_goals", "outcome", "risks", "dependencies", "gtm_hypothesis", "implementation_refs", "delivery_refs"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^prd_[0-9A-HJKMNP-TV-Z]{8,32}$" },
+        "type": { "const": "prd" },
+        "opportunity_id": { "type": "string", "pattern": "^opportunity_[0-9A-HJKMNP-TV-Z]{8,32}$" },
+        "initiative_id": { "type": "string", "pattern": "^initiative_[0-9A-HJKMNP-TV-Z]{8,32}$" },
+        "problem": { "type": "string", "minLength": 1 },
+        "target_users": { "type": "string", "minLength": 1 },
+        "evidence_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^(signal|pattern|opportunity)_[0-9A-HJKMNP-TV-Z]{8,32}$" }
+        },
+        "current_journey": { "type": "string", "minLength": 1 },
+        "desired_journey": { "type": "string", "minLength": 1 },
+        "target_outcome": { "type": "string", "minLength": 1 },
+        "requirements": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/stringList" },
+        "non_goals": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/stringList" },
+        "outcome": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/outcomeContract" },
+        "risks": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/stringList" },
+        "dependencies": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/stringList" },
+        "gtm_hypothesis": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/gtmHypothesis" },
+        "evidence_waiver": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/evidenceWaiver" },
+        "implementation_refs": {
+          "type": "array",
+          "items": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/implementationReference" }
+        },
+        "delivery_refs": {
+          "type": "array",
+          "items": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/externalObject" }
+        }
+      }
+    }
+  ],
+  "unevaluatedProperties": false
+}

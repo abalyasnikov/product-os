@@ -1,0 +1,13 @@
+schema_version: 1
+workspace_profile: core_workspace
+selected_client: claude-code
+default_branch: main
+review:
+  mode: solo
+  approver_rule:
+    initiative: self
+    prd: self
+  solo_approval:
+    allowed: true
+    commit_trailer: "Product-Approval: explicit"
+  git_capability: git.review.read

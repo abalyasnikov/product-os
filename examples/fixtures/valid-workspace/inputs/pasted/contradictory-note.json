@@ -1,0 +1,8 @@
+{
+  "provider": "pasted_note",
+  "external_id": "note-fixture-contradiction",
+  "occurred_at": "2026-05-05T12:00:00Z",
+  "anonymized": true,
+  "observation": "An experienced user preferred the compact route selector and warned that mandatory explanation could slow them down.",
+  "retention": "normalized_observation_only"
+}

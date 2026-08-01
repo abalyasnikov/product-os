@@ -1,0 +1,20 @@
+schema_version: 1
+provider: amplitude
+query_reference: amp-fixture-first-transaction-v2
+definition_version: metric-v2
+verified_by: analytics-lead
+verified_at: "2026-07-01T10:00:00Z"
+measurement_anchor:
+  type: exposure_event
+  reference: exposure-fixture-rollout-01
+  occurred_at: "2026-07-01T09:00:00Z"
+window_ended_at: "2026-07-15T09:00:00Z"
+baseline: 0.22
+observed: 0.31
+by_slice:
+  new_users: 0.30
+  returning_users: 0.33
+guardrails:
+  failed_transaction_rate: no_material_regression
+  power_user_completion_time: no_material_regression
+retrieved_at: "2026-07-20T10:00:00Z"

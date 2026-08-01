@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://productdecisionos.org/schemas/outcome-contract.schema.json",
+  "title": "Standalone Outcome Contract",
+  "allOf": [
+    { "$ref": "https://productdecisionos.org/schemas/common.schema.json" },
+    {
+      "type": "object",
+      "required": ["owner_artifact_ids", "outcome"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^outcome_[0-9A-HJKMNP-TV-Z]{8,32}$" },
+        "type": { "const": "outcome_contract" },
+        "owner_artifact_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^(initiative|prd)_[0-9A-HJKMNP-TV-Z]{8,32}$" }
+        },
+        "outcome": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/outcomeContract" }
+      }
+    }
+  ],
+  "unevaluatedProperties": false
+}

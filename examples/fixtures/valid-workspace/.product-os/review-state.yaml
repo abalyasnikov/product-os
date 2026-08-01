@@ -1,0 +1,57 @@
+schema_version: 1
+approved_artifacts:
+  opportunity_01JABCDE01:
+    approved_version: "1111111111111111111111111111111111111111"
+    approved_by: product-lead
+    approved_at: "2026-05-08T16:00:00Z"
+    synthetic: true
+    provenance:
+      git_sha: "1111111111111111111111111111111111111111"
+      verification_mode: provider_review
+      verified_by: fixture-builder
+      verified_at: "2026-05-08T16:00:00Z"
+      provider_reference: fixture-review-opportunity
+  initiative_01JABCDE01:
+    approved_version: "2222222222222222222222222222222222222222"
+    approved_by: product-manager
+    approved_at: "2026-05-15T12:00:00Z"
+    synthetic: true
+    provenance:
+      git_sha: "2222222222222222222222222222222222222222"
+      verification_mode: provider_review
+      verified_by: fixture-builder
+      verified_at: "2026-05-15T12:00:00Z"
+      provider_reference: fixture-review-initiative
+  prd_01JABCDE01:
+    approved_version: "3333333333333333333333333333333333333333"
+    approved_by: product-manager
+    approved_at: "2026-05-20T15:00:00Z"
+    synthetic: true
+    provenance:
+      git_sha: "3333333333333333333333333333333333333333"
+      verification_mode: provider_review
+      verified_by: fixture-builder
+      verified_at: "2026-05-20T15:00:00Z"
+      provider_reference: fixture-review-prd-route
+  prd_01JABCDE02:
+    approved_version: "5555555555555555555555555555555555555555"
+    approved_by: product-manager
+    approved_at: "2026-06-05T17:00:00Z"
+    synthetic: true
+    provenance:
+      git_sha: "5555555555555555555555555555555555555555"
+      verification_mode: provider_review
+      verified_by: fixture-builder
+      verified_at: "2026-06-05T17:00:00Z"
+      provider_reference: fixture-review-prd-recovery-v2
+  learning_01JABCDE01:
+    approved_version: "6666666666666666666666666666666666666666"
+    approved_by: product-lead
+    approved_at: "2026-07-20T12:00:00Z"
+    synthetic: true
+    provenance:
+      git_sha: "6666666666666666666666666666666666666666"
+      verification_mode: provider_review
+      verified_by: fixture-builder
+      verified_at: "2026-07-20T12:00:00Z"
+      provider_reference: fixture-review-learning

@@ -1,0 +1,23 @@
+schema_version: 1
+descriptor_kind: existing_provider_mcp_mapping
+provider: metabase
+canonical_version: 1.0.0
+existing_mcp_required: true
+implements_mcp: false
+credentials: provider_managed
+capability_mappings:
+  analytics.query:
+    access: read_only
+    match_existing_operation_by_semantics: Execute or retrieve a saved question/dashboard card by stable reference and return definition/result provenance.
+    required_inputs: [query_reference, definition_version, window, slices, guardrails]
+    required_outputs: [query_reference, definition_version, executed_at, result, slice_results, provenance]
+guidance:
+  suitable_for: Business, customer, revenue-band, operational, service-level, and warehouse-backed outcomes.
+  verification: A data owner must verify saved-question SQL/model semantics, parameters, joins, and access-safe aggregation.
+  privacy: Prefer safe aggregates and external account references; do not copy raw customer rows or PII into Git.
+  anchor: Use a separately recorded actual exposure, release, or manual evaluation event.
+  drift: A changed SQL/model, card, parameter, or warehouse definition returns the binding to planned until reverified.
+  forbidden: Read only; never mutate Metabase/warehouse data or add an unofficial API client/custom MCP.
+smoke_test:
+  mode: read_only
+  check: Discover a saved-question/query operation and validate fixture-shaped provenance without provider mutation.

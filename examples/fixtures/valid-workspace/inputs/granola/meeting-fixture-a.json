@@ -1,0 +1,11 @@
+{
+  "provider": "granola",
+  "external_id": "meeting-fixture-a",
+  "occurred_at": "2026-05-02T15:00:00Z",
+  "participants": ["anonymized-new-user", "researcher"],
+  "candidate_observations": [
+    "Route cost and timing were not comparable before confirmation."
+  ],
+  "retention": "reference_only",
+  "full_transcript_in_git": false
+}

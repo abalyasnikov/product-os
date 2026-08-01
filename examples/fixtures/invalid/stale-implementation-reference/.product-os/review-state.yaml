@@ -1,0 +1,6 @@
+schema_version: 1
+approved_artifacts:
+  prd_01JSTAE001:
+    approved_version: prd-current-v2
+    approved_by: product-manager
+    approved_at: "2026-02-01T00:00:00Z"

@@ -1,0 +1,11 @@
+{
+  "provider": "granola",
+  "external_id": "meeting-fixture-b",
+  "occurred_at": "2026-05-03T16:00:00Z",
+  "participants": ["anonymized-returning-user", "researcher"],
+  "candidate_observations": [
+    "The confirmation and pending states did not explain what would happen next."
+  ],
+  "retention": "reference_only",
+  "full_transcript_in_git": false
+}

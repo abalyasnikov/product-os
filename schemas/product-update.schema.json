@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://productdecisionos.org/schemas/product-update.schema.json",
+  "title": "Product Update",
+  "allOf": [
+    { "$ref": "https://productdecisionos.org/schemas/common.schema.json" },
+    {
+      "type": "object",
+      "required": ["period_start", "period_end", "audience", "claims"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^update_[0-9A-HJKMNP-TV-Z]{8,32}$" },
+        "type": { "const": "product_update" },
+        "period_start": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/date" },
+        "period_end": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/date" },
+        "audience": { "type": "string", "minLength": 1 },
+        "claims": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["claim", "source_references"],
+            "properties": {
+              "claim": { "type": "string", "minLength": 1 },
+              "source_references": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/claimSourceReference" }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "unevaluatedProperties": false
+}

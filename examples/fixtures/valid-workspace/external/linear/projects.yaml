@@ -1,0 +1,30 @@
+schema_version: 1
+projects:
+  - prd_id: prd_01JABCDE01
+    approved_version: "3333333333333333333333333333333333333333"
+    idempotency_key: prd_01JABCDE01
+    synced_from_version: "3333333333333333333333333333333333333333"
+    external_id: linear-project-route-fixture
+    state: completed
+  - prd_id: prd_01JABCDE02
+    approved_version: "5555555555555555555555555555555555555555"
+    idempotency_key: prd_01JABCDE02
+    synced_from_version: "5555555555555555555555555555555555555555"
+    external_id: linear-project-recovery-fixture
+    state: completed
+sync_attempts:
+  - idempotency_key: prd_01JABCDE01
+    synced_from_version: "3333333333333333333333333333333333333333"
+    attempt: 1
+    result: timeout_after_provider_accept
+    external_id: linear-project-route-fixture
+  - idempotency_key: prd_01JABCDE01
+    synced_from_version: "3333333333333333333333333333333333333333"
+    attempt: 2
+    result: reused_existing
+    external_id: linear-project-route-fixture
+  - idempotency_key: prd_01JABCDE02
+    synced_from_version: "5555555555555555555555555555555555555555"
+    attempt: 1
+    result: created
+    external_id: linear-project-recovery-fixture

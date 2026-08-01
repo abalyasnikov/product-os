@@ -1,0 +1,29 @@
+adapter_schema_version: 1
+generated: true
+client: codex
+canonical_source:
+  version: 1.0.0
+  hash_algorithm: sha256
+  content_hash: 4934e5b1fa2af31dfd85502445337662fc07d2fd4b50a57873a1c0d0b383c596
+  includes: [skills/**, integrations/**]
+projection:
+  client_skill_location: .agents/skills
+  instructions: ADAPTER.md
+  canonical_skills: ../../skills
+  capability_mappings: ../../integrations
+  wrapper_root: skills
+projections:
+  - {name: product-os-setup, canonical_source: .product-os/skills/setup/SKILL.md, wrapper_source: adapters/codex/skills/product-os-setup/SKILL.md, destination: .agents/skills/product-os-setup/SKILL.md}
+  - {name: product-os-discovery, canonical_source: .product-os/skills/discovery/SKILL.md, wrapper_source: adapters/codex/skills/product-os-discovery/SKILL.md, destination: .agents/skills/product-os-discovery/SKILL.md}
+  - {name: product-os-initiative, canonical_source: .product-os/skills/initiative/SKILL.md, wrapper_source: adapters/codex/skills/product-os-initiative/SKILL.md, destination: .agents/skills/product-os-initiative/SKILL.md}
+  - {name: product-os-prd-interrogation, canonical_source: .product-os/skills/prd-interrogation/SKILL.md, wrapper_source: adapters/codex/skills/product-os-prd-interrogation/SKILL.md, destination: .agents/skills/product-os-prd-interrogation/SKILL.md}
+  - {name: product-os-prd-review, canonical_source: .product-os/skills/prd-review/SKILL.md, wrapper_source: adapters/codex/skills/product-os-prd-review/SKILL.md, destination: .agents/skills/product-os-prd-review/SKILL.md}
+  - {name: product-os-prd-handoff, canonical_source: .product-os/skills/prd-handoff/SKILL.md, wrapper_source: adapters/codex/skills/product-os-prd-handoff/SKILL.md, destination: .agents/skills/product-os-prd-handoff/SKILL.md}
+  - {name: product-os-decision-queue, canonical_source: .product-os/skills/decision-queue/SKILL.md, wrapper_source: adapters/codex/skills/product-os-decision-queue/SKILL.md, destination: .agents/skills/product-os-decision-queue/SKILL.md}
+  - {name: product-os-outcome-review, canonical_source: .product-os/skills/outcome-review/SKILL.md, wrapper_source: adapters/codex/skills/product-os-outcome-review/SKILL.md, destination: .agents/skills/product-os-outcome-review/SKILL.md}
+  - {name: product-os-product-update, canonical_source: .product-os/skills/product-update/SKILL.md, wrapper_source: adapters/codex/skills/product-os-product-update/SKILL.md, destination: .agents/skills/product-os-product-update/SKILL.md}
+safety:
+  embeds_credentials: false
+  implements_mcp: false
+  network_client: false
+  generated_files_are_source_of_truth: false

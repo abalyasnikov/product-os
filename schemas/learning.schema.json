@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://productdecisionos.org/schemas/learning.schema.json",
+  "title": "Learning",
+  "allOf": [
+    { "$ref": "https://productdecisionos.org/schemas/common.schema.json" },
+    {
+      "type": "object",
+      "required": ["product_bet_id", "outcome_contract_ref", "measurement_anchor", "evaluation_scope", "results", "confidence", "confounders", "data_limitations", "thesis_change", "decision_events"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^learning_[0-9A-HJKMNP-TV-Z]{8,32}$" },
+        "type": { "const": "learning" },
+        "product_bet_id": { "type": "string", "pattern": "^(initiative|prd)_[0-9A-HJKMNP-TV-Z]{8,32}$" },
+        "outcome_contract_ref": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/outcomeContractReference" },
+        "measurement_anchor": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/measurementAnchor" },
+        "evaluation_scope": { "type": "string", "minLength": 1 },
+        "results": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["baseline", "observed", "by_slice", "provenance"],
+          "properties": {
+            "baseline": { "type": ["number", "string", "boolean"] },
+            "observed": { "type": ["number", "string", "boolean"] },
+            "by_slice": {
+              "type": "object",
+              "minProperties": 2,
+              "additionalProperties": { "type": ["number", "string", "boolean", "null"] }
+            },
+            "guardrails": {
+              "type": "object",
+              "additionalProperties": { "type": ["number", "string", "boolean", "null"] }
+            },
+            "provenance": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["method", "reference", "definition_version", "retrieved_at"],
+              "properties": {
+                "method": { "enum": ["analytics_query", "manual_import", "case_set", "review"] },
+                "provider": { "type": "string", "minLength": 1 },
+                "reference": { "type": "string", "minLength": 1 },
+                "definition_version": { "type": "string", "minLength": 1 },
+                "retrieved_at": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/timestamp" },
+                "imported_by": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/personHandle" }
+              }
+            }
+          }
+        },
+        "confidence": { "enum": ["low", "medium", "high"] },
+        "confounders": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/stringList" },
+        "data_limitations": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/stringList" },
+        "thesis_change": { "type": "string", "minLength": 1 },
+        "decision_events": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "allOf": [
+              { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/decisionEvent" },
+              { "properties": { "kind": { "const": "outcome" } } }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "unevaluatedProperties": false
+}

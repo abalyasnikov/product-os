@@ -1,0 +1,45 @@
+schema_version: 1
+descriptor_kind: capability_contract
+canonical_version: 1.0.0
+implementation: none
+transport: none
+capabilities:
+  transcript.search:
+    mode: read_only
+    purpose: Find candidate source meetings without storing transcript content in Git.
+    required_semantics: [search_by_text_or_time, stable_source_identity]
+  transcript.read:
+    mode: read_only
+    purpose: Read a selected source transiently and return source provenance.
+    required_semantics: [read_by_stable_identity, source_provenance]
+  delivery.project.read:
+    mode: read_only
+    purpose: Resolve an existing delivery project and its current delivery state.
+    required_semantics: [lookup_by_external_or_product_id, stable_external_identity]
+  delivery.project.write:
+    mode: external_write
+    purpose: Create or update one delivery project after preview and human confirmation.
+    required_semantics: [create_or_update, idempotent_identity, stable_external_identity]
+  analytics.query:
+    mode: read_only
+    purpose: Execute or retrieve a reproducible analytics result without mutating provider data.
+    required_semantics: [query_reference, definition_version, result_provenance]
+  git.review.read:
+    mode: read_only
+    purpose: Verify reviewer identity, approval timing, merge target, and approved Git version.
+    required_semantics: [review_identity, approval_after_material_change, merge_commit]
+  git.commit.read:
+    mode: read_only
+    purpose: Resolve artifact versions and inspect approval trailers or implementation references.
+    required_semantics: [immutable_commit_identity, commit_metadata]
+safety:
+  writes_require_preview: true
+  writes_require_human_confirmation: true
+  smoke_tests_are_read_only: true
+  unavailable_capability_behavior: report_named_gap
+  forbidden_fallbacks:
+    - custom_mcp_server
+    - unofficial_api_client
+    - browser_automation
+    - proxy_or_relay
+    - hidden_data_copy

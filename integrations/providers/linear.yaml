@@ -1,0 +1,39 @@
+schema_version: 1
+descriptor_kind: existing_provider_mcp_mapping
+provider: linear
+canonical_version: 1.0.0
+existing_mcp_required: true
+implements_mcp: false
+credentials: provider_managed
+capability_mappings:
+  delivery.project.read:
+    access: read_only
+    match_existing_operation_by_semantics: Find a project by persisted Linear external ID or stable Product Decision OS artifact ID and return current delivery state.
+    required_inputs: [external_id_or_product_artifact_id]
+    required_outputs: [external_id, provider_url, delivery_state]
+  delivery.project.write:
+    access: external_write
+    match_existing_operation_by_semantics: Create a project or update the already resolved project while preserving stable external identity.
+    required_inputs: [product_artifact_id, approved_git_version, projection, idempotency_key]
+    required_outputs: [external_id, provider_url, observed_at]
+    preconditions:
+      - approved_git_version_verified
+      - binding_handoff_ready
+      - exact_write_preview_shown
+      - explicit_human_confirmation
+    idempotency:
+      key: stable_prd_id
+      excludes: [approved_git_version]
+      before_create: Read by persisted external ID and stable PRD ID.
+      after_timeout: Read before retry; reuse a found external ID and update rather than create.
+    mutable_sync_metadata:
+      - approved_git_version
+guidance:
+  boundary: Linear owns engineering tasks, estimates, cycles, sequencing, delivery priority, and execution state.
+  projection: Include approved product intent and source Git version; the version updates sync metadata on the same stable-PRD project and is never part of the idempotency key. Do not decompose work or author technical design.
+  failure: Preserve Git truth, record the provider error/sync gap, and retry idempotently.
+  measurement: Project completion is never an automatic measurement anchor.
+  forbidden: Never call an unofficial Linear API, scrape the UI, or create a proxy/custom MCP.
+smoke_test:
+  mode: read_only
+  check: Discover read capability only; never create or update a production project.

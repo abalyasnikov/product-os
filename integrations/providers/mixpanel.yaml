@@ -1,0 +1,23 @@
+schema_version: 1
+descriptor_kind: existing_provider_mcp_mapping
+provider: mixpanel
+canonical_version: 1.0.0
+existing_mcp_required: true
+implements_mcp: false
+credentials: provider_managed
+capability_mappings:
+  analytics.query:
+    access: read_only
+    match_existing_operation_by_semantics: Execute or retrieve a saved report/query by reproducible reference and return definition/result provenance.
+    required_inputs: [query_reference, definition_version, window, slices, guardrails]
+    required_outputs: [query_reference, definition_version, executed_at, result, slice_results, provenance]
+guidance:
+  suitable_for: Event-based funnels, retention, cohorts, and segmented behavioral outcomes.
+  verification: An analytics owner must verify event filters, identity rules, cohorts, and report semantics.
+  anchor: Use recorded exposure, verified release, or explicit evaluation time; never infer it from Linear completion.
+  drift: A changed report, filter, cohort, or event definition returns the binding to planned until reverified.
+  claims: Missing slices and guardrails are blocking gaps when required by the contract, not zeros or inferred passes.
+  forbidden: Read only; never mutate Mixpanel data or add an unofficial API client/custom MCP.
+smoke_test:
+  mode: read_only
+  check: Discover a query/read operation and validate fixture-shaped provenance without provider mutation.

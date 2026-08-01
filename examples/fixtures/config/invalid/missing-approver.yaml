@@ -1,0 +1,12 @@
+schema_version: 1
+workspace_profile: core_workspace
+selected_client: codex
+default_branch: main
+review:
+  mode: provider
+  approver_rule:
+    initiative: product-manager
+  solo_approval:
+    allowed: false
+    commit_trailer: "Product-Approval: explicit"
+  git_capability: git.review.read

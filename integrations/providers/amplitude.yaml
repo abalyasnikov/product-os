@@ -1,0 +1,23 @@
+schema_version: 1
+descriptor_kind: existing_provider_mcp_mapping
+provider: amplitude
+canonical_version: 1.0.0
+existing_mcp_required: true
+implements_mcp: false
+credentials: provider_managed
+capability_mappings:
+  analytics.query:
+    access: read_only
+    match_existing_operation_by_semantics: Execute or retrieve a saved behavioral analysis by reproducible reference and return definition/result provenance.
+    required_inputs: [query_reference, definition_version, window, slices, guardrails]
+    required_outputs: [query_reference, definition_version, executed_at, result, slice_results, provenance]
+guidance:
+  suitable_for: Behavioral funnels, retention, cohorts, and event-based product outcomes.
+  verification: An analytics owner must verify event/cohort semantics and record verifier plus time; connection alone is insufficient.
+  anchor: Prefer actual exposure-event time; otherwise use a separately verified release/manual anchor.
+  drift: If event, cohort, metric, or query definition changes, return binding to planned until reverified.
+  claims: Compare only against the approved Outcome Contract; preserve missing slices, guardrail regressions, confounders, and limitations.
+  forbidden: Read only; never mutate Amplitude data or add an unofficial API client/custom MCP.
+smoke_test:
+  mode: read_only
+  check: Discover a query/read operation and validate fixture-shaped provenance without provider mutation.

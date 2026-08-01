@@ -1,0 +1,5 @@
+schema_version: 1
+capabilities:
+  transcript.search:
+    access: read
+    description: Synthetic capability source used by the stale-hash fixture.

@@ -1,0 +1,11 @@
+artifact_id: prd_01JABCDE02
+from_version: "4444444444444444444444444444444444444444"
+to_version: "5555555555555555555555555555555555555555"
+material_changes:
+  target_users:
+    before: New users whose transaction fails
+    after: New and returning users whose transaction is rejected or fails
+    evidence: signal_01JABCDE04
+non_material_changes: []
+reviewed_by: product-manager
+reviewed_at: "2026-06-05T17:00:00Z"

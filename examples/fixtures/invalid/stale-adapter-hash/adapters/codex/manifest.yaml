@@ -1,0 +1,18 @@
+adapter_schema_version: 1
+generated: true
+client: codex
+canonical_source:
+  version: 1.0.0
+  hash_algorithm: sha256
+  content_hash: "0000000000000000000000000000000000000000000000000000000000000000"
+  includes: [skills/**, integrations/**]
+projection:
+  client_skill_location: .agents/skills
+  instructions: ADAPTER.md
+  canonical_skills: ../../skills
+  capability_mappings: ../../integrations
+safety:
+  embeds_credentials: false
+  implements_mcp: false
+  network_client: false
+  generated_files_are_source_of_truth: false

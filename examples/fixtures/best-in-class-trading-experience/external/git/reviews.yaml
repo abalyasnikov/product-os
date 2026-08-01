@@ -1,0 +1,58 @@
+schema_version: 1
+synthetic: true
+reviews:
+  - artifact_id: opportunity_01TRADX001
+    version: "1111111111111111111111111111111111111111"
+    target_branch: main
+    approved_by: product-lead
+    approved_at: "2025-02-10T16:00:00Z"
+    merged: true
+  - artifact_id: initiative_01TRADX001
+    version: "2222222222222222222222222222222222222222"
+    target_branch: main
+    approved_by: product-manager
+    approved_at: "2025-02-18T15:00:00Z"
+    material_change_summary: external/git/rejected-cross-chain-send.yaml
+    merged: true
+  - artifact_id: prd_01TRADX001
+    version: "3333333333333333333333333333333333333333"
+    target_branch: main
+    approved_by: product-manager
+    approved_at: "2025-02-20T15:00:00Z"
+    merged: true
+  - artifact_id: prd_01TRADX002
+    version: "4444444444444444444444444444444444444444"
+    target_branch: main
+    approved_by: product-manager
+    approved_at: "2025-02-21T15:00:00Z"
+    merged: true
+  - artifact_id: prd_01TRADX003
+    version: "5555555555555555555555555555555555555555"
+    target_branch: main
+    approved_by: product-manager
+    approved_at: "2025-02-22T15:00:00Z"
+    merged: true
+  - artifact_id: prd_01TRADX004
+    version: "6666666666666666666666666666666666666666"
+    target_branch: main
+    approved_by: product-manager
+    approved_at: "2025-02-23T15:00:00Z"
+    merged: true
+  - artifact_id: prd_01TRADX005
+    version: "7777777777777777777777777777777777777777"
+    target_branch: main
+    approved_by: product-manager
+    approved_at: "2025-02-24T15:00:00Z"
+    merged: true
+  - artifact_id: prd_01TRADX006
+    version: "8888888888888888888888888888888888888888"
+    target_branch: main
+    approved_by: product-manager
+    approved_at: "2025-02-25T15:00:00Z"
+    merged: true
+  - artifact_id: learning_01TRADX001
+    version: "9999999999999999999999999999999999999999"
+    target_branch: main
+    approved_by: product-lead
+    approved_at: "2025-05-30T12:00:00Z"
+    merged: true

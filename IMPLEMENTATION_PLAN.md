@@ -83,3 +83,6 @@ product-os adapter-check [workspace]
 - Decision events are append-only against a configured Git baseline; mutation and removal fail validation.
 - Re-running handoff projections creates no duplicate external object IDs.
 - No fixture contains real customer data or credentials.
+- `scripts/run_reference_journey.py` proves a clean install through final Learning for Codex, Claude Code, and OpenClaw using reachable Git version boundaries.
+- The curated Best-in-class trading experience example contains six focused PRDs and labels every non-historical measurement as synthetic.
+- Live MCP authorization, provider mutations, analytics execution, and model-quality evals are reported separately and are never inferred from fixture success.

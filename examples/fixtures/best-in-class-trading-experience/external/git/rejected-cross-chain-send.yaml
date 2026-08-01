@@ -1,0 +1,15 @@
+schema_version: 1
+synthetic: true
+reviewed_artifact_id: initiative_01TRADX001
+rejected_alternative:
+  name: Cross-chain Send
+  decision: reject_solution
+  reason: A valid address does not prove that a CEX deposit destination supports the route's destination network and asset.
+replacement:
+  primary_prd_id: prd_01TRADX002
+  primary_prd_title: Send Flow Redesign
+  separated_barrier_prd_id: prd_01TRADX005
+  separated_barrier_prd_title: Bridge Progress Tracking
+reviewed_by: product-manager
+reviewed_at: "2025-02-18T15:00:00Z"
+production_claim: false

@@ -2,6 +2,16 @@
 
 This walkthrough proves the local evidence-to-decision path without Granola, Linear, analytics, or a hosted Git provider. External workflows remain explicitly degraded.
 
+For the automated clean-install-to-final-Learning version of this walkthrough, use:
+
+```bash
+python scripts/run_reference_journey.py --client codex
+```
+
+That journey uses the curated [Best-in-class trading experience](../examples/fixtures/best-in-class-trading-experience/README.md)
+fixture and real local Git commits. It does not claim to verify live provider authorization,
+provider mutations, or model judgment quality.
+
 ## 1. Install locally
 
 Send an agent the absolute path to `INSTALL.md` in a trusted checkout. Confirm the displayed local origin and commit. Choose:

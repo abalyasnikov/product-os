@@ -1166,6 +1166,21 @@ def test_review_state_requires_reachable_verified_full_sha(workspace: Path) -> N
     write_artifact(workspace, data)
     state = workspace / ".product-os" / "review-state.yaml"
     state.parent.mkdir(parents=True, exist_ok=True)
+    (workspace / ".product-os" / "config.yaml").write_text(
+        "schema_version: 1\n"
+        "selected_client: codex\n"
+        "default_branch: main\n"
+        "review:\n"
+        "  mode: provider\n"
+        "  approver_rule:\n"
+        "    initiative: product-manager\n"
+        "    prd: product-manager\n"
+        "  solo_approval:\n"
+        "    allowed: false\n"
+        "    commit_trailer: 'Product-Approval: explicit'\n"
+        "  git_capability: git.review.read\n",
+        encoding="utf-8",
+    )
     state.write_text(
         yaml.safe_dump(
             {
@@ -1200,3 +1215,203 @@ def test_missing_git_baseline_is_named_warning(workspace: Path) -> None:
     write_artifact(workspace, data)
     report = validate_workspace(workspace, base_ref="missing-ref")
     assert "DECISION_BASELINE_UNAVAILABLE" in {warning.code for warning in report.warnings}
+
+
+def test_root_commit_has_no_prior_append_only_baseline(workspace: Path) -> None:
+    data = metadata("opportunity", "opportunity_01DECIDE")
+    data["decision_events"] = []
+    write_artifact(workspace, data)
+    git(workspace, "init", "-b", "main")
+    git(workspace, "config", "user.email", "fixture@example.invalid")
+    git(workspace, "config", "user.name", "Fixture")
+    git(workspace, "add", ".")
+    git(workspace, "commit", "-m", "root decision draft")
+    config = workspace / ".product-os" / "config.yaml"
+    config.parent.mkdir(parents=True, exist_ok=True)
+    config.write_text("default_branch: main\n", encoding="utf-8")
+
+    report = validate_workspace(workspace)
+
+    assert report.ok
+    assert "DECISION_BASELINE_UNAVAILABLE" in {warning.code for warning in report.warnings}
+    assert "DECISION_BASELINE_PARENT_UNAVAILABLE" not in {error.code for error in report.errors}
+
+
+def test_decision_basis_commit_must_contain_the_artifact(workspace: Path) -> None:
+    git(workspace, "init", "-b", "main")
+    git(workspace, "config", "user.email", "fixture@example.invalid")
+    git(workspace, "config", "user.name", "Fixture")
+    (workspace / "README.md").write_text("basis before opportunity\n", encoding="utf-8")
+    git(workspace, "add", "README.md")
+    git(workspace, "commit", "-m", "unrelated basis")
+    basis = subprocess.run(
+        ["git", "-C", str(workspace), "rev-parse", "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    data = metadata("opportunity", "opportunity_01DECIDE")
+    data["decision_events"] = [decision_event(based_on_version=basis)]
+    write_artifact(workspace, data)
+    git(workspace, "add", ".")
+    git(workspace, "commit", "-m", "add decided opportunity")
+
+    assert "DECISION_EVENT_BASIS_ARTIFACT_MISSING" in codes(
+        validate_workspace(workspace, command="smoke-test")
+    )
+
+
+def test_review_commit_must_contain_prd_and_real_solo_trailer(workspace: Path) -> None:
+    data = metadata("prd", "prd_01TEST")
+    data["outcome"] = complete_outcome()
+    data["implementation_refs"] = []
+    write_artifact(workspace, data)
+    git(workspace, "init", "-b", "main")
+    git(workspace, "config", "user.email", "fixture@example.invalid")
+    git(workspace, "config", "user.name", "Fixture")
+    git(workspace, "add", ".")
+    git(workspace, "commit", "-m", "prd without approval trailer")
+    no_trailer_sha = subprocess.run(
+        ["git", "-C", str(workspace), "rev-parse", "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+
+    config = workspace / ".product-os" / "config.yaml"
+    config.parent.mkdir(parents=True, exist_ok=True)
+    config.write_text(
+        "schema_version: 1\n"
+        "selected_client: codex\n"
+        "default_branch: main\n"
+        "review:\n"
+        "  mode: solo\n"
+        "  approver_rule:\n"
+        "    initiative: self\n"
+        "    prd: self\n"
+        "  solo_approval:\n"
+        "    allowed: true\n"
+        "    commit_trailer: 'Product-Approval: explicit'\n"
+        "  git_capability: git.commit.read\n",
+        encoding="utf-8",
+    )
+
+    def write_review_state(sha: str) -> None:
+        state = workspace / ".product-os" / "review-state.yaml"
+        state.write_text(
+            yaml.safe_dump(
+                {
+                    "approved_artifacts": {
+                        data["id"]: {
+                            "approved_version": sha,
+                            "approved_by": "self",
+                            "approved_at": "2026-08-01T12:00:00Z",
+                            "provenance": {
+                                "git_sha": sha,
+                                "verification_mode": "solo_commit",
+                                "verified_by": "self",
+                                "verified_at": "2026-08-01T12:00:00Z",
+                                "commit_trailer_verified": True,
+                            },
+                        }
+                    }
+                },
+                sort_keys=False,
+            ),
+            encoding="utf-8",
+        )
+
+    data["implementation_refs"] = [
+        {
+            "repository": "github.com/example/app",
+            "path": "specs/plan.md",
+            "based_on_prd_id": data["id"],
+            "based_on_prd_version": no_trailer_sha,
+        }
+    ]
+    write_artifact(workspace, data)
+    write_review_state(no_trailer_sha)
+    assert "IMPLEMENTATION_REVIEW_STATE_UNVERIFIED" in codes(validate_workspace(workspace))
+
+    data["implementation_refs"] = []
+    write_artifact(workspace, data)
+    git(workspace, "add", ".")
+    git(
+        workspace,
+        "commit",
+        "-m",
+        "self-attest PRD",
+        "-m",
+        "Product-Approval: explicit",
+    )
+    approved_sha = subprocess.run(
+        ["git", "-C", str(workspace), "rev-parse", "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    data["implementation_refs"] = [
+        {
+            "repository": "github.com/example/app",
+            "path": "specs/plan.md",
+            "based_on_prd_id": data["id"],
+            "based_on_prd_version": approved_sha,
+        }
+    ]
+    write_artifact(workspace, data)
+    write_review_state(approved_sha)
+
+    assert "IMPLEMENTATION_REVIEW_STATE_UNVERIFIED" not in codes(validate_workspace(workspace))
+
+
+def test_review_commit_cannot_approve_a_prd_it_does_not_contain(workspace: Path) -> None:
+    git(workspace, "init", "-b", "main")
+    git(workspace, "config", "user.email", "fixture@example.invalid")
+    git(workspace, "config", "user.name", "Fixture")
+    (workspace / "README.md").write_text("unrelated approval basis\n", encoding="utf-8")
+    git(workspace, "add", "README.md")
+    git(workspace, "commit", "-m", "unrelated reviewed change")
+    unrelated_sha = subprocess.run(
+        ["git", "-C", str(workspace), "rev-parse", "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+
+    data = metadata("prd", "prd_01TEST")
+    data["outcome"] = complete_outcome()
+    data["implementation_refs"] = [
+        {
+            "repository": "github.com/example/app",
+            "path": "specs/plan.md",
+            "based_on_prd_id": data["id"],
+            "based_on_prd_version": unrelated_sha,
+        }
+    ]
+    write_artifact(workspace, data)
+    state = workspace / ".product-os" / "review-state.yaml"
+    state.parent.mkdir(parents=True, exist_ok=True)
+    state.write_text(
+        yaml.safe_dump(
+            {
+                "approved_artifacts": {
+                    data["id"]: {
+                        "approved_version": unrelated_sha,
+                        "approved_by": "reviewer",
+                        "approved_at": "2026-08-01T12:00:00Z",
+                        "provenance": {
+                            "git_sha": unrelated_sha,
+                            "verification_mode": "provider_review",
+                            "verified_by": "reviewer",
+                            "verified_at": "2026-08-01T12:00:00Z",
+                            "provider_reference": "review-123",
+                        },
+                    }
+                }
+            },
+            sort_keys=False,
+        ),
+        encoding="utf-8",
+    )
+
+    assert "IMPLEMENTATION_REVIEW_STATE_UNVERIFIED" in codes(validate_workspace(workspace))

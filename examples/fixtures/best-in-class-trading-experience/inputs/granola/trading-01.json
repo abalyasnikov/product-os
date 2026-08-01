@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "provider": "granola",
+  "external_id": "granola-fixture-trading-01",
+  "synthetic": true,
+  "occurred_at": "2025-01-29T15:00:00Z",
+  "source_url": "https://example.invalid/granola/trading-01",
+  "approved_summary": "Synthetic participant expected one cross-chain trade but encountered separate bridge and swap decisions.",
+  "transcript_storage": "external_reference_only"
+}

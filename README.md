@@ -39,7 +39,7 @@ skills/                  Canonical agent-neutral workflows
 adapters/                Generated client instructions and metadata
 integrations/            Capability mappings for existing provider MCPs
 src/product_decision_os/ Deterministic validation CLI
-examples/fixtures/       Anonymized reference and failure journeys
+examples/fixtures/       Reproducible reference, historical, and failure journeys
 docs/spec/               Normative product specification
 docs/architecture/       Durable implementation decisions
 tests/                    Validator, skill, and end-to-end coverage
@@ -59,6 +59,18 @@ python -m pytest
 ```
 
 All smoke tests are read-only. They do not create Linear projects or mutate analytics data.
+
+To prove the complete repository-controlled path in a brand-new Git workspace, run:
+
+```bash
+python scripts/run_reference_journey.py --client codex
+```
+
+The runner verifies the release manifest, binds apply to the exact saved install-plan hash,
+creates real Git commits for evidence and synthetic decision boundaries, materializes a
+six-PRD Product Bet, records delivery and synthetic measurement evidence, then validates the
+final Learning and Product Update. The same journey runs in CI for Codex, Claude Code, and
+OpenClaw.
 
 The Python package contains the deterministic validator only. Canonical schemas, templates, skills, adapters, and integration mappings are installed from an immutable Git release so their provenance remains inspectable; a Python wheel is not a substitute for the Product Decision OS distribution.
 
@@ -121,6 +133,45 @@ artifact, Linear, or analytics source reference.
 ```
 
 See the [five-minute solo walkthrough](docs/getting-started.md) for the complete first loop and recovery paths.
+
+## Worked example: Best-in-class trading experience
+
+The [worked historical example](examples/fixtures/best-in-class-trading-experience/README.md)
+shows how one broad outcome becomes six problem-specific PRDs without turning the PRD into
+an implementation document:
+
+```text
+6 Signals → 2 Patterns → Opportunity → Initiative
+  → Cross-chain Swap
+  → Send Flow Redesign
+  → Skip Redundant Confirmation
+  → Non-blocking Transaction Status
+  → Bridge Progress Tracking
+  → Token Approval Management
+→ Outcome Review → Learning → Product Update
+```
+
+It is derived from a historical Zerion product milestone. The old “bridge inside Send”
+proposal is retained as a rejected alternative because later discovery exposed CEX deposit
+risk. Provider URLs are sanitized and all outcome measurements are explicitly synthetic;
+the example demonstrates the operating model, not Zerion production performance.
+
+## What the tests prove
+
+| Boundary | Automated proof |
+|---|---|
+| Release provenance and deterministic installation | Yes |
+| Clean install for Codex, Claude Code, and OpenClaw | Yes |
+| Signal-to-Learning artifact graph and Git decision history | Yes |
+| Schema, relationship, review-state, adapter, and manifest integrity | Yes |
+| Live Granola authorization and transcript retrieval | No — requires a configured provider account |
+| Live Linear/Jira writes and analytics queries | No — smoke tests are deliberately read-only |
+| LLM judgment quality across model providers | No — requires a separate eval suite |
+
+The repository never turns a fixture pass into a claim that a live provider workflow was
+verified. See the [verification model](docs/verification.md) and the example's verification
+notes for the exact boundary. The runner materializes pre-authored artifacts; it does not
+prove agent interrogation, source interpretation, or document-generation quality.
 
 ## Product model
 

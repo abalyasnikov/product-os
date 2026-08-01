@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "provider": "granola",
+  "external_id": "granola-fixture-trading-03",
+  "synthetic": true,
+  "occurred_at": "2025-02-01T16:00:00Z",
+  "source_url": "https://example.invalid/granola/trading-03",
+  "approved_summary": "Synthetic participant could not tell whether leaving a blocking transaction-status surface would interrupt processing.",
+  "transcript_storage": "external_reference_only"
+}

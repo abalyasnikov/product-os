@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "provider": "granola",
+  "external_id": "granola-fixture-trading-02",
+  "synthetic": true,
+  "occurred_at": "2025-01-31T11:00:00Z",
+  "source_url": "https://example.invalid/granola/trading-02",
+  "approved_summary": "Synthetic usability review identified a duplicate product confirmation before the wallet signature for eligible native-asset trades.",
+  "transcript_storage": "external_reference_only"
+}

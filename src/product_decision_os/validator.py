@@ -1163,6 +1163,17 @@ class WorkspaceValidator:
                             field=f"decision_events.{index}.based_on_version",
                             hint="Record the full commit SHA containing the reviewed decision basis.",
                         )
+                    elif not self._fixture_synthetic_mode() and not self._artifact_exists_at_commit(
+                        _relative(document.path, self.workspace), based_on
+                    ):
+                        self.report.error(
+                            "DECISION_EVENT_BASIS_ARTIFACT_MISSING",
+                            "Decision event based_on_version is reachable but does not contain this artifact.",
+                            path=_relative(document.path, self.workspace),
+                            artifact_id=artifact_id if isinstance(artifact_id, str) else None,
+                            field=f"decision_events.{index}.based_on_version",
+                            hint="Commit the undecided artifact first, then bind the human decision to that exact commit.",
+                        )
                 events.append(event)
             prior_ids: set[str] = set()
             for index, event in enumerate(events):
@@ -1186,6 +1197,25 @@ class WorkspaceValidator:
     def _git_commit_available(self) -> bool:
         try:
             result = self._git("rev-parse", "--verify", "HEAD^{commit}")
+        except (OSError, UnicodeError, subprocess.SubprocessError):
+            return False
+        return result.returncode == 0
+
+    def _artifact_exists_at_commit(self, relative_path: str, commit: str) -> bool:
+        try:
+            root_result = self._git("rev-parse", "--show-toplevel")
+        except (OSError, UnicodeError, subprocess.SubprocessError):
+            return False
+        if root_result.returncode != 0:
+            return False
+        try:
+            repository_root = Path(root_result.stdout.strip()).resolve()
+            artifact_path = (self.workspace / relative_path).resolve()
+            repository_path = artifact_path.relative_to(repository_root).as_posix()
+        except (OSError, ValueError):
+            return False
+        try:
+            result = self._git("cat-file", "-e", f"{commit}:{repository_path}")
         except (OSError, UnicodeError, subprocess.SubprocessError):
             return False
         return result.returncode == 0
@@ -1294,11 +1324,18 @@ class WorkspaceValidator:
                     self._baseline_error("DECISION_BASELINE_PARENT_UNAVAILABLE", f"Could not resolve baseline parent: {exc}")
                     return None
                 if parent.returncode != 0 or not re.fullmatch(r"[0-9a-fA-F]{40,64}", parent.stdout.strip()):
-                    self._baseline_error(
-                        "DECISION_BASELINE_PARENT_UNAVAILABLE",
-                        f"Configured default branch '{base_ref}' points at the current commit and has no resolvable parent.",
+                    if self._repository_has_prior_commit():
+                        self._baseline_error(
+                            "DECISION_BASELINE_PARENT_UNAVAILABLE",
+                            f"Configured default branch '{base_ref}' points at the current commit and has no resolvable parent.",
+                        )
+                        return None
+                    self.report.warning(
+                        "DECISION_BASELINE_UNAVAILABLE",
+                        f"Configured default branch '{base_ref}' is the repository's root commit; there is no earlier decision baseline to compare.",
+                        hint="Append-only comparison starts after the next commit; decision based_on_version values are still checked now.",
                     )
-                    return None
+                    return {}
                 commit = parent.stdout.strip()
         self.resolved_base_sha = commit.lower()
         git_root = Path(root_result.stdout.strip()).resolve()
@@ -1797,10 +1834,17 @@ class WorkspaceValidator:
             ) and isinstance(provenance, Mapping) and all(
                 _has(provenance, key) for key in ("git_sha", "verification_mode", "verified_by", "verified_at")
             )
+            review = self.config.get("review") if isinstance(self.config.get("review"), Mapping) else {}
+            solo = review.get("solo_approval") if isinstance(review.get("solo_approval"), Mapping) else {}
             mode_ready = (
-                verification_mode == "provider_review" and _has(provenance, "provider_reference")
+                verification_mode == "provider_review"
+                and review.get("mode") == "provider"
+                and _has(provenance, "provider_reference")
             ) or (
-                verification_mode == "solo_commit" and provenance.get("commit_trailer_verified") is True
+                verification_mode == "solo_commit"
+                and review.get("mode") == "solo"
+                and solo.get("allowed") is True
+                and provenance.get("commit_trailer_verified") is True
             )
             sha_ready = (
                 isinstance(approved_version, str)
@@ -1809,16 +1853,38 @@ class WorkspaceValidator:
                 and re.fullmatch(r"[0-9a-fA-F]{40}|[0-9a-fA-F]{64}", git_sha) is not None
             )
             reachable = False
+            artifact_present = False
             if sha_ready:
                 try:
                     resolved = self._git("rev-parse", "--verify", f"{git_sha}^{{commit}}")
                     reachable = resolved.returncode == 0 and resolved.stdout.strip().lower() == git_sha.lower()
                 except (OSError, UnicodeError, subprocess.SubprocessError):
                     reachable = False
-            if not (common_ready and mode_ready and sha_ready and reachable):
+                if reachable:
+                    artifact_present = self._artifact_exists_at_commit(path, git_sha)
+            trailer_present = True
+            if verification_mode == "solo_commit" and reachable:
+                required_trailer = solo.get("commit_trailer")
+                trailer_present = False
+                if isinstance(required_trailer, str) and required_trailer.strip():
+                    try:
+                        message = self._git("show", "-s", "--format=%B", git_sha)
+                        trailer_present = message.returncode == 0 and required_trailer.strip() in {
+                            line.strip() for line in message.stdout.splitlines()
+                        }
+                    except (OSError, UnicodeError, subprocess.SubprocessError):
+                        trailer_present = False
+            if not (
+                common_ready
+                and mode_ready
+                and sha_ready
+                and reachable
+                and artifact_present
+                and trailer_present
+            ):
                 self.report.error(
                     "IMPLEMENTATION_REVIEW_STATE_UNVERIFIED",
-                    "Review-state cache lacks complete verification provenance or a reachable full approval commit SHA.",
+                    "Review-state cache lacks complete provenance, the artifact at its approval commit, or the configured solo trailer.",
                     path=_relative(review_state_path, self.workspace),
                     artifact_id=artifact_id,
                     field="implementation_refs",

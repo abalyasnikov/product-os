@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "provider": "pasted_note",
+  "external_id": "pasted-fixture-bridge-progress",
+  "synthetic": true,
+  "occurred_at": "2025-02-06T15:00:00Z",
+  "approved_summary": "Source-chain confirmation did not prove destination delivery in a synthetic multi-stage bridge journey.",
+  "sensitive_data_removed": true
+}

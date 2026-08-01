@@ -18,8 +18,8 @@
     },
     {
       "path": "IMPLEMENTATION_PLAN.md",
-      "sha256": "d8e34e7ef9079e6196b21cfe5815b40924cf5b2c0c829deeb11be7bd44c95b6b",
-      "size": 3404
+      "sha256": "5a05096f61cd77f5090ef2b1336f3867fba6cc5135e546463533ad563ae1160e",
+      "size": 3863
     },
     {
       "path": "INSTALL.md",
@@ -33,8 +33,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "d15d1bfafd752aef6d2cb26d2170e36b2f0fefb10150c813136f7a6f3c239510",
-      "size": 6504
+      "sha256": "9e0539059e0b53c75cf066b01d0549ae15ce41df919b61915f56e3e426c6e895",
+      "size": 8949
     },
     {
       "path": "SECURITY.md",
@@ -228,13 +228,13 @@
     },
     {
       "path": "docs/getting-started.md",
-      "sha256": "ae4b4b25842dba6244b7510614b263421fd66fb4943dc7bd2f02b8ab7f28d9ec",
-      "size": 2585
+      "sha256": "a27ee85f2926ff078348b7aa1efac8604c1750c0785479d3520649104f0986ad",
+      "size": 3009
     },
     {
       "path": "docs/release-checklist.md",
-      "sha256": "57281ebfe89d07df4c09bf66c85f40772f0865876c89bf566e1d333fab0c6fb4",
-      "size": 822
+      "sha256": "f2d4d210a9d9443c7b0b5a4172d5c1552b9e6e92d2af838b67704c062b67daae",
+      "size": 1090
     },
     {
       "path": "docs/security-model.md",
@@ -243,8 +243,218 @@
     },
     {
       "path": "docs/spec/product-decision-os.md",
-      "sha256": "562938b4c30900ebc3bb4567219c2d82fe416140f756c04e92f6af9faa7031ee",
-      "size": 47655
+      "sha256": "6ee1e8fab5d4221f5298f99a73466653964bac0652237692de0793bd9b1673a7",
+      "size": 48698
+    },
+    {
+      "path": "docs/verification.md",
+      "sha256": "368b278133838c9fd3689fe54c9a8a74118c18df278247fbccf2445e516b78ea",
+      "size": 3350
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-decision-queue/SKILL.md",
+      "sha256": "c84ee594db11b3a15f7c09b5cc993d108f39fec6191dd3e214d12bfc08bfa139",
+      "size": 496
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-discovery/SKILL.md",
+      "sha256": "012ad7a545e5795eb2e5345dfec1b356ff8d060979bddefe986cdde5ad44c371",
+      "size": 550
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-initiative/SKILL.md",
+      "sha256": "eb5b73c511454c518d7351ed2b3f8c0fc862c81908a3c7b329db84ca3c7e3d40",
+      "size": 529
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-outcome-review/SKILL.md",
+      "sha256": "fd6f83ab691f2f86547ba8f81718a7034b8ecb82ff5f29e750dbfebbeca6e7df",
+      "size": 552
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-prd-handoff/SKILL.md",
+      "sha256": "2e8c48eeed844b06977d2898f248d61ebbab56af93585278d8f9ec7268f65d2a",
+      "size": 548
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-prd-interrogation/SKILL.md",
+      "sha256": "65f8d9ec8b6e36aa136c84929b09bd5a22eb4218994580c7c1a9cb2a6afc4c2d",
+      "size": 557
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-prd-review/SKILL.md",
+      "sha256": "bf0d92b9cff22074e69ad511fc204ec9b454447afb8ee0e985a9a5156eca69dc",
+      "size": 544
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-product-update/SKILL.md",
+      "sha256": "f3322ced5bdbdc3c5d9ca54bc1f23f2517db172ed6add839b71e015a154a4368",
+      "size": 550
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/.agents/skills/product-os-setup/SKILL.md",
+      "sha256": "5f1a7649dd1868d6fda92725a0d3325f5ffae75756e5065a4a09a4fa19a2d15a",
+      "size": 532
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/.product-os/config.yaml",
+      "sha256": "dbbd285f7f87dc55388865fe13d3f1b5b30dc07635cf5db1e4fac83cccd12235",
+      "size": 452
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/.product-os/review-state.yaml",
+      "sha256": "a9fef4c11c079cb058362bcf2b1fac2d64b238cb9ecc2a0902fb357084b0a976",
+      "size": 3831
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/README.md",
+      "sha256": "d02c78d596c613019fe43e12044678cb0a0bf99ba6277a583fe37269fff22b9c",
+      "size": 2785
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/external/analytics/amplitude-result.yaml",
+      "sha256": "1109d3a4f52e849bd5cfe5f74b7b28d0cfee62f9b4490b8511ec6b36aa02822a",
+      "size": 1105
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/external/code-repositories/trading-wallet/specs/cross-chain-swap/implementation-plan.md",
+      "sha256": "5e5ab3eb5c6c3b59b1aaede0d9fa9d993eab4547d5e4e0576e6ca5c2ba1d58fe",
+      "size": 1275
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/external/delivery/projects.yaml",
+      "sha256": "20349c5b0ec95c2c6584cfffb55824f0a2ad44d8867671791b90b0e2938900bb",
+      "size": 1768
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/external/git/rejected-cross-chain-send.yaml",
+      "sha256": "516f9e849724ac8fae10da32582f228f3e4daa9213ae97c7fb35167340f8fc74",
+      "size": 551
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/external/git/reviews.yaml",
+      "sha256": "f4fc0dedf51d1a280b3d9d5ed0a14dd4556635c4e49028b6176694c9bb717767",
+      "size": 1948
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/inputs/granola/trading-01.json",
+      "sha256": "a2c22360851b8b1ab5bdf97ed8799a19e684367f9a889e1acb4eb72d2f9732ab",
+      "size": 403
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/inputs/granola/trading-02.json",
+      "sha256": "48e51eea85b25219a2477c6cfb89d53dcb47d22accfc1e8a5ea8d5a9230e4757",
+      "size": 431
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/inputs/granola/trading-03.json",
+      "sha256": "1f826a08ce2fe1ddf4a09be3adba324b88d3a5235539c1d9a119eecfda9dc233",
+      "size": 417
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/inputs/pasted/bridge-progress.json",
+      "sha256": "4e870bcba02ac26912d92ce6b1cc008e19f2abbe16089435b8ba979ea9108103",
+      "size": 331
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/inputs/pasted/destination-risk.json",
+      "sha256": "3c10282cfd5885b592577e2ad3e12c3bd06e1a290a20bd9dfb9be01123e2c723",
+      "size": 350
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/inputs/pasted/token-approval.json",
+      "sha256": "bdf37d3211ba769df4d9d291dd0ac79a2a23c252b36b588c47c9be8b25a2ca1d",
+      "size": 358
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/initiatives/best-in-class-trading-experience.md",
+      "sha256": "83e7b5760279b10f959cbea745f7437ae4e55abcb470f629b8d3a853bb33b5a8",
+      "size": 4501
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/learnings/trading-experience-outcome.md",
+      "sha256": "34ebbd6caadc2a1658461878f5008efaa4877c3c6ced78fa01ee40eda127de5e",
+      "size": 3380
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/opportunities/best-in-class-trading.md",
+      "sha256": "49b01f42d42eaa0d3f1b6a55a0d7ce4794b612a9bbe9e0195e41969cb3acdbf4",
+      "size": 2809
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/patterns/trading-continuity.md",
+      "sha256": "01931f0a16c6d077cb0f3b8855feccc11d53483ec0aa4466fee8db583aa65771",
+      "size": 1322
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/patterns/transaction-trust-gaps.md",
+      "sha256": "dd94b3ec82b0e466eef9936cf621ed0cdf94815c7fae04203dcf305e7e2422d2",
+      "size": 1567
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/prds/bridge-progress-tracking.md",
+      "sha256": "e0a9ba095c6eb4778e331ab6f71ce318519e9cf0237fb9788cc24b83c6894c0d",
+      "size": 3742
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/prds/cross-chain-swap.md",
+      "sha256": "e31f65cb6333247b47117dffc06109cb0ea6ef4621c61eb313e404aca7dbf98a",
+      "size": 3854
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/prds/non-blocking-transaction-status.md",
+      "sha256": "7018ac9f2b0b8f1df087aec6e544099c934d661ac8b59306ad53967db70c45ab",
+      "size": 3311
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/prds/send-flow-redesign.md",
+      "sha256": "bee29298ece1d8c6ec8b2b00dd5f375ba98f13c9dc83a3e968bbe7e409b04cef",
+      "size": 3833
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/prds/skip-redundant-native-confirmation.md",
+      "sha256": "609255c8aff23058d2f887739be8c34d9b5b6c3d24efad3afe5fd27845e1a2dd",
+      "size": 3636
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/prds/token-approval-management.md",
+      "sha256": "46e208b5c234c8d50777bfd2df2d0ea04c27da01b5b21d4f3837163a07c5feb2",
+      "size": 3611
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/signals/blocking-status.md",
+      "sha256": "ff0c34c441fcac86dcbc9eaeffa4ab05b0c7ededf41977a3076757a5823dec72",
+      "size": 1106
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/signals/bridge-progress-ambiguity.md",
+      "sha256": "8970b2d6bd87360d6c0f92d63751397e88ae8d4ae232ecccaaf5eb58c6d8f752",
+      "size": 958
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/signals/cross-chain-swap-friction.md",
+      "sha256": "3ff1928d03b791079a9a9d35ae8f01a56e374c255ff14254afca0f7b3f267d31",
+      "size": 1101
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/signals/redundant-confirmation.md",
+      "sha256": "e70c50c7db8b83f00b215b109a8510472abe8d50b6662c7fe274af339b55447a",
+      "size": 1122
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/signals/send-destination-risk.md",
+      "sha256": "94e3d8d58532c2cd5201b24b1053d99e8a4432c3b708464f2f1491fc1944f9ed",
+      "size": 1007
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/signals/token-approval-control.md",
+      "sha256": "100f748d9f47bb224674fc454374b53ce5e305dcf0e6f0991974f9752a9a8320",
+      "size": 945
+    },
+    {
+      "path": "examples/fixtures/best-in-class-trading-experience/product/updates/2025-05.md",
+      "sha256": "18b963dad68b7ffec0efcf5a0ab127624c81352d04c5f625c93bd6382c4654b9",
+      "size": 2492
     },
     {
       "path": "examples/fixtures/config/README.md",
@@ -652,6 +862,11 @@
       "size": 10625
     },
     {
+      "path": "scripts/run_reference_journey.py",
+      "sha256": "463bce01d9bcf0e6719dd72ada30b78451475792b5424b7ad32c5d0404faa69d",
+      "size": 16600
+    },
+    {
       "path": "skills/README.md",
       "sha256": "64c0d318721832aa469fd2eb527c7ce1795ab1408e0346e3e72aedea19f16460",
       "size": 1741
@@ -728,8 +943,8 @@
     },
     {
       "path": "src/product_decision_os/validator.py",
-      "sha256": "4f0e841610e98557fa672f18472859c03d931fc2fa48fdd6799fa6069c26f9fb",
-      "size": 135585
+      "sha256": "d26dd44c786582dfe304dcbeb13a3eb04649fa4093af446f1f59fda4f8c025af",
+      "size": 139220
     },
     {
       "path": "templates/config.yaml",
@@ -780,6 +995,11 @@
       "path": "tests/conftest.py",
       "sha256": "f6fd51770cab9ca4a68c8455d6060e4ca4ecbacfe90533111a0008ea06dfaa02",
       "size": 147
+    },
+    {
+      "path": "tests/e2e/test_best_in_class_trading_example.py",
+      "sha256": "726f78afad4a324f282ae29c43cd70eda04e8e58ea92a51f919cd61726834ec4",
+      "size": 4546
     },
     {
       "path": "tests/e2e/test_distribution.py",
@@ -843,8 +1063,8 @@
     },
     {
       "path": "tests/validator/test_validator.py",
-      "sha256": "20a5b82dc45082d53a05d8a4f03417ea5cbc1fbcef6ab319fb75c406e0ac4c86",
-      "size": 49943
+      "sha256": "751a12a94d8959563540afa2d0c9bf5b461eb40b1c5e9ba126ba27163f9281e9",
+      "size": 57849
     }
   ],
   "hash_algorithm": "sha256",
@@ -852,5 +1072,5 @@
   "product": "product-decision-os",
   "publisher": "Product Decision OS contributors",
   "release": "0.1.0",
-  "tree_digest": "0bcdc92ee89dc2d6bf71f89ee0e2fc671790a0a8632b0bc9c2c3043fa27765b9"
+  "tree_digest": "6c4a2335a710c10afc0eae256c5178e705d6568331f24f6e1b81f1fb68786ab1"
 }

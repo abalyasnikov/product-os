@@ -130,7 +130,7 @@ An optional meta-layer representing a multi-PRD Product Bet around one shared us
 
 It contains the target outcome, product thesis, initiative-level evidence and business impact, GTM hypothesis, initiative-level Outcome Contract, barriers, child PRDs, dependencies, sequencing, and accumulated learnings. It does not duplicate child PRD requirements.
 
-The reference implementation includes a synthetic multi-PRD fixture showing how one outcome can be decomposed into problem-specific PRDs. A Zerion-derived historical example may be added later only after separate curation and anonymization; the private Zerion product repository is never a runtime dependency.
+The reference implementation includes a curated, anonymized historical Zerion example showing how one outcome can be decomposed into six problem-specific PRDs. Its provider links are sanitized and its measurement data is explicitly synthetic because the source repository contains no trustworthy post-release result. The private Zerion product repository is never a runtime dependency.
 
 ### PRD
 
@@ -451,7 +451,9 @@ product/
 └── updates/            # deliberately published updates only
 
 examples/
-└── reference-journey/
+└── fixtures/
+    ├── best-in-class-trading-experience/  # primary worked journey
+    └── valid-workspace/                   # compact validator fixture
 
 .agents/skills/          # generated adapter
 .claude/skills/          # generated adapter
@@ -534,7 +536,7 @@ Setup, Decision Queue, schemas, and client adapters exist only to make those ver
 - On-demand source-linked context projections for downstream audiences.
 - `implementation_refs` plus an engineering-handoff projection for optional code-repository plans.
 - Post-release analysis and product updates.
-- A synthetic, anonymized multi-PRD reference journey.
+- A curated, anonymized historical multi-PRD reference journey with explicitly synthetic measurement results.
 
 ### Out of scope
 
@@ -549,7 +551,6 @@ Setup, Decision Queue, schemas, and client adapters exist only to make those ver
 - Full GTM execution.
 - Automated self-update and schema-migration framework.
 - Slack, support, CRM, and Notion ingestion in V1.
-- A Zerion-derived public example before separate curation and privacy review.
 - Replacement of Linear, Granola, or analytics platforms.
 
 ## Success model
@@ -590,20 +591,27 @@ A new team initializes a private repository from one instruction link and passes
 
 ### Reference V1 journey
 
-The release candidate must complete one fixture-backed end-to-end journey:
+The primary deterministic journey is the curated historical **Best-in-class trading
+experience** example. It must run from a clean Git repository for every supported agent
+client:
 
-1. initialize a clean private repository;
-2. ingest two Granola-style meeting fixtures plus one contradictory pasted note;
-3. create linked Signals, one pursued Opportunity, and one Pattern because this fixture deliberately contains repeated and contradictory evidence;
-4. create an optional Initiative with two child PRDs;
-5. approve the Initiative and both PRDs with complete measurement definitions, explicit binding states, and GTM hypotheses; link one child PRD to a fixture Implementation Plan based on its approved version;
-6. add a new Signal that challenges an approved assumption, surface the affected Bet, and approve a PRD update using Git diff plus a material-change summary;
-7. create exactly one Linear fixture project per approved PRD, including after a simulated timeout and retry;
-8. record an actual measurement anchor and rollout or evaluation scope rather than inferring the measurement start from Linear completion;
-9. execute one verified analytics binding in the real pilot, or use a provenance-preserving manual result in fixture and degraded workflows, including baseline, post-release behavior, and at least two slices;
-10. run the Outcome Review workflow and produce one Learning containing an explicit human decision;
-11. generate a monthly update in which every material claim links to an artifact, Linear reference, or analytics query;
-12. re-run connector syncs with zero duplicate artifacts or external objects.
+1. verify the release manifest, preview the complete install plan, confirm its hash, and install without overwriting target files;
+2. materialize six pre-authored sanitized Granola, product-observation, research, and discovery input fixtures plus their linked Signals without storing a full transcript; input-to-Signal agent quality is evaluated separately;
+3. preserve both supporting and contradictory evidence in two Patterns and one undecided Opportunity;
+4. commit the draft, then append a synthetic human-role `pursue` event bound to that reachable commit; a real human gate is outside deterministic proof;
+5. create one Initiative with six child PRDs: Cross-chain Swap, Send Flow Redesign, Skip Redundant Confirmation, Non-blocking Transaction Status, Bridge Progress Tracking, and Token Approval Management;
+6. keep the rejected “bridge inside Send” alternative in the decision record because discovery exposed CEX deposit risk;
+7. materialize method-appropriate Outcome Contracts and GTM hypotheses, then create explicitly synthetic solo-review records with real Git version boundaries and bind delivery plus optional Implementation Plan references to those versions;
+8. preserve sanitized Linear or Jira-style delivery records, including idempotent retry behavior where exercised;
+9. record an explicit measurement anchor and provenance-preserving synthetic analytics result with baseline, post-release behavior, at least two slices, guardrails, and an unmistakable non-production label;
+10. materialize a pre-authored Outcome Review and Learning through a draft commit plus a synthetic decision commit;
+11. materialize a pre-authored Product Update in which every material claim has a structured artifact, delivery, or analytics reference;
+12. pass final validation and smoke tests in clean Codex, Claude Code, and OpenClaw workspaces.
+
+The compact `valid-workspace` fixture remains for focused validator and material-change
+tests. Neither fixture is evidence that live Granola authorization, external delivery writes,
+analytics execution, or model judgment quality passed. Those capabilities require separate
+environment-specific checks and must be reported independently.
 
 ## V1 quality bars
 

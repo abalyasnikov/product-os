@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from product_decision_os.cli import main
+from product_os.cli import main
 
 from .test_validator import install_adapter, install_schemas, metadata, write_artifact
 

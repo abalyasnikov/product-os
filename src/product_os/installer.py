@@ -469,7 +469,7 @@ def plan_install(
         target=target_path,
         client=client,
         files=tuple(planned),
-        product=str(manifest.get("product", "product-decision-os")),
+        product=str(manifest.get("product", "product-os")),
         release=str(manifest.get("release", "unknown")),
         canonical_origin=origin,
         publisher=str(manifest.get("publisher", "unpublished")),

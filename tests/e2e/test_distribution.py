@@ -11,8 +11,8 @@ import pytest
 import yaml
 from jsonschema import Draft202012Validator
 
-from product_decision_os.installer import InstallError, main as install_main, plan_install, write_plan
-from product_decision_os.manifest import build, main as manifest_main, verify, write_manifest
+from product_os.installer import InstallError, main as install_main, plan_install, write_plan
+from product_os.manifest import build, main as manifest_main, verify, write_manifest
 
 
 def test_release_manifest_matches_repository(repo_root: Path) -> None:
@@ -52,12 +52,12 @@ def test_manifest_preserves_validated_release_metadata_during_verify(tmp_path: P
     (root / "README.md").write_text("release\n", encoding="utf-8")
     write_manifest(
         root,
-        canonical_origin="https://github.com/example/product-decision-os",
+        canonical_origin="https://github.com/example/product-os",
         publisher="Example Maintainers",
         release="1.2.3",
     )
     manifest = json.loads((root / "manifest.json").read_text())
-    assert manifest["canonical_origin"] == "https://github.com/example/product-decision-os"
+    assert manifest["canonical_origin"] == "https://github.com/example/product-os"
     assert manifest["publisher"] == "Example Maintainers"
     assert manifest["release"] == "1.2.3"
     assert verify(root) == []
@@ -75,7 +75,7 @@ def test_manifest_build_cli_accepts_release_identity(
                 "build",
                 str(root),
                 "--canonical-origin",
-                "https://github.com/example/product-decision-os",
+                "https://github.com/example/product-os",
                 "--publisher",
                 "Example Maintainers",
                 "--release",
@@ -108,10 +108,25 @@ def test_manifest_rejects_invalid_release_metadata(
         build(root, canonical_origin=origin, publisher=publisher, release=release)
 
 
-def test_readme_references_shipped_diagram(repo_root: Path) -> None:
+def test_readme_renders_the_loop_and_closes_it(repo_root: Path) -> None:
+    """The README must draw the loop, and the drawing must stay true.
+
+    This replaced a check that a diagram image existed and exceeded a byte
+    count, which a stale export passes just as easily as a correct one. A
+    Mermaid block is rendered by GitHub from source, so the diagram cannot
+    silently drift away from the model it depicts.
+    """
     readme = (repo_root / "README.md").read_text(encoding="utf-8")
-    assert "docs/assets/product-loop.png" in readme
-    assert (repo_root / "docs/assets/product-loop.png").stat().st_size > 10_000
+    assert "```mermaid" in readme
+
+    diagram = readme.split("```mermaid", 1)[1].split("```", 1)[0]
+    for node in ("Strategy context", "Evidence", "Opportunity", "Outcome Contract"):
+        assert node in diagram, f"loop diagram is missing {node!r}"
+
+    # The point of the product is that the loop returns; a diagram that ends at
+    # delivery would describe a different system.
+    assert "Learning" in diagram
+    assert re.search(r"(?m)^\s*L\s*-->\s*E\s*$", diagram), "loop must close back to evidence"
 
 
 def test_agent_instruction_entrypoints_are_single_source(repo_root: Path) -> None:

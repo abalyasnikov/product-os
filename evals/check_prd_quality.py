@@ -21,7 +21,7 @@ SOURCE_ROOT = REPOSITORY_ROOT / "src"
 if str(SOURCE_ROOT) not in sys.path:
     sys.path.insert(0, str(SOURCE_ROOT))
 
-from product_decision_os.frontmatter import (  # noqa: E402
+from product_os.frontmatter import (  # noqa: E402
     FrontmatterError,
     MarkdownDocument,
     parse_markdown,

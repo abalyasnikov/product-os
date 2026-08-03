@@ -5,7 +5,7 @@ import shutil
 
 import yaml
 
-from product_decision_os.adapters import canonical_source_digest, generate_adapters
+from product_os.adapters import canonical_source_digest, generate_adapters
 
 CLIENTS = {
     "codex": ".agents/skills",

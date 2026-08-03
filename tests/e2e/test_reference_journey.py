@@ -4,8 +4,8 @@ from pathlib import Path
 
 import yaml
 
-from product_decision_os.frontmatter import parse_markdown
-from product_decision_os.validator import validate_workspace
+from product_os.frontmatter import parse_markdown
+from product_os.validator import validate_workspace
 
 
 def _artifacts(workspace: Path) -> dict[str, dict[str, object]]:

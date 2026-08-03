@@ -4,7 +4,7 @@ Product OS is an agent-native, Git-backed product decision system. Contributions
 
 ## Sources of truth
 
-- Product behavior: [`docs/spec/product-decision-os.md`](spec/product-decision-os.md)
+- Product behavior: [`docs/spec/product-os.md`](spec/product-os.md)
 - Verification and release claims: [`docs/verification.md`](verification.md)
 - Schemas: `schemas/`
 - Canonical skills: `skills/`
@@ -62,7 +62,7 @@ templates/               Human-readable Markdown templates
 skills/                  Canonical agent-neutral workflows
 adapters/                Generated client projections
 integrations/            Existing-provider capability mappings
-src/product_decision_os/ Deterministic repository tooling
+src/product_os/ Deterministic repository tooling
 examples/                Human-readable worked product documents
 tests/fixtures/           Reproducible technical and failure journeys
 tests/                    Contract, security, validation, and end-to-end coverage

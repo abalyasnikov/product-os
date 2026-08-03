@@ -10,10 +10,10 @@ import subprocess
 import pytest
 import yaml
 
-from product_decision_os.validator import TYPE_CONFIG, _walk, validate_workspace
-from product_decision_os.cli import main as cli_main
-from product_decision_os.installer import apply_plan, plan_install
-from product_decision_os.manifest import write_manifest
+from product_os.validator import TYPE_CONFIG, _walk, validate_workspace
+from product_os.cli import main as cli_main
+from product_os.installer import apply_plan, plan_install
+from product_os.manifest import write_manifest
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
@@ -741,7 +741,7 @@ def install_scoped_provenance(workspace: Path, *, client: str) -> None:
     installed_root = workspace / ".product-os"
     release = {
         "manifest_version": 1,
-        "product": "product-decision-os",
+        "product": "product-os",
         "release": "test-release",
         "canonical_origin": "test-fixture",
         "publisher": "test-publisher",

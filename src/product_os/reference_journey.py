@@ -26,8 +26,8 @@ SOURCE_ROOT = REPOSITORY_ROOT / "src"
 if str(SOURCE_ROOT) not in sys.path:
     sys.path.insert(0, str(SOURCE_ROOT))
 
-from product_decision_os.frontmatter import MarkdownDocument, parse_markdown  # noqa: E402
-from product_decision_os.validator import validate_workspace  # noqa: E402
+from product_os.frontmatter import MarkdownDocument, parse_markdown  # noqa: E402
+from product_os.validator import validate_workspace  # noqa: E402
 
 from .installer import apply_plan, plan_install, write_plan  # noqa: E402
 from .manifest import verify  # noqa: E402

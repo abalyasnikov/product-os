@@ -160,7 +160,7 @@ def build(
     ]
     return {
         "manifest_version": 1,
-        "product": "product-decision-os",
+        "product": "product-os",
         "release": release,
         "canonical_origin": canonical_origin,
         "publisher": publisher,
@@ -231,8 +231,8 @@ def verify(root: Path) -> list[str]:
     problems: list[str] = []
     if expected.get("manifest_version") != 1:
         problems.append("unsupported manifest_version; expected 1")
-    if expected.get("product") != "product-decision-os":
-        problems.append("manifest product must be product-decision-os")
+    if expected.get("product") != "product-os":
+        problems.append("manifest product must be product-os")
     if expected.get("hash_algorithm") != "sha256":
         problems.append("manifest hash_algorithm must be sha256")
     entries = expected.get("files")

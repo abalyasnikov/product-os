@@ -13,8 +13,8 @@
     },
     {
       "path": "AGENTS.md",
-      "sha256": "bb2b55ff3055a84377060bbc08eefd229091fbf2a1742342ecee59f23979e035",
-      "size": 1169
+      "sha256": "ac4b35e3d030ecdcb41a3c675d13431e7f77b96ce9f16de7b969741f6fb2169c",
+      "size": 1142
     },
     {
       "path": "CLAUDE.md",
@@ -33,8 +33,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "4872f341a0f58399c5f057862e9f9939eb9959da9e44b86b9e1d837534cab25e",
-      "size": 9254
+      "sha256": "75821bb10c9f7b2f01cb2b87a02f30c470ec7775ae5deefdd08885c47e3f6b54",
+      "size": 9262
     },
     {
       "path": "SECURITY.md",
@@ -132,19 +132,9 @@
       "size": 977
     },
     {
-      "path": "docs/articles/product-decision-os-draft.md",
-      "sha256": "ec68c80dd17080eccac2c6729bd4f906fdb70877ea8735b54c5ca98c7fc30fe1",
-      "size": 19093
-    },
-    {
-      "path": "docs/assets/product-loop.png",
-      "sha256": "553c6d1d8b5c0b3b2551d6104efe56e62b5be9f82a86c900e6d7b428596d86fa",
-      "size": 780284
-    },
-    {
       "path": "docs/contributing.md",
-      "sha256": "bcda3804e615f50903d5254a5e9fc08ea08eb4d5ba5386db2784eab73a4f0035",
-      "size": 3148
+      "sha256": "0e112b3228f39c93c251a445ab48ad0dcae25de6a7bbbb90216a437c95644972",
+      "size": 3121
     },
     {
       "path": "docs/getting-started.md",
@@ -162,7 +152,7 @@
       "size": 2548
     },
     {
-      "path": "docs/spec/product-decision-os.md",
+      "path": "docs/spec/product-os.md",
       "sha256": "8013ecb5621e231f201d570b4fc07ef15403d335d52e0ef60ccd5886de70eec9",
       "size": 52363
     },
@@ -233,8 +223,8 @@
     },
     {
       "path": "evals/check_prd_quality.py",
-      "sha256": "686e39825cbca3be19c48312d4eaf0170f879d0b90564c2b6635e559af6085e3",
-      "size": 13917
+      "sha256": "ef93c242d5098903061a58714e4e316c0666bf172f2c4e6cafdf5f174aa97c2b",
+      "size": 13908
     },
     {
       "path": "evals/prd-quality-rubric.yaml",
@@ -258,8 +248,8 @@
     },
     {
       "path": "examples/best-in-class-trading-experience/product/learnings/auto-slippage-failure-rate.md",
-      "sha256": "f55d4b6fbe417cc2438258bae635ae35550919446cb5ffa1b14c725a2bfa06e5",
-      "size": 4839
+      "sha256": "33fcdfe368aa5eb56461c6b33948661bfabfe0cfec35f37fd936aca5ce4c1f7b",
+      "size": 5053
     },
     {
       "path": "examples/best-in-class-trading-experience/product/prds/auto-slippage.md",
@@ -333,8 +323,8 @@
     },
     {
       "path": "pyproject.toml",
-      "sha256": "628b23a503f7fcdc53508def63426868d5253f8fdf5ffcd2a3cbfe28c065b550",
-      "size": 667
+      "sha256": "ea13d8c66604b8b517a7d44bed812196351bd24206bde932dc269f9f3393439b",
+      "size": 926
     },
     {
       "path": "schemas/common.schema.json",
@@ -388,23 +378,23 @@
     },
     {
       "path": "scripts/generate_adapters.py",
-      "sha256": "18d72493405fa1a64c01607aa0e571b6f7574ff01802a24f9f28918d13bd2b7c",
-      "size": 345
+      "sha256": "5101e0266a1c4c31c6792c1a07d7f146937bd5382ed33d77f7a0ff57f157319b",
+      "size": 336
     },
     {
       "path": "scripts/install_workspace.py",
-      "sha256": "f3303e75f7af069335ff8bd3a110150e0d808c1db8688c070aaf81e14bb4f410",
-      "size": 338
+      "sha256": "60e50a94fcdc3de0d0bba5d7b073b6c7e24f621dad5626c43e5e97df24d25a14",
+      "size": 329
     },
     {
       "path": "scripts/manifest.py",
-      "sha256": "c81d781f3ac850061a6801b231fde7a4596ae1d2fc416d0980475f2f35577bec",
-      "size": 340
+      "sha256": "42d01f3c8b69255b8295b3654efd065d9a7ceaa984545a5998b83de91b3bd66c",
+      "size": 331
     },
     {
       "path": "scripts/run_reference_journey.py",
-      "sha256": "de89a22dc47af7c270c2246db3764419652aa0ce4b548dd4801d5f324f7f9dda",
-      "size": 357
+      "sha256": "fc052bc31a838c2d605d11b79627b5fed0ad1876b73285ad176f75b29704b46a",
+      "size": 348
     },
     {
       "path": "skills/README.md",
@@ -472,44 +462,44 @@
       "size": 8660
     },
     {
-      "path": "src/product_decision_os/__init__.py",
+      "path": "src/product_os/__init__.py",
       "sha256": "f3bc73415889eb2303099d061ba9fe9010ae97e64b97f0acf1dbc115a195c7b8",
       "size": 203
     },
     {
-      "path": "src/product_decision_os/adapters.py",
+      "path": "src/product_os/adapters.py",
       "sha256": "526a14028c3d75160ecdbcaa939abc71b8a37ebd971a46136d32df0d8345228c",
       "size": 4296
     },
     {
-      "path": "src/product_decision_os/cli.py",
+      "path": "src/product_os/cli.py",
       "sha256": "1a515b825b22148f12b2045602a06786c43740d366b28d63d7ab6bde7c52a3b7",
       "size": 3289
     },
     {
-      "path": "src/product_decision_os/frontmatter.py",
+      "path": "src/product_os/frontmatter.py",
       "sha256": "4685c58700fdc5019247ce5d85a7f75ebecaa301e0de00331ea2eab88509a3ad",
       "size": 5867
     },
     {
-      "path": "src/product_decision_os/installer.py",
-      "sha256": "9cb0d6a4486306eb9fe1fc6be03ffb59f031deaf7ea0c279d7876157f5245019",
-      "size": 29554
+      "path": "src/product_os/installer.py",
+      "sha256": "26b4b0fc13533290515f51554be92ba65e15452faf8271f3cbb06a4b8878b542",
+      "size": 29545
     },
     {
-      "path": "src/product_decision_os/manifest.py",
-      "sha256": "663892ad3de3de3fedacc8ef21c5a400dc860aecf0db8c415d6f2a74e2303ea6",
-      "size": 10616
+      "path": "src/product_os/manifest.py",
+      "sha256": "cba51de6ad2faf07f278c130e7029242844a35d08a4124933b747c2aecbb2150",
+      "size": 10589
     },
     {
-      "path": "src/product_decision_os/reference_journey.py",
-      "sha256": "c2f481243ce470716bed0d1921e1d61779a2820f46ab08e7c586b19f73ca34fe",
-      "size": 16515
+      "path": "src/product_os/reference_journey.py",
+      "sha256": "a0aedddf3eefdeb1c69fa92488e4dc8f81e9bf822348dc1ec293b0574c5530d0",
+      "size": 16497
     },
     {
-      "path": "src/product_decision_os/validator.py",
-      "sha256": "6b1e8af67ad96bbccbe19b124aea490da0544309c321a1041f71071d41aee244",
-      "size": 151670
+      "path": "src/product_os/validator.py",
+      "sha256": "68e6d78b89db7c96b731d9f24de09ea98161e6af0ecfc2f20e9a8b1e9f092cf0",
+      "size": 151661
     },
     {
       "path": "templates/config.yaml",
@@ -573,8 +563,8 @@
     },
     {
       "path": "tests/contracts/test_adapters.py",
-      "sha256": "556f7d1d866519aafe40a37b17d20c9204a4c7ac8db9dcdfd68589c3c2e19789",
-      "size": 5434
+      "sha256": "546744d811a1eff03f079b88000ed1eba867ff51ae8edec3c07129b7f40e580c",
+      "size": 5425
     },
     {
       "path": "tests/contracts/test_canonical_skills.py",
@@ -598,18 +588,18 @@
     },
     {
       "path": "tests/e2e/test_best_in_class_trading_example.py",
-      "sha256": "b938af73261e6da962a6c7b3be62da38752d2dae7a07fc2ea338a5ffb82a65f3",
-      "size": 6868
+      "sha256": "57e19677510ebdf679237420bf0efb1edaf11ebe73c280bcda4eb7a4d0846968",
+      "size": 6841
     },
     {
       "path": "tests/e2e/test_distribution.py",
-      "sha256": "13913d391347b27bdeb9486dfe68fba350833711e330611ef4edd388f9cf64ec",
-      "size": 11405
+      "sha256": "c5dd6c00939bf13a8fb8010d662d42007fe1050aefa9a30193d1cdc92fc1d10e",
+      "size": 12098
     },
     {
       "path": "tests/e2e/test_reference_journey.py",
-      "sha256": "bdfbdc964aa12e94af4e2986d36a0cca46d994a361c4b743b761ed8bc0567766",
-      "size": 3932
+      "sha256": "82a1d22d21cd6a4ec6eeba65d3f2b574ecae5e754953409606e836206a5e8dbd",
+      "size": 3914
     },
     {
       "path": "tests/evals/test_prd_quality_contract.py",
@@ -1078,13 +1068,13 @@
     },
     {
       "path": "tests/security/test_installer.py",
-      "sha256": "82b05b22aea014846784fb9b9dfb8785936ef12b86a6f234935fcb119ae05246",
-      "size": 14452
+      "sha256": "dc617818a84b3bfc6f57544408475591b1a485775de70cc4e3a98a1e3ae2735d",
+      "size": 14425
     },
     {
       "path": "tests/security/test_manifest_security.py",
-      "sha256": "bb85cd0ae51b3a57393dad4fa35fc94a5d127df0840274c62a6ca9b91533471f",
-      "size": 2192
+      "sha256": "de8f7d63d474176d8ef785102d7fbde358346d6472e6ca6b25b79c173477c167",
+      "size": 2183
     },
     {
       "path": "tests/validator/__init__.py",
@@ -1093,24 +1083,24 @@
     },
     {
       "path": "tests/validator/test_cli.py",
-      "sha256": "fff8d3889427b1d79ba4ebec129e52fd0a9817dddaebafdb33a150d42cf95979",
-      "size": 2505
+      "sha256": "3c1606aa8121cb445d945350301a80ce67303f79abeb33a65c70b46046c58db6",
+      "size": 2496
     },
     {
       "path": "tests/validator/test_repository_fixtures.py",
-      "sha256": "fd8cfa0f84dff6fc706e9be5167d3bd65a44a2bbfa5f44337b02ade58f19d7b2",
-      "size": 1915
+      "sha256": "054ce1c44872f127d218510b408cd46e0908669128846f4a29cb7dc49bfe76c4",
+      "size": 1906
     },
     {
       "path": "tests/validator/test_validator.py",
-      "sha256": "24e1e7c95a2277b4bbbc15d3b4c0297f4683b0096a927ac35718707449df822c",
-      "size": 65225
+      "sha256": "e25b43ab6298ea5314436d65292d135da3142f98f8bd6b399d131161747be742",
+      "size": 65180
     }
   ],
   "hash_algorithm": "sha256",
   "manifest_version": 1,
-  "product": "product-decision-os",
+  "product": "product-os",
   "publisher": "unpublished",
   "release": "0.1.0",
-  "tree_digest": "ab6c4a50e6f2a71c7ec9040290f9a42f5d45b3cbed8bb24db479cceb3b84cbdf"
+  "tree_digest": "a1d9de08ea9130e21b03118d2ed4bdf287d68522145889bc0e4549362d118f12"
 }

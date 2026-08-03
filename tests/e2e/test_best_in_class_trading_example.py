@@ -6,9 +6,9 @@ from pathlib import Path
 import pytest
 import yaml
 
-from product_decision_os.frontmatter import parse_markdown
-from product_decision_os.validator import validate_workspace
-from product_decision_os.reference_journey import REFERENCE_FIXTURE_ROOT, run_journey
+from product_os.frontmatter import parse_markdown
+from product_os.validator import validate_workspace
+from product_os.reference_journey import REFERENCE_FIXTURE_ROOT, run_journey
 
 
 HUMAN_EXAMPLE_ROOT = Path(__file__).resolve().parents[2] / "examples" / "best-in-class-trading-experience"

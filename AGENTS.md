@@ -4,7 +4,7 @@ Product OS is an agent-native, Git-backed product decision system.
 
 ## Source of truth
 
-- Product behavior: `docs/spec/product-decision-os.md`
+- Product behavior: `docs/spec/product-os.md`
 - Verification and release contract: `docs/verification.md`
 - Schemas: `schemas/`
 - Canonical skills: `skills/`
@@ -24,6 +24,6 @@ Product OS is an agent-native, Git-backed product decision system.
 
 ```bash
 python -m pytest
-python -m product_decision_os.cli validate tests/fixtures/valid-workspace
-python -m product_decision_os.cli smoke-test tests/fixtures/valid-workspace
+python -m product_os.cli validate tests/fixtures/valid-workspace
+python -m product_os.cli smoke-test tests/fixtures/valid-workspace
 ```

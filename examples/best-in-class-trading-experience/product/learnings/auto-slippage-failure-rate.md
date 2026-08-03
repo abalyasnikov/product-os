@@ -48,7 +48,7 @@ decision_events:
     decided_by: product-lead
     decided_at: "2026-05-04T00:00:00Z"
     rationale: The primary metric improved decisively in the affected segment, but the contract requires that no execution-quality guardrail materially regress, and those results are not in hand for this record. Continue with the adaptive default and close the guardrail evidence before claiming the barrier is fully settled.
-    based_on_version: "376230a5ab4b5d68845e75369553b5ba15755578"
+    based_on_version: "0000000000000000000000000000000000000000"
 ---
 
 ## What changed
@@ -67,4 +67,4 @@ The order that produced this is worth keeping: qualitative signal indicated wher
 
 This Learning settles the Auto-slippage barrier only. The Initiative's shared outcome across all five barriers remains unmeasured, and passing one child contract is not evidence for the aggregate claim.
 
-`based_on_version` references the original private product repository where the decision was reviewed, not this public example.
+`based_on_version` is zeroed here on purpose. In a live workspace it pins the decision to the exact commit that was reviewed, which is what makes a decision auditable rather than merely recorded. The real value belongs to a private repository and would resolve for nobody reading this, so the field keeps its shape without pointing anywhere.

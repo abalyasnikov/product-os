@@ -377,7 +377,7 @@ class WorkspaceValidator:
                 text = pyproject.read_text(encoding="utf-8")
             except (OSError, UnicodeError):
                 continue
-            if re.search(r'(?m)^name\s*=\s*["\']product-decision-os["\']\s*$', text):
+            if re.search(r'(?m)^name\s*=\s*["\']product-os["\']\s*$', text):
                 self._distribution_root_cache = candidate
                 return candidate
         self._distribution_root_cache = None

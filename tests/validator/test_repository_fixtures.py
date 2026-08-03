@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from product_decision_os.validator import validate_workspace
+from product_os.validator import validate_workspace
 
 
 ROOT = Path(__file__).resolve().parents[2]

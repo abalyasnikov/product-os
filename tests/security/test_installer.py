@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from product_decision_os.installer import (
+from product_os.installer import (
     InstallError,
     apply_plan,
     load_plan_document,
@@ -14,7 +14,7 @@ from product_decision_os.installer import (
     plan_install,
     write_plan,
 )
-from product_decision_os.manifest import write_manifest
+from product_os.manifest import write_manifest
 
 
 @pytest.fixture
@@ -315,7 +315,7 @@ def test_unrelated_target_symlink_is_rejected(
         "__pycache__",
         "build",
         "dist",
-        "product_decision_os.egg-info",
+        "product_os.egg-info",
     ],
 )
 def test_source_symlinks_in_non_distributed_directories_are_skipped(

@@ -48,6 +48,19 @@ Today an administrator gathers activity from separate views and explains missing
 - Replacing the customer's governance system.
 - Treating linked ARR as the delivery sequence.
 
+## GTM hypothesis
+
+The initial audience is B2B administrators preparing external reviews. The promise is a review-ready activity record with explicit coverage. Distribution begins through the linked account conversations; adoption is a completed review using the export. Broader positioning and demand measurement remain to establish.
+
+## Risks and dependencies
+
+- Historical event coverage may differ by activity type.
+- Export permissions must match the administrator's current access.
+
+## Open questions
+
+- Which reviewer questions are common across the linked accounts and which are customer-specific?
+
 ## Outcome Contract
 
 Better means a design-partner administrator can answer the agreed compliance-review questions using the export without reconstructing activity manually.
@@ -68,19 +81,6 @@ binding:
   owner: product-lead
   due_before: release
 ```
-
-## GTM hypothesis
-
-The initial audience is B2B administrators preparing external reviews. The promise is a review-ready activity record with explicit coverage. Distribution begins through the linked account conversations; adoption is a completed review using the export. Broader positioning and demand measurement remain to establish.
-
-## Risks and dependencies
-
-- Historical event coverage may differ by activity type.
-- Export permissions must match the administrator's current access.
-
-## Open questions
-
-- Which reviewer questions are common across the linked accounts and which are customer-specific?
 
 ## Delivery
 

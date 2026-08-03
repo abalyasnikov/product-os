@@ -124,7 +124,7 @@ deserves a Product Bet; continue toward a PRD, delivery, measurement, and
 Learning only as real inputs and approvals become available.
 ```
 
-See [INSTALL.md](INSTALL.md) for the installation contract.
+See [INSTALL.md](INSTALL.md) for the installation contract, and the [solo walkthrough](docs/getting-started.md) for the path from that first signal to a decision you can defend later — no connectors required.
 
 ## Verification boundaries
 
@@ -137,9 +137,13 @@ Passing it means the decision trail is sound. It says nothing about whether a Pr
 
 ## Project status
 
-This is a V1 reference implementation. Its release bar is an inspectable evidence-to-learning journey, not feature count.
+This is a V1 reference implementation. Its release bar is an inspectable evidence-to-learning journey, not feature count. The [release checklist](docs/release-checklist.md) states plainly what CI already enforces and what still needs a human.
 
 - [Product specification](docs/spec/product-os.md)
+- [Solo walkthrough](docs/getting-started.md) — evidence to decision without any connector
+- [Verification model](docs/verification.md) — what the suite proves, and where its coverage stops
 - [Security model](docs/security-model.md)
 - [Contributing and local verification](docs/contributing.md)
 - [Apache 2.0 license](LICENSE)
+
+The two decisions the rest of the system rests on are recorded as ADRs: [product truth stays separate from delivery and implementation](docs/architecture/0001-boundaries.md), and [learning anchors to observation rather than project completion](docs/architecture/0002-measurement-anchor.md).

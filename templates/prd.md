@@ -39,6 +39,18 @@ relationships:
 
 - <explicit boundary>
 
+## GTM hypothesis
+
+<Audience, promise, discovery channel, adoption action, and launch measurement—or why GTM is not applicable.>
+
+## Risks and dependencies
+
+- <risk or external dependency>
+
+## Open questions
+
+- <question that could change the product decision, or "None">
+
 ## Outcome Contract
 
 <One sentence explaining what evidence would make the Product Lead call this better.>
@@ -66,18 +78,6 @@ binding:
   owner: <owner>
   due_before: release
 ```
-
-## GTM hypothesis
-
-<Audience, promise, discovery channel, adoption action, and launch measurement—or why GTM is not applicable.>
-
-## Risks and dependencies
-
-- <risk or external dependency>
-
-## Open questions
-
-- <question that could change the product decision, or "None">
 
 ## Delivery
 

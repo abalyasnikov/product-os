@@ -47,6 +47,19 @@ Today the user submits, enters a blocking status surface, and must choose betwee
 - Predicting completion when the provider cannot supply a reliable estimate.
 - Redesigning transaction submission.
 
+## GTM hypothesis
+
+The audience is active wallet users submitting transactions. The promise is that a pending transaction no longer stops the rest of the wallet. Discovery happens in the existing transaction flow; adoption is continuing another task while status remains recoverable. Measurement uses the same continuation and recovery definition, with a baseline to establish.
+
+## Risks and dependencies
+
+- State events may arrive late or out of order.
+- A compact status could hide a material failure if terminal states are not prominent.
+
+## Open questions
+
+- Which wallet destinations must remain available while a transaction is pending?
+
 ## Outcome Contract
 
 Better means an eligible user can leave a pending transaction, continue another wallet task, and later recover the correct state without a false completion signal.
@@ -67,19 +80,6 @@ binding:
   owner: product-lead
   due_before: release
 ```
-
-## GTM hypothesis
-
-The audience is active wallet users submitting transactions. The promise is that a pending transaction no longer stops the rest of the wallet. Discovery happens in the existing transaction flow; adoption is continuing another task while status remains recoverable. Measurement uses the same continuation and recovery definition, with a baseline to establish.
-
-## Risks and dependencies
-
-- State events may arrive late or out of order.
-- A compact status could hide a material failure if terminal states are not prominent.
-
-## Open questions
-
-- Which wallet destinations must remain available while a transaction is pending?
 
 ## Delivery
 

@@ -59,6 +59,23 @@ The source work proposed reducing “where are my funds?” support tickets and 
 - Automatically retrying a stalled bridge without understanding execution state.
 - Replacing the bridge provider's recovery or support process.
 
+## GTM hypothesis
+
+This is a trust layer for users of Cross-chain Swap and other bridge-dependent flows. The promise is clear, truthful progress rather than instant settlement. Discovery occurs in confirmation and transaction activity; adoption is users returning to the in-product status instead of requiring external investigation.
+
+## Risks and dependencies
+
+- Providers may expose inconsistent status semantics or no reliable ETA.
+- Route aggregation can make provider-specific recovery difficult to explain.
+- Push or background updates may differ by platform.
+- Transaction Toasters and activity must share the same durable source of truth.
+
+## Open questions
+
+- Which providers expose a trustworthy delivery estimate and stage model?
+- What recovery action is safe for a genuinely stalled transaction?
+- When should completion trigger an out-of-app notification?
+
 ## Outcome Contract
 
 The user must be able to understand the stage and correct next action. Estimate accuracy is valuable, but truthful uncertainty is preferable to a precise fiction.
@@ -99,23 +116,6 @@ binding:
   owner: product-lead
   due_before: release
 ```
-
-## GTM hypothesis
-
-This is a trust layer for users of Cross-chain Swap and other bridge-dependent flows. The promise is clear, truthful progress rather than instant settlement. Discovery occurs in confirmation and transaction activity; adoption is users returning to the in-product status instead of requiring external investigation.
-
-## Risks and dependencies
-
-- Providers may expose inconsistent status semantics or no reliable ETA.
-- Route aggregation can make provider-specific recovery difficult to explain.
-- Push or background updates may differ by platform.
-- Transaction Toasters and activity must share the same durable source of truth.
-
-## Open questions
-
-- Which providers expose a trustworthy delivery estimate and stage model?
-- What recovery action is safe for a genuinely stalled transaction?
-- When should completion trigger an out-of-app notification?
 
 ## Delivery
 

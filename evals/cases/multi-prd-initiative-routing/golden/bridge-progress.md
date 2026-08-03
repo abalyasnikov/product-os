@@ -43,6 +43,19 @@ Today the product can collapse a multi-stage route into an ambiguous pending or 
 - Inventing an estimate when the provider has no reliable one.
 - Selecting or composing the route before authorization.
 
+## GTM hypothesis
+
+The audience is users of bridge-dependent trades. The promise is progress that remains truthful until funds arrive. Discovery occurs after route authorization and in transaction activity; adoption is successful interpretation of the current state. Measurement follows the lifecycle interpretation contract.
+
+## Risks and dependencies
+
+- Providers may expose different or incomplete lifecycle states.
+- A simplified vocabulary may conceal a provider-specific recovery condition.
+
+## Open questions
+
+- What evidence is sufficient to label destination settlement complete for each supported provider?
+
 ## Outcome Contract
 
 Better means users identify the truthful current settlement stage and appropriate next action across supported lifecycle cases.
@@ -63,19 +76,6 @@ binding:
   owner: product-lead
   due_before: release
 ```
-
-## GTM hypothesis
-
-The audience is users of bridge-dependent trades. The promise is progress that remains truthful until funds arrive. Discovery occurs after route authorization and in transaction activity; adoption is successful interpretation of the current state. Measurement follows the lifecycle interpretation contract.
-
-## Risks and dependencies
-
-- Providers may expose different or incomplete lifecycle states.
-- A simplified vocabulary may conceal a provider-specific recovery condition.
-
-## Open questions
-
-- What evidence is sufficient to label destination settlement complete for each supported provider?
 
 ## Delivery
 

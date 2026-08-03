@@ -64,6 +64,20 @@ Cross-chain Swap can define the unified intent before every post-confirmation st
 
 Engineering estimates and delivery sequencing belong in Linear. This document records only product dependencies and the reason the five PRDs belong to one bet.
 
+## GTM hypothesis
+
+The first audience is existing multi-chain wallet users who already trade or bridge. The promise is not “more routes”; it is one reliable journey that preserves control and progress across chains. Discovery should happen inside the existing Swap entry point and transaction status surfaces. Adoption is an eligible user completing the journey and continuing to use the wallet while settlement proceeds.
+
+A separate GTM workflow should own launch execution. The Initiative keeps this hypothesis so product design and launch positioning do not diverge.
+
+## Risks and open questions
+
+- Removing visible steps can reduce comprehension if warning and route-change rules are incomplete.
+- Improving transaction success can conceal worse execution unless price-quality guardrails are evaluated alongside failure rate.
+- Provider estimates may be unavailable or too unreliable to display as precise ETAs.
+- One aggregate metric may hide a severe failure in a smaller chain or route slice.
+- The baseline and exposure definition must be established before an outcome claim is possible.
+
 ## Outcome Contract
 
 The Initiative succeeds only if the shared trading journey improves. Passing every child PRD contract is necessary evidence, but is not by itself proof of the aggregate outcome.
@@ -95,17 +109,3 @@ binding:
   owner: product-lead
   due_before: release
 ```
-
-## GTM hypothesis
-
-The first audience is existing multi-chain wallet users who already trade or bridge. The promise is not “more routes”; it is one reliable journey that preserves control and progress across chains. Discovery should happen inside the existing Swap entry point and transaction status surfaces. Adoption is an eligible user completing the journey and continuing to use the wallet while settlement proceeds.
-
-A separate GTM workflow should own launch execution. The Initiative keeps this hypothesis so product design and launch positioning do not diverge.
-
-## Risks and open questions
-
-- Removing visible steps can reduce comprehension if warning and route-change rules are incomplete.
-- Improving transaction success can conceal worse execution unless price-quality guardrails are evaluated alongside failure rate.
-- Provider estimates may be unavailable or too unreliable to display as precise ETAs.
-- One aggregate metric may hide a severe failure in a smaller chain or route slice.
-- The baseline and exposure definition must be established before an outcome claim is possible.

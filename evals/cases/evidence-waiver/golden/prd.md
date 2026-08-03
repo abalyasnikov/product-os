@@ -55,6 +55,19 @@ Today the administrator sees an empty surface and must infer what creates value.
 - Personalization without evidence.
 - Claiming an activation improvement before measurement.
 
+## GTM hypothesis
+
+The audience is a new workspace administrator. The promise is a clear path to first value. Discovery is the empty workspace itself; adoption is the first-value event. Positioning remains provisional until the waiver is replaced by evidence.
+
+## Risks and dependencies
+
+- The first-value event is not yet validated.
+- Guidance may hide other legitimate entry paths.
+
+## Open questions
+
+- What user-observed outcome should define first value?
+
 ## Outcome Contract
 
 Better means the team can observe whether new administrators reach an agreed first-value event without introducing a trapped setup flow.
@@ -75,19 +88,6 @@ binding:
   owner: product-lead
   due_before: release
 ```
-
-## GTM hypothesis
-
-The audience is a new workspace administrator. The promise is a clear path to first value. Discovery is the empty workspace itself; adoption is the first-value event. Positioning remains provisional until the waiver is replaced by evidence.
-
-## Risks and dependencies
-
-- The first-value event is not yet validated.
-- Guidance may hide other legitimate entry paths.
-
-## Open questions
-
-- What user-observed outcome should define first value?
 
 ## Delivery
 

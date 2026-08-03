@@ -36,6 +36,14 @@ Define the outcome that requires several distinct barriers to move together.
 
 Describe only product-level constraints. Linear owns engineering estimates and delivery sequencing.
 
+## GTM hypothesis
+
+State the shared audience, promise, discovery path, adoption action, and measurement. Child PRDs add only material differences.
+
+## Risks and open questions
+
+- <risk or unresolved decision>
+
 ## Outcome Contract
 
 Explain how the shared outcome differs from the child PRD contracts.
@@ -56,11 +64,3 @@ binding:
   owner: <owner>
   due_before: release
 ```
-
-## GTM hypothesis
-
-State the shared audience, promise, discovery path, adoption action, and measurement. Child PRDs add only material differences.
-
-## Risks and open questions
-
-- <risk or unresolved decision>

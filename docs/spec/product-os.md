@@ -6,7 +6,7 @@ Name: Product OS
 
 Category: Product decision infrastructure for agentic teams
 
-Implementation state: the local reference implementation and deterministic evidence-to-learning journey are complete and verified. Public one-link distribution, live provider flows, and calibrated model-quality evaluation remain separate release checks; they are not represented as already verified.
+Implementation state: the local reference implementation and its deterministic evidence-to-learning journey are complete and run green, with the checks carrying the central claim asserted directly and the remainder covered indirectly by those journeys — see [verification](../verification.md) for where that coverage stops. Public one-link distribution, live provider flows, and calibrated model-quality evaluation remain separate release checks; they are not represented as already verified.
 
 ## Vision
 
@@ -146,7 +146,9 @@ The reference implementation includes a curated historical Zerion example showin
 
 ### PRD
 
-The approved product contract for one coherent problem or barrier. Its readable contract contains the problem with a compact, explicit **why now / business reality** statement, evidence, JTBD, current and desired journey, requirements, non-goals, Outcome Contract, GTM hypothesis, risks and dependencies, separate open questions, and delivery links. Open questions may explicitly be `None`; they are not hidden inside the risk list.
+The approved product contract for one coherent problem or barrier. Its readable contract contains, in reading order, the problem with a compact explicit **why now / business reality** statement, evidence, JTBD, current and desired journey, requirements, non-goals, GTM hypothesis, risks and dependencies, separate open questions, the Outcome Contract, and delivery links. Open questions may explicitly be `None`; they are not hidden inside the risk list.
+
+The Outcome Contract sits near the end deliberately. Its payload is a machine-readable block that no reviewer reads line by line, and placed mid-document it interrupts the product argument it exists to conclude. Everything a human needs to judge the bet comes first; the structured definition of success closes it.
 
 Competitors and alternatives, customer context, revenue context, and references are optional modules. Include them only when they change the product decision or help a reviewer verify it. For B2B work, customer and revenue context may carry the account or segment, request provenance, commercial stage and timing, and permitted ARR, expansion, pipeline, or revenue-at-risk; sensitive values remain external or use a revenue band. ARR informs the trade-off but never becomes an automatic priority score. References do not duplicate source links already clear in Evidence.
 

@@ -43,6 +43,19 @@ Today the user discovers the chain mismatch, leaves the trade, bridges, and retu
 - Supporting every chain pair.
 - Owning destination-settlement status after route acceptance.
 
+## GTM hypothesis
+
+The audience is multi-chain traders. The promise is one reviewed trade instead of a manually assembled bridge and swap. Discovery remains in the existing trading entry point; adoption is authorization of a supported composed route. Measurement follows the route-comprehension contract.
+
+## Risks and dependencies
+
+- Provider quotes may expire or change materially.
+- Unsupported routes must fail clearly rather than degrade into an unsafe partial journey.
+
+## Open questions
+
+- Which route changes are material enough to require renewed review?
+
 ## Outcome Contract
 
 Better means users can correctly understand and authorize a supported composed route without manually planning bridge and swap.
@@ -63,19 +76,6 @@ binding:
   owner: product-lead
   due_before: release
 ```
-
-## GTM hypothesis
-
-The audience is multi-chain traders. The promise is one reviewed trade instead of a manually assembled bridge and swap. Discovery remains in the existing trading entry point; adoption is authorization of a supported composed route. Measurement follows the route-comprehension contract.
-
-## Risks and dependencies
-
-- Provider quotes may expire or change materially.
-- Unsupported routes must fail clearly rather than degrade into an unsafe partial journey.
-
-## Open questions
-
-- Which route changes are material enough to require renewed review?
 
 ## Delivery
 

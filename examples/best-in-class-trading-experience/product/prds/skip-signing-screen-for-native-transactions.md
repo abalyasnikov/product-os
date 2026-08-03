@@ -58,6 +58,22 @@ The source work did not establish a measured abandonment baseline. Security conf
 - Hiding material warnings to reach a lower signing-screen rate.
 - Changing the Send flow, which did not use the same transaction-builder path.
 
+## GTM hypothesis
+
+This is primarily an experience improvement for active traders rather than a standalone acquisition message. The promise is a faster native transaction flow with the same safety checks. Discovery happens by using Swap, Approve, or Bridge; adoption is repeated eligible use without increased cancellation or support contacts.
+
+## Risks and dependencies
+
+- Missed simulation or security coverage becomes more consequential when the explicit review screen is absent.
+- Simulating every provider quote may create cost or rate-limit pressure.
+- Cross-platform differences can produce inconsistent warning behavior.
+
+## Open questions
+
+- Should rollout begin with swaps before approvals and bridges?
+- Which selected quote should be simulated, and at what point in the journey?
+- What exact changes invalidate the previously reviewed intent?
+
 ## Outcome Contract
 
 The product should remove redundant interaction while preserving or improving completion and warning coverage. Signing-screen frequency is diagnostic, not a target: optimizing it directly would create an unsafe incentive.
@@ -86,22 +102,6 @@ binding:
   owner: product-lead
   due_before: release
 ```
-
-## GTM hypothesis
-
-This is primarily an experience improvement for active traders rather than a standalone acquisition message. The promise is a faster native transaction flow with the same safety checks. Discovery happens by using Swap, Approve, or Bridge; adoption is repeated eligible use without increased cancellation or support contacts.
-
-## Risks and dependencies
-
-- Missed simulation or security coverage becomes more consequential when the explicit review screen is absent.
-- Simulating every provider quote may create cost or rate-limit pressure.
-- Cross-platform differences can produce inconsistent warning behavior.
-
-## Open questions
-
-- Should rollout begin with swaps before approvals and bridges?
-- Which selected quote should be simulated, and at what point in the journey?
-- What exact changes invalidate the previously reviewed intent?
 
 ## Delivery
 

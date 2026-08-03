@@ -23,8 +23,6 @@ results:
     aggregate_all_assets: "No material movement; at this scale the aggregate failure rate looked like noise both before and after"
   guardrails:
     median_execution_delta_from_quote: null
-    trades_with_effective_slippage_above_material_threshold: null
-    price_or_slippage_support_contact_rate: null
     trading_revenue_per_eligible_transaction: null
   provenance:
     method: analytics_query

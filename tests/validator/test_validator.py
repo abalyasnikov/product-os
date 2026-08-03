@@ -133,11 +133,6 @@ Current behavior is blocked; desired behavior completes.
 
 - Engineering implementation design.
 
-## Outcome Contract
-
-```yaml product-os:outcome
-{outcome_yaml}```
-
 ## GTM hypothesis
 
 Existing users discover the improvement in the current flow.
@@ -149,6 +144,11 @@ Existing users discover the improvement in the current flow.
 ## Open questions
 
 - None.
+
+## Outcome Contract
+
+```yaml product-os:outcome
+{outcome_yaml}```
 
 ## Delivery
 
@@ -1112,6 +1112,10 @@ def test_nonexistent_workspace_is_invocation_error(tmp_path: Path) -> None:
 
 
 def test_json_report_is_stable_and_actionable(workspace: Path) -> None:
+    # The literal below is a non-functional stand-in that exists to exercise the
+    # AWS branch of CREDENTIAL_PATTERNS, which matches on the AKIA/ASIA prefix.
+    # Secret scanners will flag it on a public repository; that is a false
+    # positive, and the string cannot be softened without disarming the test.
     write_artifact(workspace, metadata(), body="Synthetic: AKIAABCDEFGHIJKLMNOP")
     payload = validate_workspace(workspace).to_dict()
     assert payload["report_version"] == 1
@@ -1326,6 +1330,67 @@ def test_decision_event_removal_is_rejected(decision_git_workspace: Path) -> Non
     report_codes = codes(validate_workspace(decision_git_workspace, base_ref="main"))
     assert "DECISION_EVENT_REMOVED" in report_codes
     assert "DECISION_EVENT_NOT_APPENDED" in report_codes
+
+
+def test_deleting_the_artifact_does_not_erase_its_decisions(
+    decision_git_workspace: Path,
+) -> None:
+    """Deleting the file must not be a way to unmake a decision.
+
+    Removing events from a surviving artifact is already rejected. This closes
+    the other door: dropping the whole artifact, which leaves a repository that
+    looks like the decision was never taken.
+    """
+    path = decision_git_workspace / "product" / "opportunities" / "opportunity_01DECJDE.md"
+    path.unlink()
+
+    assert "DECISION_EVENTS_REMOVED" in codes(
+        validate_workspace(decision_git_workspace, base_ref="main")
+    )
+
+
+def test_reused_decision_event_id_is_rejected(workspace: Path) -> None:
+    """Decision IDs are the anchor an audit follows, so they cannot collide.
+
+    Two events sharing an ID make the trail ambiguous: a later reference cannot
+    say which decision it means, and one can silently stand in for the other.
+    """
+    data = metadata("opportunity", "opportunity_01DECJDE")
+    data["decision_events"] = [
+        decision_event(),
+        decision_event(choice="hold", rationale="Second decision, same ID"),
+    ]
+    write_artifact(workspace, data)
+
+    assert "DUPLICATE_DECISION_EVENT_ID" in codes(validate_workspace(workspace))
+
+
+def test_outcome_contract_without_a_definition_is_rejected(workspace: Path) -> None:
+    """A contract that binds an owner but never says what success is proves nothing."""
+    opportunity = metadata("opportunity", "opportunity_01TESTXX")
+    write_artifact(workspace, opportunity)
+    outcome = complete_outcome()
+    del outcome["definition"]
+    data = metadata("prd", "prd_01TESTXX")
+    data["title"] = "Test PRD"
+    data["relationships"] = {"opportunity": opportunity["id"]}
+    write_artifact(workspace, data, body=lean_prd_body(outcome))
+
+    assert "OUTCOME_DEFINITION_MISSING" in codes(validate_workspace(workspace))
+
+
+def test_outcome_contract_without_a_binding_is_rejected(workspace: Path) -> None:
+    """A definition nobody owns and nothing measures is a wish, not a contract."""
+    opportunity = metadata("opportunity", "opportunity_01TESTXX")
+    write_artifact(workspace, opportunity)
+    outcome = complete_outcome()
+    del outcome["binding"]
+    data = metadata("prd", "prd_01TESTXX")
+    data["title"] = "Test PRD"
+    data["relationships"] = {"opportunity": opportunity["id"]}
+    write_artifact(workspace, data, body=lean_prd_body(outcome))
+
+    assert "OUTCOME_BINDING_MISSING" in codes(validate_workspace(workspace))
 
 
 def test_appended_superseding_decision_event_is_allowed(decision_git_workspace: Path) -> None:

@@ -19,9 +19,9 @@ The product problem is therefore not simply to reduce failures. It is to improve
 
 ## Evidence
 
-Support specialists consolidated recurring reports in Linear, while raw Intercom conversations could be inspected when the aggregate signal needed clarification. Mixpanel was then used to investigate the failure pattern and its concentration by transaction context.
+Support specialists consolidated recurring reports in Linear, with raw Intercom conversations available when the aggregate signal needed clarification. Investigating the pattern took two sources rather than one: Mixpanel for what users did in the product, and Metabase for onchain settlement, because a transaction that the wallet accepts can still fail after it reaches the node. Product analytics alone cannot see that outcome, which is exactly the gap users were reporting.
 
-The order of investigation mattered more than any single source. Checked as an aggregate, the failure rate read as noise, and the defensible conclusion would have been that no product problem existed. The problem only became visible after the transaction funnel was decomposed by stage and failures were segmented by cause, network, and asset market cap.
+The order of investigation mattered more than any single source. As an aggregate the failure rate read as noise, and the defensible conclusion would have been that no product problem existed. It became visible only after the funnel was decomposed by stage and failures segmented by cause, network, and asset market cap.
 
 | Source | Observation | Date/window | Confidence |
 |---|---|---|---|
@@ -44,18 +44,17 @@ The order of investigation mattered more than any single source. Checked as an a
 
 ### Requirements
 
-- Make Auto the default slippage mode for eligible native swaps and bridges, with no onboarding flow, feature introduction, or red dot. A default that needs explaining is not a default.
-- Adapt the tolerance using current execution conditions and route characteristics rather than one preset for every transaction.
-- Cap Auto at 10%. When conditions would require more, the product does not silently go further — the user must switch to manual and accept that trade explicitly.
-- Cap manual override at 25%.
-- Classify any token the product cannot confidently recognize into the most conservative tier rather than an optimistic default.
-- Reset a custom slippage value to Auto when the user leaves the swap form, so nobody stays on a wide tolerance they set once for one trade and forgot.
-- Show the tolerance only when it becomes material: hidden while Auto stays low, visible above a low threshold, warned in yellow above a moderate one, and warned in red for manual values high enough to invite front-running.
+- Make Auto the default for eligible native swaps and bridges, with no onboarding flow. A default that needs explaining is not a default.
+- Adapt the tolerance to current execution conditions and route characteristics rather than applying one preset everywhere.
+- Cap Auto at 10% and manual override at 25%. Beyond the Auto cap the product does not quietly go further; the user must switch to manual and accept that trade explicitly.
+- Treat any token the product cannot confidently recognize as its riskiest case.
+- Reset a custom tolerance to Auto when the user leaves the swap form, so nobody stays on a wide value they set once and forgot.
+- Surface the tolerance once it is material for the asset being traded, and warn distinctly where a manual value is wide enough to make the trade worth sandwiching. Materiality is relative: a tolerance that is unremarkable on a volatile token is alarming on a stablecoin pair.
 - Require renewed consent when a quote or route changes beyond the trade the user accepted.
-- Define conservative fallback behavior when required inputs are missing, and log every fallback for monitoring.
-- Measure Auto and manual transactions separately, including failure reason, quoted output, executed output, and support contacts.
+- Fall back conservatively when inputs are missing, and log every fallback.
+- Measure Auto and manual separately, including failure reason, quoted output, and executed output.
 
-The exact percentages above are product safety bounds and consent thresholds, so they belong in this contract. The rules that decide where a given trade lands inside those bounds do not.
+The caps are absolute limits on what the product will ever do on someone's behalf, so they belong here. The visibility and warning points do not: what counts as material depends on the asset class, and calibrating it is engineering's work rather than a promise the product makes.
 
 ### Non-goals
 
@@ -64,9 +63,30 @@ The exact percentages above are product safety bounds and consent thresholds, so
 - Hiding material price impact or route risk from the user.
 - Fixing the final classification rules, coefficients, or calculation formula in the PRD.
 
+## GTM hypothesis
+
+This is a default reliability improvement, not a standalone product launch. Discovery should happen in the existing swap and bridge flow through the Auto setting and contextual warnings. Adoption is an eligible transaction using Auto; success is measured by the Outcome Contract rather than feature awareness.
+
+## Competitors and alternatives
+
+Jupiter's dynamic slippage set the bar for how an Auto mode should feel: the product picks a tolerance and the user does not think about it. It did not set the bar for the guardrails, which is the part this PRD adds rather than copies.
+
+The rejected alternative was simply raising the static default. It would have improved the failure rate immediately by shifting the cost onto users as worse prices — the exact outcome the Outcome Contract now forbids.
+
+## Risks and dependencies
+
+- A wider tolerance can conceal poor routing or expose users to worse prices.
+- Missing or delayed market inputs can make an adaptive calculation less reliable than a conservative fallback.
+- Cross-chain settlement increases the time between quote and execution and may require different bounds.
+- Analytics must distinguish slippage-related failures from unrelated provider and onchain failures.
+
+## Open questions
+
+- What were the guardrail results? This is a measurement gap rather than an open product decision, and it is the reason the recorded outcome is `iterate` rather than `scale`.
+
 ## Outcome Contract
 
-Transaction success and execution quality must be reviewed together. A lower failure rate is not a successful outcome if users receive materially worse execution.
+Transaction success and execution quality must be reviewed together. Failures can be driven to zero by widening the tolerance far enough, at which point every trade succeeds and every user overpays. So the target is one number going down while two are held flat: the price users actually get, and the revenue each trade produces.
 
 ```yaml product-os:outcome
 definition:
@@ -82,38 +102,13 @@ definition:
     - liquidity_and_volatility_band
   guardrails:
     - median_execution_delta_from_quote
-    - trades_with_effective_slippage_above_material_threshold
-    - price_or_slippage_support_contact_rate
     - trading_revenue_per_eligible_transaction
-  decision_rule: Scale only when eligible failure rate improves and no execution-quality, trust, or revenue guardrail materially regresses; otherwise revise the technical hypothesis or stop.
+  decision_rule: Scale only when eligible failure rate improves and neither guardrail materially regresses; otherwise revise the technical hypothesis or stop.
 binding:
   status: planned
   owner: product-lead
   due_before: release
 ```
-
-## GTM hypothesis
-
-This is a default reliability improvement, not a standalone product launch. Discovery should happen in the existing swap and bridge flow through the Auto setting and contextual warnings. Adoption is an eligible transaction using Auto; success is measured by the Outcome Contract rather than feature awareness.
-
-## Competitors and alternatives
-
-Jupiter's dynamic slippage was the reference point for what an Auto mode should feel like: the product picks a tolerance and the user does not think about it. That set the bar for the default, but not for the guardrails — the execution-quality contract below is the part this PRD adds rather than copies.
-
-The alternative considered and rejected was raising the static default. It would have improved the failure rate immediately and would have shifted the cost onto users as worse prices, which is the exact outcome the Outcome Contract now forbids.
-
-## Risks and dependencies
-
-- A wider tolerance can conceal poor routing or expose users to worse prices.
-- Missing or delayed market inputs can make an adaptive calculation less reliable than a conservative fallback.
-- Cross-chain settlement increases the time between quote and execution and may require different bounds.
-- Analytics must distinguish slippage-related failures from unrelated provider and onchain failures.
-
-## Open questions
-
-- What were the execution-quality guardrail results? Without them the decision rule cannot be fully evaluated, which is why the recorded outcome decision is `iterate` rather than `scale`.
-- Where exactly does the affected market-cap band begin?
-- What warning and renewed-consent thresholds are material to users?
 
 ## Delivery
 

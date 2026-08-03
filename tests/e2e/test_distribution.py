@@ -140,6 +140,62 @@ def test_agent_instruction_entrypoints_are_single_source(repo_root: Path) -> Non
     assert "copy these canonical directories" not in install
 
 
+PRD_SECTION_ORDER = [
+    "Problem",
+    "Evidence",
+    "JTBD",
+    "Current and desired journey",
+    "Scope",
+    "GTM hypothesis",
+    "Risks and dependencies",
+    "Open questions",
+    "Outcome Contract",
+    "Delivery",
+]
+
+INITIATIVE_SECTION_ORDER = [
+    "Vision",
+    "Why this matters",
+    "Evidence and confidence",
+    "Shared outcome",
+    "Child PRDs",
+    "Sequencing and dependencies",
+    "GTM hypothesis",
+    "Risks and open questions",
+    "Outcome Contract",
+]
+
+
+def test_readable_artifacts_keep_the_machine_block_out_of_the_reading_path(
+    repo_root: Path,
+) -> None:
+    """Every template, example, and golden file must order sections the same way.
+
+    The validator only checks that required sections exist, so order can drift
+    silently across a dozen documents. It matters most for the Outcome Contract:
+    its payload is machine-readable YAML, and mid-document it interrupts the
+    product argument a reviewer is actually reading. Optional sections may appear
+    between the required ones, so this asserts relative order, not adjacency.
+    """
+    documents = sorted(
+        path
+        for path in repo_root.rglob("*.md")
+        if ".git" not in path.parts
+        and "_shared" not in path.parts
+        and "```yaml product-os:outcome" in path.read_text(encoding="utf-8")
+    )
+    assert documents, "expected artifacts carrying an Outcome Contract"
+
+    for path in documents:
+        headings = re.findall(r"(?m)^## (.+?)\s*$", path.read_text(encoding="utf-8"))
+        expected = (
+            INITIATIVE_SECTION_ORDER if "Vision" in headings else PRD_SECTION_ORDER
+        )
+        required = [h for h in headings if h in expected]
+        rel = path.relative_to(repo_root)
+        assert required == expected, f"{rel} orders sections as {required}"
+
+
 def test_repository_markdown_has_no_broken_relative_links(repo_root: Path) -> None:
     missing: list[str] = []
     for path in repo_root.rglob("*.md"):

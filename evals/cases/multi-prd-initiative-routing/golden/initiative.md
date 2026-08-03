@@ -38,6 +38,16 @@ Eligible users can start a supported cross-chain trade, understand the route bef
 
 The route contract must define the accepted journey before shared progress can represent it. Engineering estimates and delivery sequence remain in Linear. The Initiative does not duplicate either child's requirements.
 
+## GTM hypothesis
+
+The audience is active multi-chain traders. The promise is one understandable cross-chain trade with progress that remains truthful. Discovery begins in the existing trading entry point; adoption is completion of a supported journey. Launch measurement uses the shared contract and retains child slices.
+
+## Risks and open questions
+
+- Provider differences may prevent one consistent progress vocabulary.
+- Aggregate completion could hide a weak child barrier.
+- Open question: which route classes are coherent enough to include in the shared launch?
+
 ## Outcome Contract
 
 The shared contract measures continuity across both barriers; child contracts separately measure route comprehension and settlement-state truth.
@@ -58,13 +68,3 @@ binding:
   owner: product-lead
   due_before: coordinated-release
 ```
-
-## GTM hypothesis
-
-The audience is active multi-chain traders. The promise is one understandable cross-chain trade with progress that remains truthful. Discovery begins in the existing trading entry point; adoption is completion of a supported journey. Launch measurement uses the shared contract and retains child slices.
-
-## Risks and open questions
-
-- Provider differences may prevent one consistent progress vocabulary.
-- Aggregate completion could hide a weak child barrier.
-- Open question: which route classes are coherent enough to include in the shared launch?

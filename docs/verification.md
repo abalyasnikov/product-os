@@ -60,6 +60,24 @@ The automated suite must prove:
 - handoff retries preserve external idempotency keys rather than creating duplicate objects;
 - no fixture contains production customer data, credentials, or an unlabeled synthetic result.
 
+### Where this coverage stops
+
+The validator defines around 120 distinct failure codes, and roughly half are not asserted by
+name in any test. Most of those sit in the installation and adapter-integrity layer, which the
+clean-install reference journeys exercise indirectly: the journeys pass because those checks
+stay silent, not because a test proved each one fires when it should.
+
+This is stated rather than quietly carried, because it bounds what a passing suite means. The
+checks that carry the product's central claim — decision events append-only, decisions bound to
+a reachable commit that contains the artifact, decision IDs unique, an Outcome Contract holding
+both a definition and a binding — are asserted directly. Confidence beyond that group rests on
+the journeys, not on individual assertions.
+
+Writing those assertions found a real gap: deleting every artifact left the product tree empty,
+and the append-only comparison was skipped for empty trees, so erasing the entire decision
+history raised no error. The comparison now runs regardless. Untested checks are not evidence
+of absent bugs.
+
 Run the full matrix with:
 
 ```bash

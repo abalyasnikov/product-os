@@ -33,8 +33,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "75821bb10c9f7b2f01cb2b87a02f30c470ec7775ae5deefdd08885c47e3f6b54",
-      "size": 9262
+      "sha256": "35936a448ce2a817da90e34896069c9ec393df04fbb6fa23763ac90af679f6db",
+      "size": 10020
     },
     {
       "path": "SECURITY.md",
@@ -143,8 +143,8 @@
     },
     {
       "path": "docs/release-checklist.md",
-      "sha256": "f2d4d210a9d9443c7b0b5a4172d5c1552b9e6e92d2af838b67704c062b67daae",
-      "size": 1090
+      "sha256": "ec2bc076a806c3339bcc1960f5b6814bb77c236c7e50ea343a6ee3e16abf3b13",
+      "size": 2057
     },
     {
       "path": "docs/security-model.md",
@@ -153,13 +153,13 @@
     },
     {
       "path": "docs/spec/product-os.md",
-      "sha256": "8013ecb5621e231f201d570b4fc07ef15403d335d52e0ef60ccd5886de70eec9",
-      "size": 52363
+      "sha256": "d86dcd8d75e38860c749e17f9d13039306084efc14274ac00947696c7337357d",
+      "size": 52896
     },
     {
       "path": "docs/verification.md",
-      "sha256": "b7d355c9d89a3febb26fb81fb73677b1456e0433b6f7d15b3bafa9ffe44c236e",
-      "size": 6083
+      "sha256": "de68c8df01b9dd383502b99bd03e02e0daf981a6ae2ec437ab2c21731165b513",
+      "size": 7195
     },
     {
       "path": "evals/README.md",
@@ -178,7 +178,7 @@
     },
     {
       "path": "evals/cases/b2b-arr-demand/golden/prd.md",
-      "sha256": "1ee44348d4e6dae16a77af5e1561d1985c527316167b9173902a64a8dd0af647",
+      "sha256": "e4928e31b5c9ac2e20e0c3e5ad6962a28d6be62650469044e58c37127d5c1fdc",
       "size": 3824
     },
     {
@@ -188,7 +188,7 @@
     },
     {
       "path": "evals/cases/b2c-ux/golden/prd.md",
-      "sha256": "aa5f9755d20a5646a1c49a24b90850da78471d04671208e2b285e9f25f4eeb58",
+      "sha256": "ec2f68534604cf651e71f7263b803d46598394d542b3d4e7ff61c023f4af419a",
       "size": 3688
     },
     {
@@ -198,7 +198,7 @@
     },
     {
       "path": "evals/cases/evidence-waiver/golden/prd.md",
-      "sha256": "6e0d4b9e7247b5a5d0735a9585a1dc5f2a5f052ba76188b860f6aa83696c7001",
+      "sha256": "4e9b94095f0d4f5fda5814380151035bef5c32894b46fd58b36e59aaa18c91ea",
       "size": 3626
     },
     {
@@ -208,17 +208,17 @@
     },
     {
       "path": "evals/cases/multi-prd-initiative-routing/golden/bridge-progress.md",
-      "sha256": "f97b00e5ce721acad8ca57e615bd6de5aa2590c32b1ee38f7ac5b3b9d483572e",
+      "sha256": "7d2a903e2437ef31f0bba068f9db0cb9b5fbc5df6d5863594cf96c437e0d6098",
       "size": 3347
     },
     {
       "path": "evals/cases/multi-prd-initiative-routing/golden/cross-chain-swap.md",
-      "sha256": "45e5c92456141ad0f5f1bde9e9459daf80c2036d8493e0f568823907fb2d173e",
+      "sha256": "b9daee062150573c3abc28a0b48fb0d0dbf2308768bc2973cf810e46c1d30d7c",
       "size": 3157
     },
     {
       "path": "evals/cases/multi-prd-initiative-routing/golden/initiative.md",
-      "sha256": "1eee7cca13333ebac2e1f96725f52041bf9d09e3bc5a9a44ef0235e038b189f8",
+      "sha256": "b79e4411f2a84ffd6b3b48f3b78b19fec92a4eaafbd5b52b338626e5c94261e3",
       "size": 3219
     },
     {
@@ -243,37 +243,37 @@
     },
     {
       "path": "examples/best-in-class-trading-experience/product/initiatives/best-in-class-trading-experience.md",
-      "sha256": "1042798c408989ddbd9549a06b4e185706163128bc5f2cbb5d174e50f1dea19f",
+      "sha256": "65b754ecce1fef37a71fd33b5cf9a4ee1fb412ed83073c939ce3414c5cbcc694",
       "size": 7369
     },
     {
       "path": "examples/best-in-class-trading-experience/product/learnings/auto-slippage-failure-rate.md",
-      "sha256": "33fcdfe368aa5eb56461c6b33948661bfabfe0cfec35f37fd936aca5ce4c1f7b",
-      "size": 5053
+      "sha256": "c445de61341c25fa04547ca4471dfeedf6d3b103a53a144731dc4997aaee2904",
+      "size": 4938
     },
     {
       "path": "examples/best-in-class-trading-experience/product/prds/auto-slippage.md",
-      "sha256": "373499ae5e9bba97f762246d893b8e52b21cdcb78f3d5bea9f31748ba332a386",
-      "size": 8658
+      "sha256": "689b9889b2e8fa6dbb9fe70f6fe3ea7facf1d7a2a9da43591b5473a2e835b6f6",
+      "size": 8558
     },
     {
       "path": "examples/best-in-class-trading-experience/product/prds/bridge-progress-tracking.md",
-      "sha256": "232acd6d10fe005803d6c35222d9da87a4192780713c3393ca5793a976e45973",
+      "sha256": "e6a17e1e8f90099133ee480054d45239af414e0ff064e0160028813ba5685886",
       "size": 6497
     },
     {
       "path": "examples/best-in-class-trading-experience/product/prds/cross-chain-swap.md",
-      "sha256": "cc66b988a06d15a3ddd9c38f9b4933665519a432dd65d1521470e60dc1bcb52b",
+      "sha256": "ea3a237c79f43966040eef33f590cabb11a0cdf4255adff0c399435bd315d23c",
       "size": 6351
     },
     {
       "path": "examples/best-in-class-trading-experience/product/prds/skip-signing-screen-for-native-transactions.md",
-      "sha256": "e331eaf890a624e4cf4aaedf02c52b9ef09194119a35b1e406d350b4fbf1fcff",
+      "sha256": "0f92f928b177ef160e4691308f0208420520a581eae97df1902ceb75b25cfcaf",
       "size": 5978
     },
     {
       "path": "examples/best-in-class-trading-experience/product/prds/transaction-toasters.md",
-      "sha256": "df753178ee891ab52748e8abbddc3f72645bdabffe3d3a735b6c306a6f4a74b9",
+      "sha256": "0543da8bdc719322b60e207f91a08cf1f7b034a2fd4fc8c3a50449d5982a3350",
       "size": 5318
     },
     {
@@ -498,8 +498,8 @@
     },
     {
       "path": "src/product_os/validator.py",
-      "sha256": "68e6d78b89db7c96b731d9f24de09ea98161e6af0ecfc2f20e9a8b1e9f092cf0",
-      "size": 151661
+      "sha256": "343552a338ac80f84b1bdb6fc8cda2cadbabd4c1948e3bde87c5b3382489bf75",
+      "size": 152310
     },
     {
       "path": "templates/config.yaml",
@@ -508,7 +508,7 @@
     },
     {
       "path": "templates/initiative.md",
-      "sha256": "ab26c366126661678545cfdcb89ecbf92ab311ef8be005317b20b150c4344719",
+      "sha256": "8e070dfa95515cb60482b79b4d93324b9eafbe514922031ee318d5d35165cebe",
       "size": 1514
     },
     {
@@ -533,7 +533,7 @@
     },
     {
       "path": "templates/prd.md",
-      "sha256": "e212c21c64a3c4bd527b935360242190592e6c28a0cb24b4a08532c9dd610e02",
+      "sha256": "8d59d854210a95d8a8ceb02598ca2c4067d8126edcfe086f634f92a2cecbc5db",
       "size": 2343
     },
     {
@@ -593,8 +593,8 @@
     },
     {
       "path": "tests/e2e/test_distribution.py",
-      "sha256": "c5dd6c00939bf13a8fb8010d662d42007fe1050aefa9a30193d1cdc92fc1d10e",
-      "size": 12098
+      "sha256": "20d0dcf553842105c58e365a39e036cf4c3790914e0097c3abe85053a2f310c0",
+      "size": 13898
     },
     {
       "path": "tests/e2e/test_reference_journey.py",
@@ -1093,8 +1093,8 @@
     },
     {
       "path": "tests/validator/test_validator.py",
-      "sha256": "e25b43ab6298ea5314436d65292d135da3142f98f8bd6b399d131161747be742",
-      "size": 65180
+      "sha256": "f71eed1e4cd5e4a6958100ff8f75103f04491c5302d04e7ace71b76ffdfa8d58",
+      "size": 67994
     }
   ],
   "hash_algorithm": "sha256",
@@ -1102,5 +1102,5 @@
   "product": "product-os",
   "publisher": "unpublished",
   "release": "0.1.0",
-  "tree_digest": "a1d9de08ea9130e21b03118d2ed4bdf287d68522145889bc0e4549362d118f12"
+  "tree_digest": "6c2c6cd6ba703cc01c27f3a5e037025f6f67c78b9142f48ac2c1f912debc0359"
 }

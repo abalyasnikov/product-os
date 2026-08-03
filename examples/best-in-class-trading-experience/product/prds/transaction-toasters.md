@@ -55,6 +55,22 @@ The source document proposed that blocking pages reduce transaction frequency, b
 - Treating submission as settlement.
 - Defining bridge-specific progress stages; those belong to Bridge Progress Tracking.
 
+## GTM hypothesis
+
+The audience is active users who perform several wallet actions per session. The promise is simple: keep using the wallet while transactions complete. Discovery is intrinsic to the first eligible transaction; adoption can be observed through continued in-session activity and repeat transactions.
+
+## Risks and dependencies
+
+- A transient notification can make failure easier to miss unless activity remains durable.
+- Concurrent notifications can create noise or hide the most important state.
+- All clients need a consistent transaction identity and state model.
+
+## Open questions
+
+- How long should terminal success remain visible?
+- Should failure persist until acknowledged?
+- At what concurrency should individual notifications collapse into a summary?
+
 ## Outcome Contract
 
 The original work proposed reducing the time before another action from roughly 15 seconds to under 3 seconds. That baseline must be remeasured before it is used as a claim.
@@ -86,22 +102,6 @@ binding:
   owner: product-lead
   due_before: release
 ```
-
-## GTM hypothesis
-
-The audience is active users who perform several wallet actions per session. The promise is simple: keep using the wallet while transactions complete. Discovery is intrinsic to the first eligible transaction; adoption can be observed through continued in-session activity and repeat transactions.
-
-## Risks and dependencies
-
-- A transient notification can make failure easier to miss unless activity remains durable.
-- Concurrent notifications can create noise or hide the most important state.
-- All clients need a consistent transaction identity and state model.
-
-## Open questions
-
-- How long should terminal success remain visible?
-- Should failure persist until acknowledged?
-- At what concurrency should individual notifications collapse into a summary?
 
 ## Delivery
 

@@ -60,6 +60,23 @@ Evidence quality was directional: the journey failure was concrete, while its po
 - Hiding provider, route, or chain risk.
 - Cross-ecosystem routing such as Solana-to-EVM before the required account model exists.
 
+## GTM hypothesis
+
+The initial audience is existing users who already hold and trade assets on multiple EVM chains. The promise is one cross-chain trade without manually coordinating a bridge. Discovery belongs in the current Swap asset and network selectors; the adoption action is completing an eligible cross-chain swap.
+
+## Risks and dependencies
+
+- The route provider must expose both execution stages, estimates, and material changes.
+- A unified presentation can accidentally hide multi-stage failure.
+- Quote expiry can invalidate the accepted trade between review and signature.
+- Cross-ecosystem expansion depends on the account model and is explicitly separate.
+
+## Open questions
+
+- Which route changes are material enough to require renewed consent?
+- How should the product explain partial completion when the bridge succeeds but the destination trade fails?
+- Which baseline event defines a genuine eligible cross-chain intent rather than casual asset browsing?
+
 ## Outcome Contract
 
 The release must first pass the critical journeys honestly; post-release behavior can then test whether one intent improves completion.
@@ -96,23 +113,6 @@ binding:
   owner: product-lead
   due_before: release
 ```
-
-## GTM hypothesis
-
-The initial audience is existing users who already hold and trade assets on multiple EVM chains. The promise is one cross-chain trade without manually coordinating a bridge. Discovery belongs in the current Swap asset and network selectors; the adoption action is completing an eligible cross-chain swap.
-
-## Risks and dependencies
-
-- The route provider must expose both execution stages, estimates, and material changes.
-- A unified presentation can accidentally hide multi-stage failure.
-- Quote expiry can invalidate the accepted trade between review and signature.
-- Cross-ecosystem expansion depends on the account model and is explicitly separate.
-
-## Open questions
-
-- Which route changes are material enough to require renewed consent?
-- How should the product explain partial completion when the bridge succeeds but the destination trade fails?
-- Which baseline event defines a genuine eligible cross-chain intent rather than casual asset browsing?
 
 ## Delivery
 

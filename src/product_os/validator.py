@@ -566,8 +566,12 @@ class WorkspaceValidator:
         self.report.check("ids-and-relationships", before, f"indexed {len(self.by_id)} unique artifact ID(s)")
 
         before = len(self.report.errors)
-        if not self.empty_workspace:
-            self._validate_decision_events()
+        # Runs even when the product tree is empty. An empty tree is legitimate
+        # right after setup, but it is also exactly what deleting every artifact
+        # looks like, and skipping the comparison in both cases would let a
+        # repository erase its whole decision history without a single error.
+        # With no baseline to compare against this returns without complaint.
+        self._validate_decision_events()
         baseline_detail = (
             f"resolved baseline SHA {self.resolved_base_sha}"
             if self.resolved_base_sha
@@ -1172,6 +1176,10 @@ class WorkspaceValidator:
         legacy_fields = {"outcome", "outcome_contract", "problem", "product_thesis", "child_prd_ids"}
         if legacy_fields.intersection(metadata):
             return  # backward-compatible large-frontmatter artifact
+        # Declared in reading order. The Outcome Contract sits near the end
+        # because it is the one section a human does not read: its payload is a
+        # machine-readable block, and in the middle of the document it interrupts
+        # the product argument it is supposed to conclude.
         required_sections = {
             "prd": (
                 "problem",
@@ -1179,10 +1187,10 @@ class WorkspaceValidator:
                 "jtbd",
                 "current and desired journey",
                 "scope",
-                "outcome contract",
                 "gtm hypothesis",
                 "risks and dependencies",
                 "open questions",
+                "outcome contract",
                 "delivery",
             ),
             "initiative": (
@@ -1192,9 +1200,9 @@ class WorkspaceValidator:
                 "shared outcome",
                 "child prds",
                 "sequencing and dependencies",
-                "outcome contract",
                 "gtm hypothesis",
                 "risks and open questions",
+                "outcome contract",
             ),
         }.get(artifact_type, ())
         sections = markdown_sections(document)

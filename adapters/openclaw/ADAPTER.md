@@ -1,4 +1,4 @@
-<!-- GENERATED: canonical_version=1.0.0 canonical_sha256=4891e37517174b2fc98cd264794814eacba28248f814b3f63801bd23d8cbb6bb -->
+<!-- GENERATED: canonical_version=1.0.0 canonical_sha256=f258e7b94087dcefe2923d93bed83822d96e9974aa050dd6a8bfcce1b7645fee -->
 # OpenClaw adapter
 
 Install every generated `adapters/_shared/skills/<skill>/SKILL.md` wrapper at workspace `skills/<skill>/SKILL.md` exactly as listed in `manifest.yaml`. OpenClaw discovers the wrapper metadata; the wrapper then reads its named `.product-os/skills/<canonical-skill>/SKILL.md`. Canonical files remain the only workflow source.

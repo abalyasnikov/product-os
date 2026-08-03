@@ -82,6 +82,8 @@ flowchart LR
     B -. optional clustering .-> C["Patterns"]
     B --> D
     C --> D["Opportunities"]
+    S["Strategy context<br/>context/strategy.md"] -. informs .-> D
+    S -. informs .-> E
     D --> E{"Pursue Product Bet?"}
     E -->|Standalone| G["PRD + Outcome Contract"]
     E -->|Multiple barriers| F["Initiative + shared Outcome Contract"]
@@ -544,6 +546,7 @@ Setup, Decision Queue, schemas, and client adapters exist only to make those ver
 ### Included
 
 - Dedicated Git workspace and agent-only interface.
+- One readable strategy context per workspace, read by every workflow that judges strategic fit.
 - Canonical schemas, Markdown artifacts, and stable relationships.
 - One-link setup and smoke tests.
 - Granola and pasted or local transcript input.
@@ -618,7 +621,7 @@ client:
 2. materialize four pre-authored sanitized research and product-observation input fixtures plus their linked Signals without storing a full transcript; input-to-Signal agent quality is evaluated separately;
 3. preserve both supporting and contradictory evidence in two Patterns and one undecided Opportunity;
 4. commit the draft, then append a synthetic human-role `pursue` event bound to that reachable commit; a real human gate is outside deterministic proof;
-5. create one Initiative with four child PRDs matching the human-readable historical example;
+5. create one Initiative with four child PRDs drawn from the human-readable historical example; the fixture deliberately carries a subset, because its job is to exercise the multi-PRD shape rather than to mirror the example document by document;
 6. materialize method-appropriate Outcome Contracts and GTM hypotheses, then create explicitly synthetic solo-review records with real Git version boundaries and bind delivery plus optional Implementation Plan references to those versions;
 7. preserve sanitized Linear or Jira-style delivery records, including idempotent retry behavior where exercised;
 8. record an explicit measurement anchor and provenance-preserving synthetic analytics result with baseline, post-release behavior, at least two slices, guardrails, and an unmistakable non-production label;

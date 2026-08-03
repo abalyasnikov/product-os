@@ -35,6 +35,16 @@ Before reading artifacts, Git/provider review, Linear results, implementation re
 
 Emit, after a separate fresh confirmation over its payload hash and preview, a versioned context projection for engineering or a coding agent. It may request an optional Implementation Plan in the code repository and carry `based_on_prd_id` plus `based_on_prd_version`. It must not author the final plan, architecture, tasks, estimates, or approval state.
 
+### Keeping the consuming repository honest
+
+A code repository that vendors this workspace — as a submodule, a checkout, or any other copy — holds a pinned version, not a live one. A coding agent reading that copy cannot tell an approved current PRD from one superseded three weeks ago, and it will act with full confidence either way. Silent staleness at this boundary undoes the reason for putting product context in Git at all.
+
+When the human confirms an engineering handoff, offer them the guidance to add to the consuming repository's own agent instructions (`AGENTS.md`, `CLAUDE.md`, or that client's equivalent). Never write to that repository directly: it belongs to engineering, and this workflow only supplies text the owner may choose to paste. Offer wording to this effect, adapted to the actual paths:
+
+> Product context lives in the pinned `<path>` copy of the product workspace. Before acting on a PRD or Implementation Plan found there, confirm the copy is current; if it is behind, update it and re-read the PRD before continuing. Treat the PRD as the product contract and the Implementation Plan as engineering's own: when they disagree, the PRD wins on what and why, and the difference goes back to product review rather than being resolved locally.
+
+State plainly that this is a convention, not an enforced guarantee. Product OS cannot verify what the consuming repository does with its copy, and must not claim that it can.
+
 ## Fail-safe behavior
 
 - Missing Linear capability degrades handoff and preserves a local projection; do not call an unofficial API, browser automation, proxy, or custom MCP.

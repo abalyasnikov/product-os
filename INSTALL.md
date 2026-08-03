@@ -55,4 +55,7 @@ Report:
 - files added and files deliberately left unchanged;
 - selected client adapter and enabled capabilities;
 - smoke-test results and named degraded capabilities;
+- the prompt that drafts `context/strategy.md` from the installed template, and a plain statement that until that file exists every strategic-fit judgment stays an explicit gap;
 - the next natural-language prompt that creates the first Signal or Opportunity.
+
+Installation never writes `context/strategy.md` itself. It is workspace content owned by the human and goes through the normal preview-and-confirm loop like any other artifact.

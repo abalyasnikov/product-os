@@ -23,8 +23,8 @@
     },
     {
       "path": "INSTALL.md",
-      "sha256": "ed89227d6dfa8af9f573b511fe83a5f0dd0d6c4e0e0b2efc37e5a63746f22536",
-      "size": 4151
+      "sha256": "87b17811a2b933ba6e81173b080eb4013c0ddf5e4a9caf8b4fc5ae78ff4e18de",
+      "size": 4507
     },
     {
       "path": "LICENSE",
@@ -33,8 +33,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "06176b2cceaef43e95ba8caaa109a9918aa1a5387206637fa143b740961d0b11",
-      "size": 8443
+      "sha256": "4872f341a0f58399c5f057862e9f9939eb9959da9e44b86b9e1d837534cab25e",
+      "size": 9254
     },
     {
       "path": "SECURITY.md",
@@ -93,32 +93,32 @@
     },
     {
       "path": "adapters/claude-code/ADAPTER.md",
-      "sha256": "9556b9898e89088a35886fcf49b29fcd6ecb49c40ee73535d4858dc35c643b44",
+      "sha256": "44807c11ff6412478d63f73179c56a5398470f10942535f02dc8d6dfc1d9cfeb",
       "size": 1195
     },
     {
       "path": "adapters/claude-code/manifest.yaml",
-      "sha256": "300016fa1a08e846bc376efea058b6f5f3280fd1f6dd491f4c6b097e82d81d82",
+      "sha256": "6a9844c81095f7d87372b7d40e9722d8f5c91bebfea37d7446c4d02212a69d5a",
       "size": 2646
     },
     {
       "path": "adapters/codex/ADAPTER.md",
-      "sha256": "c277f5bde21cb9f28dbcad7aac54cbc717a1e180887268400958ad180275d5d2",
+      "sha256": "3e5fc7925017b17904ce3cabab7ec8ded4d0cea333b2a2d655c8f196c0e0c58a",
       "size": 1172
     },
     {
       "path": "adapters/codex/manifest.yaml",
-      "sha256": "5d47ad22deb648277d71612cdfb44b22effdf134c8c463c92be68e500c7e1fb1",
+      "sha256": "08cc377c46d610b2b7f00dfd7d3984e7b318fdc3c327c1c3c67cdb0e297b5923",
       "size": 2640
     },
     {
       "path": "adapters/openclaw/ADAPTER.md",
-      "sha256": "fd6bf64d11e3c1a810ddeb456b14faedf69a4235b70bb0b712781338b4bd1bc3",
+      "sha256": "439e3bc33d3407ca8fc8fe6ab5780c7623ca8739b4a311f0fa09e1c12625d218",
       "size": 1110
     },
     {
       "path": "adapters/openclaw/manifest.yaml",
-      "sha256": "d695a6dbcdf97766ae84ffced45631d8f5bdc162936a69d64ddbc6d37b3df3ee",
+      "sha256": "03028ae1183478eefba848c720e0209d103959f1ff3cd04769ec8774f8f6bf4d",
       "size": 2563
     },
     {
@@ -133,8 +133,8 @@
     },
     {
       "path": "docs/articles/product-decision-os-draft.md",
-      "sha256": "988a076fcc4c087eca9af6863074b7b73c7c88aedabd887f69031c76d022d1e9",
-      "size": 16133
+      "sha256": "ec68c80dd17080eccac2c6729bd4f906fdb70877ea8735b54c5ca98c7fc30fe1",
+      "size": 19093
     },
     {
       "path": "docs/assets/product-loop.png",
@@ -148,8 +148,8 @@
     },
     {
       "path": "docs/getting-started.md",
-      "sha256": "c4c1e2c51e735f243f505cbdb424c381b54927c8f5397130a2ba1ab6f0b61d25",
-      "size": 3355
+      "sha256": "f809e56b0050fbdd5d26048eeb48a9fb75795f55a68c257cabaf1dfca0b86f04",
+      "size": 4404
     },
     {
       "path": "docs/release-checklist.md",
@@ -163,13 +163,13 @@
     },
     {
       "path": "docs/spec/product-decision-os.md",
-      "sha256": "d639c098cf061e62f3f655e0d966b365b9f7aeec8d3f9d48b302f8958c7d3e33",
-      "size": 52024
+      "sha256": "8013ecb5621e231f201d570b4fc07ef15403d335d52e0ef60ccd5886de70eec9",
+      "size": 52363
     },
     {
       "path": "docs/verification.md",
-      "sha256": "c808ab51529147ab9d0da65981f37372954bc33b2736360418b9d2c4a2262471",
-      "size": 5592
+      "sha256": "b7d355c9d89a3febb26fb81fb73677b1456e0433b6f7d15b3bafa9ffe44c236e",
+      "size": 6083
     },
     {
       "path": "evals/README.md",
@@ -428,8 +428,8 @@
     },
     {
       "path": "skills/decision-queue/SKILL.md",
-      "sha256": "dd5266bdf433b5f62d1900e2f376418af96d15965164b6f159e2c0fa16d94d66",
-      "size": 3752
+      "sha256": "6729de845d7412251ace2510b7004a460fefc95a71014a50119432cfc92552df",
+      "size": 4140
     },
     {
       "path": "skills/discovery/SKILL.md",
@@ -448,8 +448,8 @@
     },
     {
       "path": "skills/prd-handoff/SKILL.md",
-      "sha256": "b977edaad912f47cf16754968cacfbf1baf27e83942e19e58159b81b5e35e02e",
-      "size": 4446
+      "sha256": "0a4d9fb6b26df0fa6cf29632c8aa7aa6f8d0e5df2db3e9490027ec2f27d95bb1",
+      "size": 5897
     },
     {
       "path": "skills/prd-interrogation/SKILL.md",
@@ -1112,5 +1112,5 @@
   "product": "product-decision-os",
   "publisher": "unpublished",
   "release": "0.1.0",
-  "tree_digest": "418feb174e6b7e74406b5fb49b6e2739d96f36369cfffe3bc132a3e9e36424d1"
+  "tree_digest": "ab6c4a50e6f2a71c7ec9040290f9a42f5d45b3cbed8bb24db479cceb3b84cbdf"
 }

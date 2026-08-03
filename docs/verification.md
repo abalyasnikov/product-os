@@ -32,7 +32,14 @@ requires the configured approval trailer in that commit; a review-state cache ca
 
 The technical fixture uses synthetic measurement where source history contains no trustworthy
 result. That is deliberate: it tests the operating contract without inventing Zerion production
-facts. The human-readable historical example contains no fabricated result.
+facts.
+
+The human-readable historical example is held to the opposite rule: it contains no fabricated
+result at all. One barrier, Auto-slippage, carries a real baseline and a real observed outcome
+because those figures were recovered from the original analysis. Its guardrail results were
+not, which is why its recorded decision is `iterate` rather than `scale` — the contract's own
+decision rule cannot be satisfied on incomplete evidence, and the example is more useful
+showing that than hiding it. Every other measure in the example remains explicitly proposed.
 The runner does not judge source material, execute agent skills, interrogate a PM, or generate
 the artifacts; those behaviors require an agent-quality eval and are not inferred from this
 deterministic journey.

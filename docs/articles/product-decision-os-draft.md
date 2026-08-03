@@ -14,7 +14,11 @@ This is a field report, not a playbook. It worked in our environment because PMs
 
 ## Git became our review system
 
-I did not want to build another workflow with custom statuses, approval buttons, and a product-management UI to maintain. Git already had branches, pull requests, comments, approvals, and an immutable merged version. Every one of those had taken years to become boring and reliable.
+I did not want to build another workflow with custom statuses, approval buttons, and a product-management UI to maintain.
+
+I had used enough of those tools to know how they end. The first two months feel great. Then the thing rots, and it rots for a structural reason rather than a design one: the person who gets the value is the PM, and the people who pay the upkeep are everyone else. Engineers treat it as a second place to update after Linear. Support treats it as a form. Within a quarter you are the only one still opening it, and what is inside is stale enough to be worse than nothing.
+
+Git already had branches, pull requests, comments, approvals, and an immutable merged version. Every one of those had taken years to become boring and reliable, and nobody had to be persuaded to keep them alive.
 
 PMs opened PRs for PRDs. As their manager, I reviewed them. We argued about the product decision in the PR, and the author updated the document. Agents could read the same comments and respond by changing the PRD, so I never had to open a separate AI interface just to translate review feedback into edits.
 
@@ -54,7 +58,7 @@ In Product OS, the unit that takes an investment decision and later produces a l
 
 Strategy shaped the bet rather than decorating it. Removing a duplicate confirmation served speed, but only conditionally: because reliability outranks speed, the signing screen is skipped only when simulation and security checks come back clean. The unconditional version would have been faster, and it was rejected on the strength of a principle order written down months earlier.
 
-Shipping all five would still not prove the trading experience improved. The Initiative owns that aggregate claim; each PRD owns evidence that its own barrier is gone. Our [worked example](../../examples/best-in-class-trading-experience/README.md) keeps the whole chain intact, from the strategy file down to individual requirements.
+Shipping all five would still not prove the trading experience improved. The Initiative owns that aggregate claim; each PRD owns evidence that its own barrier is gone. Our [worked example](../../examples/best-in-class-trading-experience/README.md) keeps that chain intact, from the strategy file down to individual requirements, and for one of the five, all the way through to a measured result and the decision that followed it.
 
 ## The metric that said there was no problem
 
@@ -93,9 +97,11 @@ The sequence is what I kept. Qualitative signal told me where to look. Segmentat
 
 That same PRD showed me where another line sits. Classification rules, coefficients, fallback algorithms: all important, none of them the durable product decision. They were engineering hypotheses wearing product clothing.
 
-Long PRDs failed on our team for an unglamorous reason: people did not read them. So the format got compact. A PRD covered the user problem and use cases, the business reason to act now, the evidence, the desired journey, requirements, non-goals, risks, and the outcome we intended to observe. Competitor context appeared when it changed the decision, not as a market-research appendix nobody asked for.
+Long PRDs failed on our team for an unglamorous reason: people did not read them. Instead of assuming I knew why, I asked them — what made you stop, what would have made it worth finishing — and cut the format against the answers. Running discovery on my own documents was the cheapest research I did that year. A PRD covered the user problem and use cases, the business reason to act now, the evidence, the desired journey, requirements, non-goals, risks, and the outcome we intended to observe. Competitor context appeared when it changed the decision, not as a market-research appendix nobody asked for.
 
 Architecture, algorithms, API contracts, migrations, and rollout mechanics moved into an engineering-owned Implementation Plan living in the code repository. That split did two things. It kept the PRD readable, and it stopped an implementation detail from quietly redefining the product outcome.
+
+Shortening a document only works if what it drops stays reachable, and that is the objection I would raise at someone showing me this format: cut the PRD down and the engineer gets less context, not more. The answer is that evidence moves rather than disappears. Signals and Patterns stay linked to the PRD, so anyone (or any agent) reading a requirement can follow it back to the support conversation that produced it. The document gets shorter. The trail behind it does not get thinner.
 
 Product safety bounds stayed in the PRD, though, and that distinction took me a while to get right. "Auto never exceeds 10%, manual caps at 25%" is a promise to the user. The rule deciding where a specific trade lands inside those bounds is engineering's business.
 
@@ -106,6 +112,8 @@ GTM went through the same reconsideration. It is not equally urgent for everythi
 My old workflow had one more structural problem: it ended at the engineering handoff. Product OS follows the decision further.
 
 ```text
+strategy context ─┐
+                  ↓
 evidence
   → opportunity
   → product bet
@@ -117,7 +125,9 @@ evidence
 
 Git holds the artifacts and the decision trail. Everything else keeps its natural job: transcript providers own full interviews, Linear owns delivery, analytics systems own behavioral data, code repositories own implementation plans. An agent connects them and brings the next decision to a human.
 
-Three judgments stay human. Whether to pursue an opportunity. Whether to approve the bet. What to do once the result is in. An agent can investigate, draft, compare, and recommend — it does not get to make those three calls quietly.
+Keeping delivery out is a deliberate bet, and it is the one most worth challenging. Linear has been moving into product territory for a while now: you can attach a customer request to a project and notify that customer when it ships, and it is entirely plausible that it becomes the single tool for most teams. My reason for holding the line is that delivery systems are organised around what is being built and when. The questions here are which problem deserves the work and how we will know it worked. Those have a different shape and a much longer life than a ticket, and every time I have seen them stored as ticket metadata they have quietly become ticket metadata.
+
+Three judgments stay human. Whether to pursue an opportunity. Whether to approve the bet. What to do once the result is in. An agent can investigate, draft, compare, and recommend; it does not get to make those three calls quietly.
 
 ## GitHub is useful, and still a barrier
 
@@ -128,6 +138,14 @@ GitHub is a technical tool. PMs already living in coding agents adapted in days.
 That is the trade-off I would name honestly to anyone considering this: you get a review system nobody has to build and a context store agents can read, and you pay for it with an interface that excludes part of your team by default.
 
 It also convinced me the agent, not GitHub, should be the front door. A PM should be able to ask "what decision needs my attention?" or "interrogate me before I draft this PRD" without learning an artifact graph or hand-editing YAML.
+
+## Marketing never made it in
+
+The other gap is larger, and I never closed it.
+
+Marketing was involved early. We pulled them into discovery, and go-to-market thinking genuinely shaped what we built. But they lived in their own Notion and their own boards, and they were never inside the system. The result was a loop that kept breaking at the same joint: something shipped, and the people whose job was to tell the world about it found out late, even when the date had been written down and said out loud weeks before.
+
+I do not think that was a marketing problem. Product context reached engineering because engineering already lived in Git and already worked with agents that read it. Marketing did not, so the context stopped at the edge of the tool. That is the real limit of building on the developers' substrate: it serves the people who are already standing on it, and everyone else needs a bridge that I never built.
 
 ## What I have proved, and what I have not
 

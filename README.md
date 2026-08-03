@@ -40,6 +40,8 @@ The goal is not more documents. The goal is more completed **evidence-backed lea
 ## The product loop
 
 ```text
+strategy context ─┐
+                  ↓
 evidence
   → opportunity
   → product bet
@@ -48,6 +50,8 @@ evidence
   → measurement
   → learning and next decision
 ```
+
+Evidence establishes that a problem is real. Strategy context establishes that it is yours to act on now. A loop running on evidence alone will produce a well-argued case for work the company has already decided against.
 
 A small Product Bet is represented by one PRD. When one outcome requires several independent interventions, an optional Initiative groups the child PRDs and owns the shared Outcome Contract. Product Bet is a decision and learning unit, not another mandatory file.
 
@@ -61,19 +65,25 @@ Agents can investigate, question, draft, link, measure, and recommend between th
 
 ## Worked example: Best-in-class trading experience
 
-The [historical Zerion example](examples/best-in-class-trading-experience/README.md) shows one Initiative decomposed into four focused, readable PRDs:
+The [historical Zerion example](examples/best-in-class-trading-experience/README.md) shows one company ambition becoming a single Product Bet with five focused PRDs:
 
 ```text
+context/strategy.md                  ← what every document below was argued against
 Initiative: Best-in-class trading experience
   → Cross-chain Swap
+  → Auto-slippage for Native Swaps and Bridges
   → Skip Signing Screen for Native Transactions
   → Transaction Toasters
   → Bridge Progress Tracking
 ```
 
-The documents preserve real problems, evidence limits, JTBDs, journeys, requirements, decisions, risks, and proposed measures. Personal names, private workspace links, and unsupported post-release claims are omitted. Where the original work lacked a verified baseline or outcome, the gap stays visible instead of being filled with synthetic certainty.
+Each barrier surfaced a different way: one from support, one from a moving competitive baseline, three from inspecting the product's own flows. That mix is the argument for the structure — a system fed only by customer requests would have found one of the five.
 
-Start with the [Initiative](examples/best-in-class-trading-experience/product/initiatives/best-in-class-trading-experience.md), then open any child PRD to see how product reasoning remains readable while the Outcome Contract stays machine-checkable.
+One of them closes the loop. Auto-slippage carries a real baseline, a measured result, and a Learning. At the aggregate level its failure rate read as noise; only segmentation revealed roughly 15% of trades failing in one asset band, which the fix took to about 2%. It closes honestly rather than triumphantly: execution-quality guardrail results were never recovered, so the recorded decision is `iterate`, not `scale`. The contract refuses to let its own author declare victory.
+
+Everywhere else, proposed measures stay proposed rather than being filled in with synthetic certainty. Personal names, private links, exact revenue figures, and unsupported post-release claims are omitted.
+
+Start with the [strategy context](examples/best-in-class-trading-experience/context/strategy.md), then the [Initiative](examples/best-in-class-trading-experience/product/initiatives/best-in-class-trading-experience.md), then any child PRD.
 
 ## What a PRD contains
 
@@ -92,6 +102,7 @@ When implementation design needs durable detail, engineering owns a separate **I
 
 ## What Product OS owns
 
+- One readable strategy context per workspace, so every workflow can ask why this team should act on a problem now — not only whether the problem is real.
 - Traceable Signals, Opportunities, optional Initiatives, PRDs, Outcome Contracts, and Learnings.
 - PRD interrogation and evidence-quality checks before drafting.
 - Human review tied to an immutable product version.
@@ -114,11 +125,9 @@ See [INSTALL.md](INSTALL.md) for the installation contract.
 
 ## Verification boundaries
 
-The reference journey is a suite of unit and contract tests for the operating model. It verifies repository invariants, artifact relationships, immutable decisions, version boundaries, installation integrity, and measurement-contract structure. Its job is to catch artifacts that read convincingly but do not hold together — a decision event rewritten after the fact, an approval pointing at a version that never existed, a Learning bound to an outcome definition its owner no longer uses.
+The reference journey is a suite of unit and contract tests for the operating model. It exists to catch artifacts that read convincingly but do not hold together: a decision event rewritten after the fact, an approval pointing at a version that never existed, a Learning bound to an outcome definition its owner no longer uses.
 
-It is not a model-quality evaluation and not proof of live provider behavior. Passing it says the operating model is internally sound. It says nothing about whether a Product Lead made a good call, whether discovery was thorough, or whether a connector returns what it claims — none of which can be established without exercising those capabilities in the configured environment.
-
-Synthetic technical proof is never presented as a real customer outcome. The historical example contains no fabricated production result. See the [verification model](docs/verification.md) for the exact claim boundary.
+Passing it means the decision trail is sound. It says nothing about whether a Product Lead made a good call, whether discovery was thorough, or whether a connector returns what it claims. Synthetic technical proof is never presented as a real customer outcome, and the historical example contains no fabricated production result. See the [verification model](docs/verification.md) for the exact claim boundary.
 
 ## Project status
 

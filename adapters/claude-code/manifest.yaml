@@ -4,7 +4,7 @@ client: claude-code
 canonical_source:
   version: 1.0.0
   hash_algorithm: sha256
-  content_hash: 4891e37517174b2fc98cd264794814eacba28248f814b3f63801bd23d8cbb6bb
+  content_hash: f258e7b94087dcefe2923d93bed83822d96e9974aa050dd6a8bfcce1b7645fee
   includes: [skills/**, integrations/**]
 projection:
   client_skill_location: .claude/skills

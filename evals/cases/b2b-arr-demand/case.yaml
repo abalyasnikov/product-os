@@ -1,0 +1,18 @@
+schema_version: 1
+name: b2b-arr-demand
+description: Account demand may carry source-backed ARR weight but must not become an automatic priority or invented market size.
+source_facts:
+  - id: signal_01EVALB2B001
+    fact: Account Northstar requested audit-log export for its compliance review.
+    account: Northstar
+    arr: $120k
+  - id: signal_01EVALB2B002
+    fact: Account Harbor requested the same export before expanding usage.
+    account: Harbor
+    arr: $60k
+allowed_numeric_claims: [$120k, $60k, $180k]
+expected_documents:
+  - file: prd.md
+    type: prd
+    evidence_ids: [signal_01EVALB2B001, signal_01EVALB2B002]
+    open_questions_required: true

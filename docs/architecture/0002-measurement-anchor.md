@@ -15,6 +15,6 @@ The anchor includes its type, external or manual reference, time, and applicable
 
 ## Consequences
 
-- Product Decision OS does not infer outcome timing from Linear completion.
+- Product OS does not infer outcome timing from Linear completion.
 - Outcome Review blocks unsupported success claims when the anchor is missing.
 - Manual evaluation remains possible with provenance when no provider exposes an event.

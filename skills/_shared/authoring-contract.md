@@ -1,6 +1,6 @@
 # Shared artifact authoring contract
 
-Read this contract completely before any Product Decision OS repository write. Canonical workflow skills decide **what** may be written and which human gate applies; this contract defines **how** artifacts are created safely.
+Read this contract completely before any Product OS repository write. Canonical workflow skills decide **what** may be written and which human gate applies; this contract defines **how** artifacts are created safely.
 
 ## Resolve the canonical shape
 
@@ -21,7 +21,7 @@ Read this contract completely before any Product Decision OS repository write. C
    | Learning | `learning_` | `product/learnings/` |
    | Product Update | `update_` | `product/updates/` |
 
-6. Generate every new artifact ID as its typed prefix plus a new UUID4 hexadecimal value, uppercased: for example `signal_` + 32 uppercase UUID4 hex characters. Generate decision IDs as `decision_` plus a new uppercase UUID4 hex value. Never derive an ID from a title, filename, user text, timestamp, or mutable provider label. Preserve existing IDs on update.
+6. Valid IDs use the typed prefix plus 8–32 uppercase Crockford Base32 characters. For every newly generated artifact, use the collision-resistant 32-character subset produced by an uppercased UUID4 hexadecimal value: for example `signal_` + 32 uppercase UUID4 hex characters. Generate decision IDs the same way with `decision_`. Never derive an ID from a title, filename, user text, timestamp, or mutable provider label. Preserve existing IDs on update.
 7. Choose a short human-readable filename independently of identity. Before writing, scan all artifacts for duplicate IDs and resolve relationships by stable ID.
 
 ## Pasted or local evidence

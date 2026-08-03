@@ -9,7 +9,7 @@ Product teams already use Git providers, Linear, transcript systems, analytics p
 
 ## Decision
 
-Product Decision OS owns product evidence, contracts, decisions, and learnings in Git. Linear owns engineering tasks, estimates, and delivery sequencing. Code repositories own optional Implementation Plans and ADRs. Provider MCPs retain authentication and external data access.
+Product OS owns product evidence, contracts, decisions, and learnings in Git. Linear owns engineering tasks, estimates, and delivery sequencing. Code repositories own optional Implementation Plans and ADRs. Provider MCPs retain authentication and external data access.
 
 The system stores stable references and version bindings instead of mirroring external systems. It ships no custom MCP server and no UI.
 

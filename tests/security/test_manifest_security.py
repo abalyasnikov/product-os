@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.manifest import ManifestSecurityError, build, verify, write_manifest
+from product_decision_os.manifest import ManifestSecurityError, build, verify, write_manifest
 
 
 def test_manifest_builder_rejects_file_symlink(tmp_path: Path) -> None:

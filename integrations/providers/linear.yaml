@@ -8,7 +8,7 @@ credentials: provider_managed
 capability_mappings:
   delivery.project.read:
     access: read_only
-    match_existing_operation_by_semantics: Find a project by persisted Linear external ID or stable Product Decision OS artifact ID and return current delivery state.
+    match_existing_operation_by_semantics: Find a project by persisted Linear external ID or stable Product OS artifact ID and return current delivery state.
     required_inputs: [external_id_or_product_artifact_id]
     required_outputs: [external_id, provider_url, delivery_state]
   delivery.project.write:

@@ -1,0 +1,16 @@
+schema_version: 1
+name: b2c-ux
+description: Directional usability evidence must not become invented prevalence or a fabricated baseline.
+source_facts:
+  - id: signal_01EVALB2C001
+    fact: A moderated journey showed that a pending transaction screen blocked navigation back to the wallet.
+    confidence: directional
+  - id: signal_01EVALB2C002
+    fact: A support note described uncertainty about whether leaving the pending screen would cancel the transaction.
+    confidence: directional
+allowed_numeric_claims: []
+expected_documents:
+  - file: prd.md
+    type: prd
+    evidence_ids: [signal_01EVALB2C001, signal_01EVALB2C002]
+    open_questions_required: true

@@ -1,7 +1,7 @@
 # Cross-chain Swap — illustrative Implementation Plan
 
 This file represents an engineering-owned artifact in a separate code repository. It is
-synthetic and contains no Zerion source-code details. The Product Decision OS workspace keeps
+synthetic and contains no Zerion source-code details. The Product OS workspace keeps
 only its repository/path/version reference.
 
 ## Product contract

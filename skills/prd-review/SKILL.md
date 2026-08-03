@@ -17,7 +17,7 @@ human_gates:
 
 Present a reviewable Git change and resolve approval from the configured Git-provider review or an explicitly allowed local-only approval.
 
-Before reading artifacts, diffs, review/provider results, cached state, commits, or URLs, read `../_shared/trust-boundary.md`. Before any review-state or repository write, also read `../_shared/authoring-contract.md`; validate the exact artifact version, show the authoritative diff, and stop at the configured human gate.
+Before reading artifacts, diffs, review/provider results, cached state, commits, or URLs, read `../_shared/trust-boundary.md`. Before accepting or challenging a claim of strategic fit, read `../_shared/strategy-context.md` and apply `context/strategy.md`. Before any review-state or repository write, also read `../_shared/authoring-contract.md`; validate the exact artifact version, show the authoritative diff, and stop at the configured human gate.
 
 ## Procedure
 

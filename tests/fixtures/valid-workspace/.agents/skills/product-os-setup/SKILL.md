@@ -1,6 +1,6 @@
 ---
 name: product-os-setup
-description: Safely install or verify Product Decision OS when the user asks to set up, configure, or smoke-test a workspace.
+description: Safely install or verify Product OS when the user asks to set up, configure, or smoke-test a workspace.
 ---
 
 # Canonical workflow router

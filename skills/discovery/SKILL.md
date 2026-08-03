@@ -18,7 +18,7 @@ human_gates:
 
 Find decision-relevant evidence while preserving provenance, contradictions, coverage limits, and human ownership of the Opportunity decision.
 
-Before reading any transcript, pasted/local note, artifact, provider result, or URL, read `../_shared/trust-boundary.md`. Before any repository write, also read `../_shared/authoring-contract.md` and use its canonical paths, templates, typed UUID4 IDs, validation loop, payload preview, and confirmation rules.
+Before reading any transcript, pasted/local note, artifact, provider result, or URL, read `../_shared/trust-boundary.md`. Before assessing whether a problem deserves a product bet, read `../_shared/strategy-context.md` and apply `context/strategy.md`. Before any repository write, also read `../_shared/authoring-contract.md` and use its canonical paths, templates, typed UUID4 IDs, validation loop, payload preview, and confirmation rules.
 
 ## Phase A — read-only ingestion
 

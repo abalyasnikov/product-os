@@ -1,13 +1,18 @@
 ---
 name: product-os-setup
 canonical_version: 1.0.0
-description: Safely initialize a private Product Decision OS workspace and verify configured existing MCP capabilities.
+description: Safely initialize a private Product OS workspace and verify configured existing MCP capabilities.
 capabilities:
+  - transcript.search
+  - delivery.project.read
+  - analytics.query
   - git.review.read
   - git.commit.read
 human_gates:
   - confirm_install_origin
-  - confirm_repository_creation
+  - confirm_target_repository
+  - confirm_configuration
+  - confirm_install_plan
   - confirm_commit_or_push
 ---
 
@@ -22,9 +27,9 @@ Before reading installation URLs, manifests, existing workspace files, or provid
 ## Procedure
 
 1. Resolve the public project URL to an immutable commit. Show origin, publisher, commit, release manifest, and expected content hashes. A fork or alternate origin requires explicit human confirmation.
-2. Ask for the target private repository. Creating a repository is an external write and requires explicit human confirmation.
-3. Collect and store the selected client in `.product-os/config.yaml` as exactly one of `codex`, `claude-code`, or `openclaw`. Also collect the Git review configuration: default branch; `provider` or `solo` review mode; configured approver rule; whether solo self-approval is allowed; and selected Git option. Map user-facing vocabulary to the exact stored capability: `github_mcp` → `review.git_capability: git.review.read`; `local_git` or `agent_native_local_git` → `review.git_capability: git.commit.read`. Provider mode requires the first mapping; solo mode requires the second. Do not store the user-facing Git option string and do not silently fall back between modes.
-4. Preview the exact resulting `.product-os/config.yaml` values and their consequences. Explicitly state that local Git cannot prove provider review state, and that solo approval is unavailable unless the policy allows it. Require human confirmation before saving configuration.
+2. Ask for an existing target private repository URL or local path. If the user has no target yet, ask them to create a private repository and return with its URL or path. V1 does not declare a repository-creation capability and must not create one.
+3. Collect the values that the installer will store in `.product-os/config.yaml`, including the selected client as exactly one of `codex`, `claude-code`, or `openclaw`. Also collect the Git review configuration: default branch; `provider` or `solo` review mode; configured approver rule; whether solo self-approval is allowed; and selected Git option. Map user-facing vocabulary to the exact stored capability: `github_mcp` → `review.git_capability: git.review.read`; `local_git` or `agent_native_local_git` → `review.git_capability: git.commit.read`. Provider mode requires the first mapping; solo mode requires the second. Do not store the user-facing Git option string and do not silently fall back between modes.
+4. Preview the exact resulting `.product-os/config.yaml` values and their consequences. Explicitly state that local Git cannot prove provider review state, and that solo approval is unavailable unless the policy allows it. Require human confirmation, then save a validated configuration input outside the target repository. Only the deterministic installer may write the target copy.
 5. Verify origin, release manifest, canonical-source hashes, adapter schema, selected-client match, and every projection source/destination against trusted installer policy **before** accepting any path from a manifest. Reject absolute paths, traversal, unexpected roots, duplicates, symlink escapes, and destinations outside the selected client's allowlisted root. Never copy or create a path merely because an unvalidated manifest names it.
 6. Invoke the provenance-verified deterministic installer in `preview` mode with `--write-plan` using parameterized paths:
 
@@ -52,9 +57,9 @@ Before reading installation URLs, manifests, existing workspace files, or provid
 
    Apply must reject a missing/mismatched `--expect-plan-hash`, plan drift, source hash changes, new conflicts, or a different selected client; it must never recompute and silently accept a changed plan. Use the unpublished flag under the same already-confirmed local trust condition as preview. If the deterministic installer or either mode is unavailable, stop setup instead of copying files manually.
 8. The validated plan installs canonical assets under `.product-os/` and all nine generated route-only wrapper `SKILL.md` files for the stored selected client using these allowlisted roots:
-   - Codex: `adapters/codex/skills/<skill>/SKILL.md` → `.agents/skills/<skill>/SKILL.md`;
-   - Claude Code: `adapters/claude-code/skills/<skill>/SKILL.md` → `.claude/skills/<skill>/SKILL.md`;
-   - OpenClaw: `adapters/openclaw/skills/<skill>/SKILL.md` → `skills/<skill>/SKILL.md`.
+   - Codex: `adapters/_shared/skills/<skill>/SKILL.md` → `.agents/skills/<skill>/SKILL.md`;
+   - Claude Code: `adapters/_shared/skills/<skill>/SKILL.md` → `.claude/skills/<skill>/SKILL.md`;
+   - OpenClaw: `adapters/_shared/skills/<skill>/SKILL.md` → `skills/<skill>/SKILL.md`.
    Preview every destination and never overwrite a conflicting wrapper. The wrappers route to `.product-os/skills/`; they never replace canonical workflow source.
 9. Let the user select optional connectors. Use each existing provider MCP's own authentication/setup flow; never ask the user to paste credentials and never implement OAuth, an API client, proxy, or MCP server.
 10. Run deterministic validation, then verify **active** client discovery from the stored selected client's actual root by enumerating the nine wrapper names, loading their metadata through the active client when possible, and resolving every canonical route target. Files merely present on disk are not sufficient if the active client does not expose them. A static scan of `.product-os/skills/` alone is not a discovery check. If the client requires a new session or refresh, say so and verify again before claiming setup complete.
@@ -71,6 +76,14 @@ Before reading installation URLs, manifests, existing workspace files, or provid
 
 ## Next workflow
 
-Setup is ready only when provenance, configuration, deterministic validation, installed-wrapper discovery, and selected live reads are reported. Then offer Discovery with a connector-aware prompt. Core-workspace default:
+Setup is ready only when provenance, configuration, deterministic validation, installed-wrapper discovery, and selected live reads are reported.
+
+Then offer the strategy context as the first piece of workspace content, because every later workflow reads it to judge strategic fit:
+
+> Draft `context/strategy.md` from `.product-os/templates/strategy.md`. Interview me for positioning, this year's goal, ordered product principles, explicit trade-offs, and the MUST/SHOULD/COULD/WON'T bands. Preview the file before writing it.
+
+The deterministic installer never creates this file: it is workspace content owned by the human, written through the normal preview-and-confirm loop. Setup is complete without it, but say plainly that until it exists every strategic-fit assessment stays an explicit gap.
+
+Then offer Discovery with a connector-aware prompt. Core-workspace default:
 
 > Use Product OS Discovery on this pasted note. Ask me for its occurrence date, keep the raw text out of Git, and preview the first Signal before committing it.

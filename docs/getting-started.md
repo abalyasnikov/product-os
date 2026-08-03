@@ -1,4 +1,4 @@
-# Five-minute solo walkthrough
+# Solo walkthrough
 
 This walkthrough proves the local evidence-to-decision path without Granola, Linear, analytics, or a hosted Git provider. External workflows remain explicitly degraded.
 
@@ -18,13 +18,23 @@ example shows the resulting product documents in the form a PM would actually re
 Send an agent the absolute path to `INSTALL.md` in a trusted checkout. Confirm the displayed local origin and commit. Choose:
 
 ```yaml
+schema_version: 1
+workspace_profile: core_workspace
 selected_client: codex
+default_branch: main
 review:
   mode: solo
+  approver_rule:
+    initiative: current-product-lead
+    prd: current-product-lead
   git_capability: git.commit.read
   solo_approval:
     allowed: true
     commit_trailer: "Product-Approval: explicit"
+evidence:
+  storage: reference_only
+  max_excerpt_chars: 500
+connectors: {}
 ```
 
 The agent installs canonical assets under `.product-os/`, generated wrappers in the current client's discovery path, and the validator from the same verified checkout.

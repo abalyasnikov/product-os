@@ -1,6 +1,6 @@
 # Canonical skills
 
-This directory is the agent-neutral source of truth for Product Decision OS workflows. Client adapters may point at or project these files, but must not change their behavior.
+This directory is the agent-neutral source of truth for Product OS workflows. Client adapters may point at or project these files, but must not change their behavior.
 
 All skills follow the same safety contract:
 

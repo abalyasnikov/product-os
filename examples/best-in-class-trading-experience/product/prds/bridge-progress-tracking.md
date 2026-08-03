@@ -15,6 +15,8 @@ After confirming a bridge-dependent transaction, users could not tell what was h
 
 Source-chain confirmation is not the same as destination completion. Treating it as success would create false confidence precisely when the user needs the wallet to be reliable.
 
+**Why now / business reality:** Cross-chain Swap depended on bridge routing, so launching it without truthful settlement progress would leave the core journey incomplete; support and retention impact had not yet been baselined.
+
 ## Evidence
 
 Bridge delivery times varied substantially by route and chain. Users often had to open block explorers or provider interfaces to determine whether a transaction was still progressing. Cross-chain Swap depended on bridging under the hood, so shipping it without truthful progress left the core journey incomplete.

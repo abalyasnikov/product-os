@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from scripts.install_workspace import (
+from product_decision_os.installer import (
     InstallError,
     apply_plan,
     load_plan_document,
@@ -14,7 +14,7 @@ from scripts.install_workspace import (
     plan_install,
     write_plan,
 )
-from scripts.manifest import write_manifest
+from product_decision_os.manifest import write_manifest
 
 
 @pytest.fixture
@@ -46,9 +46,10 @@ def install_source(tmp_path: Path) -> tuple[Path, Path]:
     (source / "integrations/capabilities.yaml").write_text("schema_version: 1\n", encoding="utf-8")
     (source / "skills/setup").mkdir()
     (source / "skills/setup/SKILL.md").write_text("# Canonical setup\n", encoding="utf-8")
-    wrapper = source / "adapters/codex/skills/product-os-setup"
+    wrapper = source / "adapters/_shared/skills/product-os-setup"
     wrapper.mkdir(parents=True)
     (wrapper / "SKILL.md").write_text("# Wrapper\n", encoding="utf-8")
+    (source / "adapters/codex").mkdir()
     adapter = {
         "adapter_schema_version": 1,
         "generated": True,
@@ -58,7 +59,7 @@ def install_source(tmp_path: Path) -> tuple[Path, Path]:
             {
                 "name": "product-os-setup",
                 "canonical_source": ".product-os/skills/setup/SKILL.md",
-                "wrapper_source": "adapters/codex/skills/product-os-setup/SKILL.md",
+                "wrapper_source": "adapters/_shared/skills/product-os-setup/SKILL.md",
                 "destination": ".agents/skills/product-os-setup/SKILL.md",
             }
         ],
@@ -303,6 +304,57 @@ def test_unrelated_target_symlink_is_rejected(
 
     with pytest.raises(InstallError, match="target tree contains a symlink"):
         plan_install(source, target, "codex", config, allow_unpublished_local=True)
+
+
+@pytest.mark.parametrize(
+    "ignored_directory",
+    [
+        ".git",
+        ".pytest_cache",
+        ".venv",
+        "__pycache__",
+        "build",
+        "dist",
+        "product_decision_os.egg-info",
+    ],
+)
+def test_source_symlinks_in_non_distributed_directories_are_skipped(
+    install_source: tuple[Path, Path],
+    tmp_path: Path,
+    ignored_directory: str,
+) -> None:
+    source, config = install_source
+    local_directory = source / ignored_directory / "bin"
+    local_directory.mkdir(parents=True)
+    (local_directory / "python3").symlink_to(tmp_path / "local-runtime")
+
+    plan = plan_install(
+        source,
+        tmp_path / "target",
+        "codex",
+        config,
+        allow_unpublished_local=True,
+    )
+
+    assert all(ignored_directory not in item.display_source for item in plan.files)
+
+
+def test_source_symlink_in_distributed_tree_is_rejected(
+    install_source: tuple[Path, Path], tmp_path: Path
+) -> None:
+    source, config = install_source
+    outside = tmp_path / "outside.md"
+    outside.write_text("outside\n", encoding="utf-8")
+    (source / "templates/linked.md").symlink_to(outside)
+
+    with pytest.raises(InstallError, match="source tree contains a symlink"):
+        plan_install(
+            source,
+            tmp_path / "target",
+            "codex",
+            config,
+            allow_unpublished_local=True,
+        )
 
 
 def test_apply_refuses_source_changed_after_preview(

@@ -1,6 +1,6 @@
 # Verification model
 
-Product Decision OS separates deterministic repository proof from live provider proof.
+Product OS separates deterministic repository proof from live provider proof.
 Passing a fixture never implies that an external account, mutation, or model judgment was
 verified.
 
@@ -37,6 +37,53 @@ The runner does not judge source material, execute agent skills, interrogate a P
 the artifacts; those behaviors require an agent-quality eval and are not inferred from this
 deterministic journey.
 
+## Executable acceptance matrix
+
+The automated suite must prove:
+
+- the compact valid workspace and the explicit evidence-waiver workspace pass;
+- invalid fixtures fail for duplicate IDs, broken or mistyped references, oversized excerpts,
+  transcript-sized or credential-like content, stale adapters, stale outcome definitions,
+  stale implementation references, missing measurement anchors, unverified executable
+  bindings, and incomplete evidence waivers;
+- decision events remain append-only against their Git baseline;
+- installation is preview-first, refuses overwrites and symlink escapes, and preserves exact
+  release provenance;
+- adapter generation is deterministic and idempotent for Codex, Claude Code, and OpenClaw;
+- handoff retries preserve external idempotency keys rather than creating duplicate objects;
+- no fixture contains production customer data, credentials, or an unlabeled synthetic result.
+
+Run the full matrix with:
+
+```bash
+python -m pytest
+```
+
+The fixture suite proves repository behavior only. Live MCP authorization, provider mutations,
+analytics execution, human identity, and model output quality remain separate checks below.
+
+## PRD output-quality contract
+
+`evals/` contains four versioned golden cases for B2C UX, B2B ARR-weighted demand,
+evidence waiver, and multi-PRD Initiative routing. The executable layer checks required
+sections, the compact `Why now / business reality` statement, evidence traceability,
+unsupported numeric claims, a separate Open questions section, Outcome Contracts, waiver
+completeness, Initiative/child links, and the boundary between product decisions and an
+engineering-owned Implementation Plan.
+
+Run it with:
+
+```bash
+python evals/check_prd_quality.py
+python -m pytest tests/evals
+```
+
+This is a deterministic contract over pre-authored artifacts, not an LLM eval. It does not
+prove interrogation quality, problem selection, semantic correctness, or writing quality.
+The adjacent model rubric is explicitly uncalibrated and requires a fixed external runtime,
+blinded generation, retained judge evidence, and human adjudication before any score can be
+used as a release claim.
+
 ## Live provider proof
 
 Live verification is environment-specific and requires the user's configured provider MCPs.
@@ -45,7 +92,7 @@ It must be reported capability by capability:
 | Capability | Passing condition |
 |---|---|
 | Granola retrieval | The agent can search and read a user-approved meeting without exporting the full transcript into Git. |
-| Linear or Jira handoff | A previewed create/update uses the PRD stable ID as its idempotency key and a retry reuses the same object. |
+| Delivery handoff (Linear in reference V1) | A previewed create/update uses the PRD stable ID as its idempotency key and a retry reuses the same object. |
 | Analytics measurement | The configured query runs against the declared definition version and returns provenance plus slice and guardrail results. |
 | Git review | The provider review or explicit solo commit is verifiable at a reachable immutable commit, including provider identity rather than fixture metadata. |
 | Agent quality | A separately versioned case set evaluates evidence fidelity, interrogation quality, PRD completeness, and unsupported-claim rate. |

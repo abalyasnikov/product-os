@@ -26,5 +26,10 @@ jobs:
         run: python -m pip install -e '.[dev]'
       - name: Run tests
         run: python -m pytest
-      - name: Validate reference journey
-        run: product-os smoke-test examples/fixtures/valid-workspace --json
+      - name: Verify generated adapters are current
+        run: python scripts/generate_adapters.py --check
+      - name: Run clean-install reference journeys
+        run: |
+          python scripts/run_reference_journey.py --client codex
+          python scripts/run_reference_journey.py --client claude-code
+          python scripts/run_reference_journey.py --client openclaw

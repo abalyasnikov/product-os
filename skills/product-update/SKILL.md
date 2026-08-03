@@ -4,6 +4,7 @@ canonical_version: 1.0.0
 description: Generate a source-linked weekly or monthly Product Update for human review and deliberate publication.
 capabilities:
   - git.review.read
+  - git.commit.read
   - delivery.project.read
   - analytics.query
 human_gates:
@@ -21,7 +22,7 @@ Before reading artifacts, Git/provider objects, Linear state, analytics results,
 
 ## Procedure
 
-1. Establish the period and audience. Read approved Git artifacts and Learnings first; query Linear or analytics only for claims that need current external state. Group each Product Bet under exactly one identity: standalone PRD ID or Initiative ID, with child PRDs linked beneath it rather than reported as separate Bets.
+1. Establish the period and audience. Read `.product-os/config.yaml`, then verify approved Git artifacts and Learnings through exactly the configured Git capability: provider mode uses `git.review.read`; solo mode uses `git.commit.read` plus the verified explicit approval trailer. Never fall back between review modes. Query Linear or analytics only for claims that need current external state. Group each Product Bet under exactly one identity: standalone PRD ID or Initiative ID, with child PRDs linked beneath it rather than reported as separate Bets.
 2. Cite every material claim directly to an artifact Git version, provider object, or reproducible analytics query. Resolve Outcome Contracts from the owner embedding or a single stable extracted `outcome_` reference, never a duplicated copy. Material claims include scope, decisions, delivery state, dates/commitments, metrics, user outcomes, customer demand, and business impact.
 3. Label unavailable, stale, conflicting, or unverified data. Do not transform a connector gap into a positive or negative claim.
 4. Keep uncited text structural only; it cannot introduce a new factual claim.
@@ -33,6 +34,7 @@ Before reading artifacts, Git/provider objects, Linear state, analytics results,
 - Block publication while any material claim lacks a source or its provenance cannot be reproduced.
 - Generated updates never make product decisions, change delivery state, or mutate analytics.
 - A failed connector leaves a named gap and does not block unrelated, fully sourced sections.
+- If the configured Git approval source is unavailable, approval-dependent claims remain blocked rather than being inferred from local files or cached review state.
 
 ## Next workflow
 

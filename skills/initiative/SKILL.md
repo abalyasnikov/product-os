@@ -21,7 +21,7 @@ human_gates:
 
 Create an Initiative only when several distinct barriers and child PRDs must contribute to one shared user outcome. The Initiative ID is the single logical Product Bet identity. A small Product Bet uses its standalone PRD ID and must not be forced through an empty Initiative.
 
-Before reading evidence, artifacts, analytics, or URLs, read `../_shared/trust-boundary.md`. Before any repository write, also read `../_shared/authoring-contract.md` and use its Initiative template/schema/path, typed UUID4 ID, validation, preview, and confirmation rules.
+Before reading evidence, artifacts, analytics, or URLs, read `../_shared/trust-boundary.md`. Before framing the shared outcome, read `../_shared/strategy-context.md` and apply `context/strategy.md`. Before any repository write, also read `../_shared/authoring-contract.md` and use its Initiative template/schema/path, typed UUID4 ID, validation, preview, and confirmation rules.
 
 ## Create or update
 

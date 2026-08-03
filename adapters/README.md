@@ -10,6 +10,12 @@ The `canonical_source.content_hash` in every manifest is SHA-256 over every regu
 relative/path + NUL + raw file bytes + NUL
 ```
 
-The adapter freshness test recomputes this digest. Any canonical change requires regenerating all client manifests together. Generated files must not be hand-edited into a competing workflow source.
+The adapter freshness test recomputes this digest. Any canonical change requires:
+
+```bash
+python scripts/generate_adapters.py
+```
+
+The nine client-neutral wrappers live once under `adapters/_shared/skills/`; manifests only project them into each client's discovery path. Generated manifests and markers must not be hand-edited into a competing workflow source.
 
 Adapters deliberately do not embed credentials, provider URLs, MCP transports, executable tool code, or unofficial fallbacks.

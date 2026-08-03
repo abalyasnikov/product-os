@@ -30,4 +30,4 @@ projects:
     external_id: TRD-105
     url: https://jira.example.invalid/browse/TRD-105
     state: completed_fixture
-sync_note: Keys and URLs are anonymized examples; Product Decision OS references delivery state but does not duplicate engineering estimates or sequencing.
+sync_note: Keys and URLs are anonymized examples; Product OS references delivery state but does not duplicate engineering estimates or sequencing.

@@ -18,17 +18,17 @@ human_gates:
 
 Do not immediately generate a PRD. First interrogate the Product Lead and inspect linked repository evidence.
 
-Before reading evidence, artifacts, analytics, provider results, or URLs, read `../_shared/trust-boundary.md`. Before any draft/checkpoint write, also read `../_shared/authoring-contract.md` and use its template, schema, canonical path, typed UUID4 ID, validation, preview, and confirmation rules.
+Before reading evidence, artifacts, analytics, provider results, or URLs, read `../_shared/trust-boundary.md`. Before writing the **Why now / business reality** statement, read `../_shared/strategy-context.md` and apply `context/strategy.md`. Before any draft/checkpoint write, also read `../_shared/authoring-contract.md` and use its template, schema, canonical path, typed UUID4 ID, validation, preview, and confirmation rules.
 
 ## Procedure
 
 1. Resolve the PRD by stable ID when resuming. Load any draft checkpoint and begin by showing three compact lists: **confirmed**, **unknown**, and **blocking**. Ask only 1–3 related questions per turn. Never present the entire interrogation as one questionnaire.
-2. **Understand the problem:** identify the user, current behavior or journey, blocked value, desired outcome, evidence, and why now.
-3. **Qualify demand:** inspect frequency, segments, repeated patterns, contradictory evidence, affected accounts/revenue bands for B2B, or behavioral/strategic impact for B2C. Do not infer representativeness from counts.
+2. **Understand the problem:** identify the user, current behavior or journey, blocked value, desired outcome, and evidence. Capture one compact, explicit **Why now / business reality** statement: the observed demand, market or strategic shift, customer commitment, revenue exposure, or material risk that makes this worth deciding now. If timing is not established, record that gap instead of inventing urgency.
+3. **Qualify demand:** inspect frequency, segments, repeated patterns, contradictory evidence, and representativeness. For B2B work, identify the account or segment, request source, commercial stage and timing, current ARR, expansion/new ARR or ARR at risk when policy permits; otherwise retain an external account reference and revenue band. ARR is decision context, not a substitute for user value or an automatic priority score. For B2C, inspect behavioral and strategic impact. Do not infer representativeness from counts.
 4. **Define better:** ask the human to choose an honest Outcome Contract method: case-based eval, behavioral metric, experiment, service level, acceptance journey, or qualitative rubric. Never choose the method or decision rule silently.
 5. Complete the measurement definition: observable baseline/current state, target, method, slices, guardrails, window/review date, and decision rule. For case evals, establish a simple passing and known failing case first.
 6. Record binding status as `unconfigured`, `planned`, `executable`, or `manual`. Never claim executable merely because a provider is connected. Executable requires a query/case reference, definition version, verifier, and verification time. Planned handoff requires an owner and due date no later than release.
-7. **Lock boundaries:** requirements, non-goals, dependencies, risks, and the smallest end-to-end intervention. Product owns why/what; engineering owns how. Do not author an Implementation Plan or decompose engineering tasks.
+7. **Lock boundaries:** requirements, non-goals, dependencies, risks, open questions, and the smallest end-to-end intervention. Keep Open questions separate from risks; write `None` when the review has no unresolved product question. Product owns why/what; engineering owns how. Do not author an Implementation Plan or decompose engineering tasks.
 8. **Form a GTM hypothesis:** audience, promise, discovery channel, adoption action, and launch measurement; or `not_applicable` with a reason.
 9. Establish one logical Product Bet identity: this standalone PRD ID for a small Bet, or the parent Initiative ID when this is a child PRD. Never mint a separate `bet_` artifact or treat each child as another Product Bet.
 10. Embed the PRD Outcome Contract by default. Extract it only when large or reusable, link the separate `outcome_` artifact by stable internal relationship, and never retain a duplicated embedded contract. In an Initiative, this child contract measures its barrier; it does not replace the Initiative's shared Outcome Contract.
@@ -36,6 +36,19 @@ Before reading evidence, artifacts, analytics, provider results, or URLs, read `
 12. If evidence is insufficient, offer an explicit waiver containing assumption, rationale, risk, and review date. A waiver never removes the Outcome Contract or decision rule.
 13. At the end of every turn, summarize newly confirmed answers, remaining unknowns, blockers, and exactly one recommended next question. Offer to save a resumable draft checkpoint. A checkpoint keeps unresolved gaps explicit, is validated, previewed, and written only after human confirmation; it is not approval and never syncs to Linear.
 14. Draft when all material sections are answered or explicitly marked as gaps. Show the proposed file and diff, then write only after human confirmation. Drafting does not approve or sync to Linear.
+
+## PRD output contract
+
+Use the canonical readable sections from the PRD template. The Problem section must include the compact `**Why now / business reality:**` statement. Open questions is a separate required section and may explicitly say `None`; do not hide unresolved questions inside Risks and dependencies.
+
+Add context modules only when they improve a product decision or make evidence reviewable:
+
+- **Competitors and alternatives:** when the current alternative, market baseline, or rejected approach changes scope or urgency.
+- **Customer context:** for customer-driven or B2B work; record the account/segment, sourced need, commercial stage, and timing without copying sensitive CRM data.
+- **Revenue context:** when permitted ARR, expansion, pipeline, or revenue-at-risk materially affects the trade-off. Use an external account reference or revenue band when exact values are sensitive.
+- **References:** when a reviewer benefits from direct links to source artifacts, research, designs, analytics definitions, a parent Initiative, or an external Implementation Plan. Do not duplicate links already clear in Evidence.
+
+Omit unused optional headings completely. Never generate empty boilerplate sections to make the PRD look complete.
 
 ## Fail-safe behavior
 

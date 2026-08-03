@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+import re
 import shutil
 import subprocess
 
@@ -11,8 +12,8 @@ import yaml
 
 from product_decision_os.validator import TYPE_CONFIG, _walk, validate_workspace
 from product_decision_os.cli import main as cli_main
-from scripts.install_workspace import apply_plan, plan_install
-from scripts.manifest import write_manifest
+from product_decision_os.installer import apply_plan, plan_install
+from product_decision_os.manifest import write_manifest
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
@@ -36,7 +37,7 @@ def install_schemas(workspace: Path) -> None:
     )
 
 
-def metadata(artifact_type: str = "signal", artifact_id: str = "signal_01TEST") -> dict:
+def metadata(artifact_type: str = "signal", artifact_id: str = "signal_01TESTXX") -> dict:
     return {
         "schema_version": 1,
         "id": artifact_id,
@@ -108,6 +109,8 @@ def lean_prd_body(outcome: dict) -> str:
 
 A real user problem.
 
+**Why now / business reality:** A verified product trigger makes this worth deciding now.
+
 ## Evidence
 
 One explicit source with a named coverage gap.
@@ -142,6 +145,10 @@ Existing users discover the improvement in the current flow.
 ## Risks and dependencies
 
 - Baseline coverage remains incomplete.
+
+## Open questions
+
+- None.
 
 ## Delivery
 
@@ -178,7 +185,7 @@ def test_frontmatter_must_be_safe_mapping(workspace: Path) -> None:
 def test_duplicate_yaml_keys_are_rejected(workspace: Path) -> None:
     path = workspace / "product" / "signals" / "bad.md"
     path.parent.mkdir(parents=True)
-    path.write_text("---\nid: signal_ONE\nid: signal_TWO\n---\n", encoding="utf-8")
+    path.write_text("---\nid: signal_PNEXXXXX\nid: signal_TWPXXXXX\n---\n", encoding="utf-8")
     assert "FRONTMATTER_INVALID" in codes(validate_workspace(workspace))
 
 
@@ -219,8 +226,8 @@ def test_duplicate_artifact_ids_are_rejected(workspace: Path) -> None:
 
 
 def test_broken_internal_reference_is_actionable(workspace: Path) -> None:
-    data = metadata("opportunity", "opportunity_01TEST")
-    data["relationships"] = {"signals": ["signal_MISSING"]}
+    data = metadata("opportunity", "opportunity_01TESTXX")
+    data["relationships"] = {"signals": ["signal_MJSSJNGX"]}
     write_artifact(workspace, data)
     report = validate_workspace(workspace)
     issue = next(error for error in report.errors if error.code == "BROKEN_INTERNAL_REFERENCE")
@@ -231,7 +238,7 @@ def test_broken_internal_reference_is_actionable(workspace: Path) -> None:
 def test_relationship_container_and_named_target_type_are_validated(workspace: Path) -> None:
     signal = metadata()
     write_artifact(workspace, signal)
-    opportunity = metadata("opportunity", "opportunity_01TEST")
+    opportunity = metadata("opportunity", "opportunity_01TESTXX")
     opportunity["relationships"] = {"patterns": [signal["id"]]}
     write_artifact(workspace, opportunity)
     assert "RELATIONSHIP_TYPE_MISMATCH" in codes(validate_workspace(workspace))
@@ -242,12 +249,12 @@ def test_relationship_container_and_named_target_type_are_validated(workspace: P
 
 
 def test_type_id_and_directory_must_agree(workspace: Path) -> None:
-    data = metadata("signal", "prd_01WRONG")
+    data = metadata("signal", "prd_01WRPNGX")
     write_artifact(workspace, data)
     report = validate_workspace(workspace)
     assert "ID_TYPE_MISMATCH" in codes(report)
 
-    data = metadata("signal", "signal_01MOVED")
+    data = metadata("signal", "signal_01MPVEDX")
     path = write_artifact(workspace, data)
     moved = workspace / "product" / "patterns" / path.name
     moved.parent.mkdir(parents=True, exist_ok=True)
@@ -346,8 +353,25 @@ def test_excerpt_limit_is_configurable_and_defaults_to_500(workspace: Path) -> N
 
     config = workspace / ".product-os" / "config.yaml"
     config.parent.mkdir(parents=True)
-    config.write_text("evidence:\n  max_excerpt_chars: 600\n", encoding="utf-8")
-    assert "EVIDENCE_EXCERPT_TOO_LONG" not in codes(validate_workspace(workspace))
+    data["evidence"] = {"excerpt": "x" * 401}
+    write_artifact(workspace, data)
+    config.write_text("evidence:\n  max_excerpt_chars: 400\n", encoding="utf-8")
+    assert "EVIDENCE_EXCERPT_TOO_LONG" in codes(validate_workspace(workspace))
+
+
+def test_missing_release_file_is_not_misreported_as_escape_or_digest_drift(
+    workspace: Path,
+) -> None:
+    tracked = workspace / "tracked.txt"
+    tracked.write_text("present during manifest build\n", encoding="utf-8")
+    install_provenance(workspace)
+    tracked.unlink()
+
+    report_codes = codes(validate_workspace(workspace, "smoke-test"))
+
+    assert "PROVENANCE_FILE_MISSING" in report_codes
+    assert "SYMLINK_OR_ESCAPE_REJECTED" not in report_codes
+    assert "PROVENANCE_TREE_DIGEST_MISMATCH" not in report_codes
 
 
 def test_raw_transcript_and_transcript_sized_body_are_blocked(workspace: Path) -> None:
@@ -385,7 +409,7 @@ def test_known_credential_patterns_are_blocked(workspace: Path) -> None:
 
 
 def test_prd_requires_complete_outcome_contract(workspace: Path) -> None:
-    data = metadata("prd", "prd_01TEST")
+    data = metadata("prd", "prd_01TESTXX")
     write_artifact(workspace, data)
     assert "OUTCOME_CONTRACT_MISSING" in codes(validate_workspace(workspace))
 
@@ -400,9 +424,9 @@ def test_prd_requires_complete_outcome_contract(workspace: Path) -> None:
 
 
 def test_prd_outcome_contract_can_live_in_named_markdown_block(workspace: Path) -> None:
-    opportunity = metadata("opportunity", "opportunity_01TEST")
+    opportunity = metadata("opportunity", "opportunity_01TESTXX")
     write_artifact(workspace, opportunity)
-    data = metadata("prd", "prd_01TEST")
+    data = metadata("prd", "prd_01TESTXX")
     data["title"] = "Test PRD"
     data["relationships"] = {"opportunity": opportunity["id"]}
     for field_name in ("created_at", "updated_at", "authors"):
@@ -414,9 +438,9 @@ def test_prd_outcome_contract_can_live_in_named_markdown_block(workspace: Path) 
 
 
 def test_named_outcome_block_supports_crlf(workspace: Path) -> None:
-    opportunity = metadata("opportunity", "opportunity_01TEST")
+    opportunity = metadata("opportunity", "opportunity_01TESTXX")
     write_artifact(workspace, opportunity)
-    data = metadata("prd", "prd_01TEST")
+    data = metadata("prd", "prd_01TESTXX")
     data["title"] = "Test PRD"
     data["relationships"] = {"opportunity": opportunity["id"]}
     path = write_artifact(workspace, data, body=lean_prd_body(complete_outcome()))
@@ -426,7 +450,7 @@ def test_named_outcome_block_supports_crlf(workspace: Path) -> None:
 
 
 def test_invalid_named_outcome_block_is_actionable(workspace: Path) -> None:
-    data = metadata("prd", "prd_01TEST")
+    data = metadata("prd", "prd_01TESTXX")
     body = """# Test PRD
 
 ## Outcome Contract
@@ -443,7 +467,7 @@ def test_invalid_named_outcome_block_is_actionable(workspace: Path) -> None:
 
 
 def test_frontmatter_and_body_outcome_cannot_both_be_canonical(workspace: Path) -> None:
-    data = metadata("prd", "prd_01TEST")
+    data = metadata("prd", "prd_01TESTXX")
     data["outcome"] = complete_outcome()
     outcome_yaml = yaml.safe_dump(complete_outcome(), sort_keys=False)
     body = f"""# Test PRD
@@ -459,7 +483,7 @@ def test_frontmatter_and_body_outcome_cannot_both_be_canonical(workspace: Path) 
 
 
 def test_lean_prd_requires_readable_sections_and_product_bet_link(workspace: Path) -> None:
-    data = metadata("prd", "prd_01TEST")
+    data = metadata("prd", "prd_01TESTXX")
     outcome_yaml = yaml.safe_dump(complete_outcome(), sort_keys=False)
     write_artifact(
         workspace,
@@ -472,8 +496,56 @@ def test_lean_prd_requires_readable_sections_and_product_bet_link(workspace: Pat
     assert "PRD_PRODUCT_BET_LINK_MISSING" in report_codes
 
 
+def test_lean_prd_requires_explicit_why_now_and_separate_open_questions(workspace: Path) -> None:
+    opportunity = metadata("opportunity", "opportunity_01TESTXX")
+    write_artifact(workspace, opportunity)
+    data = metadata("prd", "prd_01TESTXX")
+    data["title"] = "Test PRD"
+    data["relationships"] = {"opportunity": opportunity["id"]}
+    body = lean_prd_body(complete_outcome())
+
+    without_why_now = body.replace(
+        "**Why now / business reality:** A verified product trigger makes this worth deciding now.\n\n",
+        "",
+    )
+    write_artifact(workspace, data, body=without_why_now)
+    why_now_issues = validate_workspace(workspace).errors
+    assert any(issue.field == "body.problem.why_now" for issue in why_now_issues)
+
+    without_open_questions = re.sub(
+        r"(?ms)^## Open questions\n\n.*?(?=^## Delivery)",
+        "",
+        body,
+    )
+    write_artifact(workspace, data, body=without_open_questions)
+    open_question_issues = validate_workspace(workspace).errors
+    assert any(issue.field == "body.open questions" for issue in open_question_issues)
+
+    multiline_why_now = body.replace(
+        "**Why now / business reality:** A verified product trigger",
+        "**Why now / business reality:**\nA verified product trigger",
+    )
+    write_artifact(workspace, data, body=multiline_why_now)
+    assert validate_workspace(workspace).ok
+
+
+def test_references_and_context_modules_are_optional_for_lean_prd(workspace: Path) -> None:
+    opportunity = metadata("opportunity", "opportunity_01TESTXX")
+    write_artifact(workspace, opportunity)
+    data = metadata("prd", "prd_01TESTXX")
+    data["title"] = "Test PRD"
+    data["relationships"] = {"opportunity": opportunity["id"]}
+    body = lean_prd_body(complete_outcome())
+    assert "## References" not in body
+    assert "## Customer context" not in body
+
+    write_artifact(workspace, data, body=body)
+
+    assert validate_workspace(workspace).ok
+
+
 def test_verified_executable_binding_passes_and_unverified_fails(workspace: Path) -> None:
-    data = metadata("prd", "prd_01TEST")
+    data = metadata("prd", "prd_01TESTXX")
     data["outcome"] = complete_outcome("executable")
     write_artifact(workspace, data)
     assert validate_workspace(workspace).exit_code == 0
@@ -484,7 +556,7 @@ def test_verified_executable_binding_passes_and_unverified_fails(workspace: Path
 
 
 def test_executable_binding_version_must_match_definition(workspace: Path) -> None:
-    data = metadata("prd", "prd_01TEST")
+    data = metadata("prd", "prd_01TESTXX")
     data["outcome"] = complete_outcome("executable")
     data["outcome"]["binding"]["definition_version"] = "old-version"
     write_artifact(workspace, data)
@@ -492,7 +564,7 @@ def test_executable_binding_version_must_match_definition(workspace: Path) -> No
 
 
 def test_executable_binding_requires_versioned_definition(workspace: Path) -> None:
-    data = metadata("prd", "prd_01TEST")
+    data = metadata("prd", "prd_01TESTXX")
     data["outcome"] = complete_outcome("executable")
     del data["outcome"]["definition"]["version"]
     write_artifact(workspace, data)
@@ -500,7 +572,7 @@ def test_executable_binding_requires_versioned_definition(workspace: Path) -> No
 
 
 def test_learning_requires_actual_measurement_anchor(workspace: Path) -> None:
-    data = metadata("learning", "learning_01TEST")
+    data = metadata("learning", "learning_01TESTXX")
     write_artifact(workspace, data)
     assert "MEASUREMENT_ANCHOR_MISSING" in codes(validate_workspace(workspace))
 
@@ -510,7 +582,7 @@ def test_learning_requires_actual_measurement_anchor(workspace: Path) -> None:
 
 
 def test_released_prd_requires_actual_anchor_reference(workspace: Path) -> None:
-    data = metadata("prd", "prd_01TEST")
+    data = metadata("prd", "prd_01TESTXX")
     data["outcome"] = complete_outcome()
     data["outcome"]["binding"]["measurement_anchor"] = {"type": "release"}
     data["delivery_state"] = "released"
@@ -519,24 +591,24 @@ def test_released_prd_requires_actual_anchor_reference(workspace: Path) -> None:
 
 
 def test_implementation_ref_shape_owner_and_staleness(workspace: Path) -> None:
-    data = metadata("prd", "prd_01TEST")
+    data = metadata("prd", "prd_01TESTXX")
     data["outcome"] = complete_outcome()
     data["implementation_refs"] = [
         {
             "repository": "github.com/example/app",
             "path": "specs/plan.md",
-            "based_on_prd_id": "prd_01TEST",
+            "based_on_prd_id": "prd_01TESTXX",
             "based_on_prd_version": "old-version",
         }
     ]
     write_artifact(workspace, data)
     state = workspace / ".product-os" / "review-state.yaml"
     state.parent.mkdir(parents=True)
-    state.write_text("artifacts:\n  prd_01TEST:\n    approved_version: current-version\n", encoding="utf-8")
+    state.write_text("artifacts:\n  prd_01TESTXX:\n    approved_version: current-version\n", encoding="utf-8")
     assert "IMPLEMENTATION_REF_STALE" in codes(validate_workspace(workspace))
 
     data["implementation_refs"][0].pop("repository")
-    data["implementation_refs"][0]["based_on_prd_id"] = "prd_OTHER"
+    data["implementation_refs"][0]["based_on_prd_id"] = "prd_PTHERXXX"
     write_artifact(workspace, data)
     report_codes = codes(validate_workspace(workspace))
     assert "IMPLEMENTATION_REF_INCOMPLETE" in report_codes
@@ -544,7 +616,7 @@ def test_implementation_ref_shape_owner_and_staleness(workspace: Path) -> None:
 
 
 def test_implementation_refs_require_valid_named_review_state(workspace: Path) -> None:
-    data = metadata("prd", "prd_01TEST")
+    data = metadata("prd", "prd_01TESTXX")
     data["outcome"] = complete_outcome()
     data["implementation_refs"] = [
         {
@@ -610,12 +682,12 @@ def install_adapter(
             {
                 "name": "product-os-discovery",
                 "canonical_source": ".product-os/skills/discovery/SKILL.md",
-                "wrapper_source": f"adapters/{client}/skills/product-os-discovery/SKILL.md",
+                "wrapper_source": "adapters/_shared/skills/product-os-discovery/SKILL.md",
                 "destination": f"{client_roots[client]}/product-os-discovery/SKILL.md",
             }
         ],
     }
-    wrapper = workspace / "adapters" / client / "skills" / "product-os-discovery" / "SKILL.md"
+    wrapper = workspace / "adapters" / "_shared" / "skills" / "product-os-discovery" / "SKILL.md"
     wrapper.parent.mkdir(parents=True, exist_ok=True)
     wrapper.write_text("# Generated discovery router\n", encoding="utf-8")
     destination = workspace / client_roots[client] / "product-os-discovery" / "SKILL.md"
@@ -883,7 +955,7 @@ def prepare_installed_empty_workspace(workspace: Path, *, client: str, client_ro
     for name in ("schemas", "skills", "integrations", "adapters"):
         shutil.move(str(workspace / name), str(installed / name))
     if client == "openclaw":
-        source = installed / "adapters" / client / "skills" / "product-os-discovery" / "SKILL.md"
+        source = installed / "adapters" / "_shared" / "skills" / "product-os-discovery" / "SKILL.md"
         destination = workspace / client_root / "product-os-discovery" / "SKILL.md"
         destination.parent.mkdir(parents=True)
         destination.write_bytes(source.read_bytes())
@@ -892,6 +964,21 @@ def prepare_installed_empty_workspace(workspace: Path, *, client: str, client_ro
     )
     install_scoped_provenance(workspace, client=client)
     git(workspace, "init", "-b", "main")
+
+
+def test_missing_installed_file_is_not_misreported_as_escape_or_digest_drift(
+    workspace: Path,
+) -> None:
+    prepare_installed_empty_workspace(
+        workspace, client="codex", client_root=".agents/skills"
+    )
+    (workspace / ".product-os" / "config.yaml").unlink()
+
+    report_codes = codes(validate_workspace(workspace, "smoke-test"))
+
+    assert "PROVENANCE_FILE_MISSING" in report_codes
+    assert "SYMLINK_OR_ESCAPE_REJECTED" not in report_codes
+    assert "PROVENANCE_TREE_DIGEST_MISMATCH" not in report_codes
 
 
 def test_installed_provenance_rejects_plan_parent_and_scoped_file_tampering(workspace: Path) -> None:
@@ -976,7 +1063,7 @@ def test_smoke_requires_reachable_full_decision_basis_sha(workspace: Path) -> No
     sha = subprocess.run(
         ["git", "-C", str(workspace), "rev-parse", "HEAD"], check=True, capture_output=True, text=True
     ).stdout.strip()
-    data = metadata("opportunity", "opportunity_01DECIDE")
+    data = metadata("opportunity", "opportunity_01DECJDE")
     data["decision_events"] = [decision_event(based_on_version="friendly-label")]
     write_artifact(workspace, data)
     install_provenance(workspace)
@@ -1034,7 +1121,7 @@ def test_json_report_is_stable_and_actionable(workspace: Path) -> None:
 
 
 def test_typed_reference_fields_resolve_and_match_relationships(workspace: Path) -> None:
-    signal = metadata("signal", "signal_01EVIDENCE")
+    signal = metadata("signal", "signal_01EVJDENCE")
     write_artifact(workspace, signal)
     opportunity = metadata("opportunity", "opportunity_01TARGET")
     opportunity["relationships"] = {"signals": [signal["id"]]}
@@ -1044,7 +1131,7 @@ def test_typed_reference_fields_resolve_and_match_relationships(workspace: Path)
     assert "BROKEN_TYPED_REFERENCE" not in codes(report)
     assert "REFERENCE_RELATIONSHIP_CONTRADICTION" not in codes(report)
 
-    opportunity["evidence_ids"] = ["signal_01MISSING"]
+    opportunity["evidence_ids"] = ["signal_01MJSSJNG"]
     write_artifact(workspace, opportunity)
     report_codes = codes(validate_workspace(workspace))
     assert "BROKEN_TYPED_REFERENCE" in report_codes
@@ -1054,10 +1141,10 @@ def test_typed_reference_fields_resolve_and_match_relationships(workspace: Path)
 @pytest.mark.parametrize(
     ("field_name", "value", "expected_prefix"),
     [
-        ("opportunity_id", "signal_01EVIDENCE", "opportunity_"),
-        ("initiative_id", "signal_01EVIDENCE", "initiative_"),
-        ("product_bet_id", "signal_01EVIDENCE", "initiative_"),
-        ("outcome_contract_id", "signal_01EVIDENCE", "outcome_"),
+        ("opportunity_id", "signal_01EVJDENCE", "opportunity_"),
+        ("initiative_id", "signal_01EVJDENCE", "initiative_"),
+        ("product_bet_id", "signal_01EVJDENCE", "initiative_"),
+        ("outcome_contract_id", "signal_01EVJDENCE", "outcome_"),
     ],
 )
 def test_singular_typed_reference_prefixes_are_enforced(
@@ -1076,13 +1163,13 @@ def test_singular_typed_reference_prefixes_are_enforced(
 @pytest.mark.parametrize(
     ("field_name", "value"),
     [
-        ("evidence_ids", "signal_01MISSING"),
-        ("supporting_signal_ids", "signal_01MISSING"),
-        ("contradictory_signal_ids", "signal_01MISSING"),
-        ("child_prd_ids", "prd_01MISSING"),
-        ("owner_artifact_ids", "initiative_01MISSING"),
-        ("product_bet_ids", "prd_01MISSING"),
-        ("learnings", "learning_01MISSING"),
+        ("evidence_ids", "signal_01MJSSJNG"),
+        ("supporting_signal_ids", "signal_01MJSSJNG"),
+        ("contradictory_signal_ids", "signal_01MJSSJNG"),
+        ("child_prd_ids", "prd_01MJSSJNG"),
+        ("owner_artifact_ids", "initiative_01MJSSJNG"),
+        ("product_bet_ids", "prd_01MJSSJNG"),
+        ("learnings", "learning_01MJSSJNG"),
     ],
 )
 def test_all_typed_reference_arrays_reject_missing_targets(
@@ -1097,10 +1184,10 @@ def test_all_typed_reference_arrays_reject_missing_targets(
 @pytest.mark.parametrize(
     ("field_name", "wrong_value"),
     [
-        ("child_prd_ids", "signal_01WRONG"),
-        ("owner_artifact_ids", "signal_01WRONG"),
-        ("product_bet_ids", "signal_01WRONG"),
-        ("learnings", "signal_01WRONG"),
+        ("child_prd_ids", "signal_01WRPNGX"),
+        ("owner_artifact_ids", "signal_01WRPNGX"),
+        ("product_bet_ids", "signal_01WRPNGX"),
+        ("learnings", "signal_01WRPNGX"),
     ],
 )
 def test_typed_reference_arrays_reject_wrong_prefixes(
@@ -1113,8 +1200,8 @@ def test_typed_reference_arrays_reject_wrong_prefixes(
 
 
 def test_scalar_reference_contradiction_with_relationship_is_rejected(workspace: Path) -> None:
-    first = metadata("opportunity", "opportunity_01FIRST")
-    second = metadata("opportunity", "opportunity_01SECOND")
+    first = metadata("opportunity", "opportunity_01FJRSTX")
+    second = metadata("opportunity", "opportunity_01SECPND")
     write_artifact(workspace, first)
     write_artifact(workspace, second)
     source = metadata()
@@ -1125,14 +1212,14 @@ def test_scalar_reference_contradiction_with_relationship_is_rejected(workspace:
 
 
 def test_outcome_contract_ref_resolves_required_and_optional_ids(workspace: Path) -> None:
-    initiative = metadata("initiative", "initiative_01OWNER")
-    initiative["relationships"] = {"outcome_contract": "outcome_01CONTRACT"}
+    initiative = metadata("initiative", "initiative_01PWNERX")
+    initiative["relationships"] = {"outcome_contract": "outcome_01CPNTRACT"}
     initiative["outcome"] = complete_outcome()
     write_artifact(workspace, initiative)
-    contract = metadata("outcome_contract", "outcome_01CONTRACT")
+    contract = metadata("outcome_contract", "outcome_01CPNTRACT")
     contract["outcome"] = complete_outcome()
     write_artifact(workspace, contract)
-    learning = metadata("learning", "learning_01RESULT")
+    learning = metadata("learning", "learning_01RESVMT")
     learning["relationships"] = {"initiative": initiative["id"], "outcome_contract": contract["id"]}
     learning["outcome_contract_ref"] = {
         "owner_artifact_id": initiative["id"],
@@ -1148,16 +1235,16 @@ def test_outcome_contract_ref_resolves_required_and_optional_ids(workspace: Path
     assert "TYPED_REFERENCE_INVALID" not in report_codes
     assert "BROKEN_TYPED_REFERENCE" not in report_codes
 
-    learning["outcome_contract_ref"]["extracted_artifact_id"] = "outcome_01MISSING"
+    learning["outcome_contract_ref"]["extracted_artifact_id"] = "outcome_01MJSSJNG"
     write_artifact(workspace, learning)
     assert "BROKEN_TYPED_REFERENCE" in codes(validate_workspace(workspace))
 
 
 def test_learning_versions_must_match_owner_definition(workspace: Path) -> None:
-    initiative = metadata("initiative", "initiative_01OWNER")
+    initiative = metadata("initiative", "initiative_01PWNERX")
     initiative["outcome"] = complete_outcome()
     write_artifact(workspace, initiative)
-    learning = metadata("learning", "learning_01RESULT")
+    learning = metadata("learning", "learning_01RESVMT")
     learning["relationships"] = {"initiative": initiative["id"]}
     learning["outcome_contract_ref"] = {
         "owner_artifact_id": initiative["id"],
@@ -1172,9 +1259,9 @@ def test_learning_versions_must_match_owner_definition(workspace: Path) -> None:
 
 
 def test_structured_product_update_artifact_sources_resolve(workspace: Path) -> None:
-    signal = metadata("signal", "signal_01SOURCE")
+    signal = metadata("signal", "signal_01SPVRCE")
     write_artifact(workspace, signal)
-    update = metadata("product_update", "update_01REPORT")
+    update = metadata("product_update", "update_01REPPRT")
     update["claims"] = [
         {
             "claim": "A sourced claim",
@@ -1187,12 +1274,12 @@ def test_structured_product_update_artifact_sources_resolve(workspace: Path) -> 
     write_artifact(workspace, update)
     assert "BROKEN_TYPED_REFERENCE" not in codes(validate_workspace(workspace))
 
-    update["claims"][0]["source_references"][0]["artifact_id"] = "signal_01MISSING"
+    update["claims"][0]["source_references"][0]["artifact_id"] = "signal_01MJSSJNG"
     write_artifact(workspace, update)
     assert "BROKEN_TYPED_REFERENCE" in codes(validate_workspace(workspace))
 
 
-def decision_event(event_id: str = "decision_01BASE", **overrides) -> dict:
+def decision_event(event_id: str = "decision_01BASEXX", **overrides) -> dict:
     event = {
         "id": event_id,
         "kind": "opportunity",
@@ -1212,7 +1299,7 @@ def git(workspace: Path, *args: str) -> None:
 
 @pytest.fixture
 def decision_git_workspace(workspace: Path) -> Path:
-    data = metadata("opportunity", "opportunity_01DECIDE")
+    data = metadata("opportunity", "opportunity_01DECJDE")
     data["decision_events"] = [decision_event()]
     write_artifact(workspace, data)
     git(workspace, "init", "-b", "main")
@@ -1224,7 +1311,7 @@ def decision_git_workspace(workspace: Path) -> Path:
 
 
 def test_decision_event_payload_mutation_is_rejected(decision_git_workspace: Path) -> None:
-    data = metadata("opportunity", "opportunity_01DECIDE")
+    data = metadata("opportunity", "opportunity_01DECJDE")
     data["decision_events"] = [decision_event(rationale="Changed in place")]
     write_artifact(decision_git_workspace, data)
     assert "DECISION_EVENT_MUTATED" in codes(
@@ -1233,7 +1320,7 @@ def test_decision_event_payload_mutation_is_rejected(decision_git_workspace: Pat
 
 
 def test_decision_event_removal_is_rejected(decision_git_workspace: Path) -> None:
-    data = metadata("opportunity", "opportunity_01DECIDE")
+    data = metadata("opportunity", "opportunity_01DECJDE")
     data["decision_events"] = []
     write_artifact(decision_git_workspace, data)
     report_codes = codes(validate_workspace(decision_git_workspace, base_ref="main"))
@@ -1242,14 +1329,14 @@ def test_decision_event_removal_is_rejected(decision_git_workspace: Path) -> Non
 
 
 def test_appended_superseding_decision_event_is_allowed(decision_git_workspace: Path) -> None:
-    data = metadata("opportunity", "opportunity_01DECIDE")
+    data = metadata("opportunity", "opportunity_01DECJDE")
     data["decision_events"] = [
         decision_event(),
         decision_event(
-            "decision_01CORRECT",
+            "decision_01CPRRECT",
             choice="hold",
             rationale="Correction after new evidence",
-            supersedes="decision_01BASE",
+            supersedes="decision_01BASEXX",
         ),
     ]
     write_artifact(decision_git_workspace, data)
@@ -1268,7 +1355,7 @@ def test_workspace_default_branch_config_selects_baseline(decision_git_workspace
     config.write_text("default_branch: main\n", encoding="utf-8")
     git(decision_git_workspace, "add", ".product-os/config.yaml")
     git(decision_git_workspace, "commit", "-m", "configure default branch")
-    data = metadata("opportunity", "opportunity_01DECIDE")
+    data = metadata("opportunity", "opportunity_01DECJDE")
     data["decision_events"] = [decision_event(rationale="Changed in place")]
     write_artifact(decision_git_workspace, data)
     assert "DECISION_EVENT_MUTATED" in codes(validate_workspace(decision_git_workspace))
@@ -1289,7 +1376,7 @@ def test_unreachable_default_branch_fails_with_history_even_without_events(works
 
 
 def test_review_state_requires_reachable_verified_full_sha(workspace: Path) -> None:
-    data = metadata("prd", "prd_01TEST")
+    data = metadata("prd", "prd_01TESTXX")
     data["outcome"] = complete_outcome()
     data["implementation_refs"] = [
         {
@@ -1351,12 +1438,12 @@ def test_review_state_requires_reachable_verified_full_sha(workspace: Path) -> N
     )
     assert "IMPLEMENTATION_REVIEW_STATE_UNVERIFIED" not in codes(validate_workspace(workspace))
 
-    state.write_text("approved_artifacts:\n  prd_01TEST:\n    approved_version: not-a-sha\n", encoding="utf-8")
+    state.write_text("approved_artifacts:\n  prd_01TESTXX:\n    approved_version: not-a-sha\n", encoding="utf-8")
     assert "IMPLEMENTATION_REVIEW_STATE_UNVERIFIED" in codes(validate_workspace(workspace))
 
 
 def test_missing_git_baseline_is_named_warning(workspace: Path) -> None:
-    data = metadata("opportunity", "opportunity_01DECIDE")
+    data = metadata("opportunity", "opportunity_01DECJDE")
     data["decision_events"] = [decision_event()]
     write_artifact(workspace, data)
     report = validate_workspace(workspace, base_ref="missing-ref")
@@ -1364,7 +1451,7 @@ def test_missing_git_baseline_is_named_warning(workspace: Path) -> None:
 
 
 def test_root_commit_has_no_prior_append_only_baseline(workspace: Path) -> None:
-    data = metadata("opportunity", "opportunity_01DECIDE")
+    data = metadata("opportunity", "opportunity_01DECJDE")
     data["decision_events"] = []
     write_artifact(workspace, data)
     git(workspace, "init", "-b", "main")
@@ -1396,7 +1483,7 @@ def test_decision_basis_commit_must_contain_the_artifact(workspace: Path) -> Non
         capture_output=True,
         text=True,
     ).stdout.strip()
-    data = metadata("opportunity", "opportunity_01DECIDE")
+    data = metadata("opportunity", "opportunity_01DECJDE")
     data["decision_events"] = [decision_event(based_on_version=basis)]
     write_artifact(workspace, data)
     git(workspace, "add", ".")
@@ -1408,7 +1495,7 @@ def test_decision_basis_commit_must_contain_the_artifact(workspace: Path) -> Non
 
 
 def test_review_commit_must_contain_prd_and_real_solo_trailer(workspace: Path) -> None:
-    data = metadata("prd", "prd_01TEST")
+    data = metadata("prd", "prd_01TESTXX")
     data["outcome"] = complete_outcome()
     data["implementation_refs"] = []
     write_artifact(workspace, data)
@@ -1524,7 +1611,7 @@ def test_review_commit_cannot_approve_a_prd_it_does_not_contain(workspace: Path)
         text=True,
     ).stdout.strip()
 
-    data = metadata("prd", "prd_01TEST")
+    data = metadata("prd", "prd_01TESTXX")
     data["outcome"] = complete_outcome()
     data["implementation_refs"] = [
         {

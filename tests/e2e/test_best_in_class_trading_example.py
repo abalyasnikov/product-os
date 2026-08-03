@@ -8,7 +8,7 @@ import yaml
 
 from product_decision_os.frontmatter import parse_markdown
 from product_decision_os.validator import validate_workspace
-from scripts.run_reference_journey import REFERENCE_FIXTURE_ROOT, run_journey
+from product_decision_os.reference_journey import REFERENCE_FIXTURE_ROOT, run_journey
 
 
 HUMAN_EXAMPLE_ROOT = Path(__file__).resolve().parents[2] / "examples" / "best-in-class-trading-experience"
@@ -22,12 +22,49 @@ def test_human_trading_example_uses_lean_readable_documents() -> None:
         parse_markdown(path)
         for path in sorted((HUMAN_EXAMPLE_ROOT / "product").glob("*/*.md"))
     ]
-    assert len(documents) == 5
-    assert {document.metadata["type"] for document in documents} == {"initiative", "prd"}
-    assert sum(document.metadata["type"] == "prd" for document in documents) == 4
-    for document in documents:
+    assert len(documents) == 7
+    assert {document.metadata["type"] for document in documents} == {
+        "initiative",
+        "prd",
+        "learning",
+    }
+    assert sum(document.metadata["type"] == "prd" for document in documents) == 5
+
+    narrative = [d for d in documents if d.metadata["type"] in {"initiative", "prd"}]
+    for document in narrative:
         assert set(document.metadata) == {"schema_version", "id", "type", "title", "relationships"}
         assert len(document.body) > 1_000
+
+
+def test_human_trading_example_closes_the_loop_on_one_barrier() -> None:
+    """One barrier carries a measured result, and it closes honestly.
+
+    The Learning keeps structured frontmatter because provenance and the decision
+    must be machine-checkable; narrative artifacts stay lean by contrast.
+    """
+    learning = parse_markdown(
+        HUMAN_EXAMPLE_ROOT / "product" / "learnings" / "auto-slippage-failure-rate.md"
+    )
+    assert learning.metadata["product_bet_id"] == "prd_01TRADX002"
+    assert learning.metadata["outcome_contract_ref"] == {
+        "owner_artifact_id": "prd_01TRADX002",
+        "definition_version": "auto-slippage-v1",
+    }
+
+    # Guardrail results were never recovered, so the contract's decision rule
+    # cannot be satisfied and the outcome decision must stop short of "scale".
+    assert all(value is None for value in learning.metadata["results"]["guardrails"].values())
+    assert learning.metadata["decision_events"][-1]["choice"] == "iterate"
+
+    # The Initiative's aggregate outcome stays unmeasured; one child contract
+    # passing is not evidence for the shared claim.
+    initiative = parse_markdown(
+        HUMAN_EXAMPLE_ROOT
+        / "product"
+        / "initiatives"
+        / "best-in-class-trading-experience.md"
+    )
+    assert "learning" not in initiative.metadata.get("relationships", {})
 
 
 def _artifacts(workspace: Path) -> dict[str, dict[str, object]]:

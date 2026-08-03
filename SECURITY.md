@@ -1,6 +1,6 @@
 # Security policy
 
-Product Decision OS executes through agents that may read untrusted research text and use already configured provider tools. Treat changes to `INSTALL.md`, `skills/`, `adapters/`, `integrations/`, validator code, and release manifests as security-sensitive.
+Product OS executes through agents that may read untrusted research text and use already configured provider tools. Treat changes to `INSTALL.md`, `skills/`, `adapters/`, `integrations/`, validator code, and release manifests as security-sensitive.
 
 ## Supported version
 

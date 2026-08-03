@@ -1,7 +1,7 @@
-<!-- GENERATED: canonical_version=1.0.0 canonical_sha256=a163e23b21dcd78ece65fea6fb9418692a7eb2682cd7f6be96548560af9dd6f4 -->
+<!-- GENERATED: canonical_version=1.0.0 canonical_sha256=4891e37517174b2fc98cd264794814eacba28248f814b3f63801bd23d8cbb6bb -->
 # Claude Code adapter
 
-Install every generated `skills/<skill>/SKILL.md` wrapper at `.claude/skills/<skill>/SKILL.md` exactly as listed in `manifest.yaml`. Claude Code discovers the wrapper metadata; the wrapper then reads its named `.product-os/skills/<canonical-skill>/SKILL.md`. Canonical files remain authoritative and wrappers add no client-specific decision logic.
+Install every generated `adapters/_shared/skills/<skill>/SKILL.md` wrapper at `.claude/skills/<skill>/SKILL.md` exactly as listed in `manifest.yaml`. Claude Code discovers the wrapper metadata; the wrapper then reads its named `.product-os/skills/<canonical-skill>/SKILL.md`. Canonical files remain authoritative and wrappers add no client-specific decision logic.
 
 Resolve capability names through `integrations/capabilities.yaml` and a provider descriptor against MCP tools already configured in Claude Code. Match semantic inputs, outputs, access mode, and safety preconditions rather than assuming a fixed tool name. An incomplete match is an unavailable capability, not permission to add a fallback client.
 

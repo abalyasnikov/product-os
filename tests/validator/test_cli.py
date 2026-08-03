@@ -24,7 +24,7 @@ def test_cli_validate_json_contract(tmp_path: Path, capsys) -> None:
 def test_cli_validation_failure_is_exit_one_and_stderr(tmp_path: Path, capsys) -> None:
     install_schemas(tmp_path)
     data = metadata()
-    data["relationships"] = {"signals": ["signal_MISSING"]}
+    data["relationships"] = {"signals": ["signal_MJSSJNGX"]}
     write_artifact(tmp_path, data)
     exit_code = main(["validate", str(tmp_path)])
     captured = capsys.readouterr()
@@ -56,10 +56,10 @@ def test_cli_adapter_check_command(tmp_path: Path, capsys) -> None:
 
 def test_cli_accepts_base_ref_override(tmp_path: Path, capsys) -> None:
     install_schemas(tmp_path)
-    data = metadata("opportunity", "opportunity_01DECIDE")
+    data = metadata("opportunity", "opportunity_01DECJDE")
     data["decision_events"] = [
         {
-            "id": "decision_01BASE",
+            "id": "decision_01BASEXX",
             "kind": "opportunity",
             "choice": "pursue",
         }

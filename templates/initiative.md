@@ -30,7 +30,7 @@ Define the outcome that requires several distinct barriers to move together.
 
 | Barrier | PRD |
 |---|---|
-| <distinct user barrier> | [<PRD title>](../prds/<file>.md) |
+| <distinct user barrier> | `product/prds/<file>.md` |
 
 ## Sequencing and dependencies
 

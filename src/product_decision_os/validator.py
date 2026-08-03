@@ -1,4 +1,4 @@
-"""Product Decision OS workspace validators."""
+"""Product OS workspace validators."""
 
 from __future__ import annotations
 
@@ -57,7 +57,7 @@ RELATIONSHIP_TARGETS: dict[str, str] = {
     "updates": "update_",
 }
 INTERNAL_ID_RE = re.compile(
-    r"^(?:signal|pattern|opportunity|initiative|prd|outcome|learning|update)_[A-Za-z0-9][A-Za-z0-9_-]*$"
+    r"^(?:signal|pattern|opportunity|initiative|prd|outcome|learning|update)_[0-9A-HJKMNP-TV-Z]{8,32}$"
 )
 SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
 SPEAKER_LINE_RE = re.compile(
@@ -339,7 +339,7 @@ class WorkspaceValidator:
                 "WORKSPACE_NOT_FOUND",
                 "Workspace does not exist.",
                 path=str(self.workspace),
-                hint="Pass an existing Product Decision OS workspace directory.",
+                hint="Pass an existing Product OS workspace directory.",
             )
             return self.report
         if not self.workspace.is_dir():
@@ -751,10 +751,11 @@ class WorkspaceValidator:
         if not isinstance(artifact_id, str) or not INTERNAL_ID_RE.fullmatch(artifact_id):
             self.report.error(
                 "ARTIFACT_ID_INVALID",
-                f"Artifact ID must be a stable typed ID beginning with '{prefix}'.",
+                "Artifact ID must use a supported typed prefix followed by "
+                "8–32 uppercase Crockford Base32 characters.",
                 path=path,
                 field="id",
-                hint=f"Use an ID such as {prefix}01JEXAMPLE.",
+                hint=f"Use an ID such as {prefix}01JEXAMP1.",
             )
         elif not artifact_id.startswith(prefix):
             self.report.error(
@@ -1181,6 +1182,7 @@ class WorkspaceValidator:
                 "outcome contract",
                 "gtm hypothesis",
                 "risks and dependencies",
+                "open questions",
                 "delivery",
             ),
             "initiative": (
@@ -1225,6 +1227,19 @@ class WorkspaceValidator:
                     hint="Keep product reasoning in readable Markdown; an explicit named gap is valid, an empty section is not.",
                 )
         if artifact_type == "prd":
+            problem = sections.get("problem", "")
+            if not re.search(
+                r"(?mi)^\*\*(?:why now(?:\s*/\s*business reality)?|business reality):\*\*[ \t]*(?:\r?\n[ \t]*)?\S",
+                problem,
+            ):
+                self.report.error(
+                    "READABLE_SECTION_MISSING",
+                    "PRD Problem requires a compact, explicit 'Why now / business reality' statement.",
+                    path=path,
+                    artifact_id=artifact_id if isinstance(artifact_id, str) else None,
+                    field="body.problem.why_now",
+                    hint="State the concrete product or business trigger, or name the timing gap without inventing urgency.",
+                )
             scope = sections.get("scope", "")
             for subsection in ("Requirements", "Non-goals"):
                 if not re.search(rf"(?mi)^###[ \t]+{re.escape(subsection)}[ \t]*$", scope):
@@ -1627,7 +1642,7 @@ class WorkspaceValidator:
             value: Any = self.config
             for key in key_path:
                 value = value.get(key) if isinstance(value, Mapping) else None
-            if isinstance(value, int) and 1 <= value <= 10_000:
+            if isinstance(value, int) and 1 <= value <= 500:
                 return value
         return 500
 
@@ -2661,7 +2676,19 @@ class WorkspaceValidator:
                 )
                 return
             seen.add(relative)
+            digest.update(relative.encode("utf-8"))
+            digest.update(b"\0")
+            digest.update(expected_hash.lower().encode("ascii"))
+            digest.update(b"\0")
             target = root / relative
+            if not target.exists() and not target.is_symlink():
+                self.report.error(
+                    "PROVENANCE_FILE_MISSING",
+                    f"Manifest file '{relative}' is unavailable.",
+                    path=_relative(target, self.workspace),
+                    hint="Restore the complete release/install contents.",
+                )
+                continue
             if not self._safe_contained_path(target, root):
                 self._report_unsafe_path(target, "release provenance file")
                 continue
@@ -2683,10 +2710,6 @@ class WorkspaceValidator:
                     path=_relative(target, self.workspace),
                     hint="Replace modified files with trusted release contents.",
                 )
-            digest.update(relative.encode("utf-8"))
-            digest.update(b"\0")
-            digest.update(expected_hash.lower().encode("ascii"))
-            digest.update(b"\0")
         if digest.hexdigest() != manifest["tree_digest"].lower():
             self.report.error(
                 "PROVENANCE_TREE_DIGEST_MISMATCH",
@@ -2775,6 +2798,13 @@ class WorkspaceValidator:
             digest.update(b"\0")
             if verify_files:
                 target = self.workspace / relative
+                if not target.exists() and not target.is_symlink():
+                    self.report.error(
+                        "PROVENANCE_FILE_MISSING",
+                        "A scoped installed file is unavailable.",
+                        path=_relative(target, self.workspace),
+                    )
+                    continue
                 if not self._safe_contained_path(target, self.workspace):
                     self._report_unsafe_path(target, "installed manifest file")
                     continue

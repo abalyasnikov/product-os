@@ -1,0 +1,11 @@
+schema_version: 1
+name: evidence-waiver
+description: Proceeding before user evidence exists must remain an explicit, expiring product decision.
+source_facts: []
+allowed_numeric_claims: []
+expected_documents:
+  - file: prd.md
+    type: prd
+    evidence_ids: []
+    open_questions_required: true
+    waiver_required: true

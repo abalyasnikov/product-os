@@ -1,0 +1,69 @@
+schema_version: 1
+name: prd-output-quality
+purpose: Evaluate whether agent-produced product artifacts preserve evidence and decision quality.
+
+deterministic_contract:
+  required_sections:
+    prd:
+      - Problem
+      - Evidence
+      - JTBD
+      - Current and desired journey
+      - Scope
+      - Outcome Contract
+      - GTM hypothesis
+      - Risks and dependencies
+      - Open questions
+      - Delivery
+    initiative:
+      - Vision
+      - Why this matters
+      - Evidence and confidence
+      - Shared outcome
+      - Child PRDs
+      - Sequencing and dependencies
+      - Outcome Contract
+      - GTM hypothesis
+      - Risks and open questions
+  required_subsections:
+    prd:
+      Scope: [Requirements, Non-goals]
+  uncertainty_markers: [to establish, proposed, TBD, unknown, not measured]
+  forbidden_implementation_patterns:
+    - '(?i)^## Implementation\b'
+    - '(?i)\b(?:GET|POST|PUT|PATCH|DELETE)\s+/[A-Za-z0-9_/{}/.-]+'
+    - '(?i)\b(?:CREATE|ALTER)\s+TABLE\b'
+    - '(?i)\b(?:class|function)\s+[A-Za-z_][A-Za-z0-9_]*\s*[({]'
+    - '(?i)(?:src|app|lib)/[A-Za-z0-9_./-]+\.[A-Za-z0-9]+'
+
+model_rubric:
+  execution: requires_external_model_runtime_and_human_adjudication
+  scale: "0 = harmful or absent; 2 = usable with material gaps; 4 = decision-ready"
+  dimensions:
+    evidence_fidelity:
+      weight: 25
+      question: Does every material claim preserve its source, confidence, contradiction, and coverage gap?
+    problem_and_jtbd:
+      weight: 20
+      question: Is the blocked user value specific without prematurely selecting an implementation?
+    outcome_quality:
+      weight: 20
+      question: Does the Outcome Contract define observable better, slices, guardrails, and a human decision rule?
+    scope_and_tradeoffs:
+      weight: 15
+      question: Are requirements, non-goals, risks, dependencies, and open decisions coherent?
+    routing_and_boundaries:
+      weight: 10
+      question: Is a multi-barrier bet routed correctly and are implementation details left to engineering?
+    readability:
+      weight: 10
+      question: Can a Product Lead and downstream agent understand the decision without decoding metadata?
+  critical_failures:
+    - Invented evidence, customer demand, ARR, baseline, target, or observed result
+    - Missing evidence waiver when proceeding without sufficient evidence
+    - Unsafe or contradictory requirement hidden by aggregate prose
+    - Initiative and child PRDs duplicate or conflict on ownership
+  proposed_gate:
+    note: Informational until calibrated on blinded human-rated outputs.
+    no_critical_failures: true
+    minimum_weighted_score: 3.0

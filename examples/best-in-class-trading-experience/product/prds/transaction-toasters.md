@@ -13,6 +13,8 @@ relationships:
 
 After confirming a transaction, the user was taken through full-screen pending and success pages that blocked the entire wallet. They could not start another swap, inspect the portfolio, or browse while waiting. The cost was especially visible for bridge transactions that can take minutes.
 
+**Why now / business reality:** Blocking status affected every supported transaction type and was most costly during long bridge waits; the proposed effect on transaction frequency had not yet been measured.
+
 ## Evidence
 
 The existing flow visibly blocked all further work after submission. Ethereum confirmation could take seconds and bridge settlement much longer. Power users performing several transactions had to wait through the same blocking sequence repeatedly. Phantom and Rainbow used non-blocking status patterns.

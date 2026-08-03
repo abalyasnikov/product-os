@@ -56,4 +56,4 @@ The shared result supports one trading-continuity Initiative while preserving fo
 
 ## Measurement interpretation
 
-Every quantitative result above is synthetic and illustrative. It proves that Product Decision OS can bind an Initiative outcome, retain child PRD outcomes, import a provider result, record limitations, and produce a decision. It does not claim a real post-launch result.
+Every quantitative result above is synthetic and illustrative. It proves that Product OS can bind an Initiative outcome, retain child PRD outcomes, import a provider result, record limitations, and produce a decision. It does not claim a real post-launch result.

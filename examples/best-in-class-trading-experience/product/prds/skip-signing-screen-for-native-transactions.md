@@ -15,6 +15,8 @@ Native swap, approve, and bridge flows showed a signing screen after the user ha
 
 The screen remained valuable when something material changed or a warning existed. The product problem was not the presence of confirmation; it was showing the same confirmation unconditionally.
 
+**Why now / business reality:** Competitors and Zerion Perps already used the shorter interaction pattern while native wallet flows still repeated a clean review; the abandonment impact had not yet been measured. This is where the principle order in [strategy context](../../context/strategy.md) did visible work: **Fast** argued for removing the screen outright, **Reliable** outranks it, so the removal is conditional on clean simulation and security checks instead of unconditional.
+
 ## Evidence
 
 The duplicate step was directly observable in the current journey. Phantom, Rainbow, and Rabby already skipped an equivalent screen for eligible native flows, and Zerion used the same interaction pattern in Perps.

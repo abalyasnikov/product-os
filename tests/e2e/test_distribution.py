@@ -2,15 +2,17 @@ from __future__ import annotations
 
 import json
 import hashlib
+import re
 import shutil
 import subprocess
 from pathlib import Path
 
 import pytest
 import yaml
+from jsonschema import Draft202012Validator
 
-from scripts.install_workspace import InstallError, main as install_main, plan_install, write_plan
-from scripts.manifest import build, main as manifest_main, verify, write_manifest
+from product_decision_os.installer import InstallError, main as install_main, plan_install, write_plan
+from product_decision_os.manifest import build, main as manifest_main, verify, write_manifest
 
 
 def test_release_manifest_matches_repository(repo_root: Path) -> None:
@@ -110,6 +112,40 @@ def test_readme_references_shipped_diagram(repo_root: Path) -> None:
     readme = (repo_root / "README.md").read_text(encoding="utf-8")
     assert "docs/assets/product-loop.png" in readme
     assert (repo_root / "docs/assets/product-loop.png").stat().st_size > 10_000
+
+
+def test_agent_instruction_entrypoints_are_single_source(repo_root: Path) -> None:
+    assert (repo_root / "CLAUDE.md").read_text(encoding="utf-8") == "@AGENTS.md\n"
+    agents = (repo_root / "AGENTS.md").read_text(encoding="utf-8")
+    assert "Canonical skills: `skills/`" in agents
+    assert "Generated client adapters: `adapters/`" in agents
+    install = (repo_root / "INSTALL.md").read_text(encoding="utf-8").lower()
+    assert "v1 does not create repositories" in install
+    assert "do not copy files manually" in install
+    assert "copy these canonical directories" not in install
+
+
+def test_repository_markdown_has_no_broken_relative_links(repo_root: Path) -> None:
+    missing: list[str] = []
+    for path in repo_root.rglob("*.md"):
+        if any(part in {".git", ".venv", "build", "dist"} for part in path.parts):
+            continue
+        for target in re.findall(r"\[[^\]]*\]\(([^)]+)\)", path.read_text(encoding="utf-8")):
+            if target.startswith(("#", "http://", "https://", "mailto:")):
+                continue
+            relative_target = target.split("#", 1)[0]
+            if relative_target and not (path.parent / relative_target).resolve().exists():
+                missing.append(f"{path.relative_to(repo_root)} -> {relative_target}")
+    assert missing == []
+
+
+def test_solo_walkthrough_config_matches_canonical_schema(repo_root: Path) -> None:
+    walkthrough = (repo_root / "docs/getting-started.md").read_text(encoding="utf-8")
+    match = re.search(r"```yaml\n(.*?)\n```", walkthrough, re.DOTALL)
+    assert match is not None
+    config = yaml.safe_load(match.group(1))
+    schema = json.loads((repo_root / "schemas/config.schema.json").read_text(encoding="utf-8"))
+    assert list(Draft202012Validator(schema).iter_errors(config)) == []
 
 
 def _relocated_release(repo_root: Path, destination: Path) -> Path:

@@ -1,4 +1,4 @@
-"""Deterministic validation tooling for Product Decision OS workspaces."""
+"""Deterministic validation tooling for Product OS workspaces."""
 
 from .validator import ValidationReport, validate_workspace
 

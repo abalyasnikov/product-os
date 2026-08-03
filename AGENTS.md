@@ -1,19 +1,19 @@
 # Contributor contract
 
-Product Decision OS is an agent-native, Git-backed product decision system.
+Product OS is an agent-native, Git-backed product decision system.
 
 ## Source of truth
 
 - Product behavior: `docs/spec/product-decision-os.md`
-- Shared implementation contract: `IMPLEMENTATION_PLAN.md`
+- Verification and release contract: `docs/verification.md`
 - Schemas: `schemas/`
 - Canonical skills: `skills/`
-- Generated client adapters: `adapters/`
+- Generated client adapters: `adapters/` (regenerate with `python scripts/generate_adapters.py`)
 
 ## Working rules
 
 - Preserve evidence provenance. Never add secrets, raw transcripts, or customer PII.
-- Keep Product Decision OS separate from engineering planning. Linear owns delivery; code repositories own implementation plans.
+- Keep Product OS separate from engineering planning. Linear owns delivery; code repositories own implementation plans.
 - Do not invent custom MCP servers. Integrations are capability mappings and instructions for existing provider MCPs.
 - Use stable typed IDs and explicit artifact relationships.
 - Add tests for every validator behavior and failure path.

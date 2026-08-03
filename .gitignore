@@ -7,3 +7,4 @@ build/
 *.egg-info/
 .DS_Store
 .product-os.local.yaml
+CLAUDE.local.md

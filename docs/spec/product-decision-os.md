@@ -1,18 +1,20 @@
-# Product Decision OS
+# Product OS
 
-Status: Draft
+Status: V1 reference implementation
 
-Working name: Product Decision OS
+Name: Product OS
 
-Working category: Product decision infrastructure for agentic teams
+Category: Product decision infrastructure for agentic teams
+
+Implementation state: the local reference implementation and deterministic evidence-to-learning journey are complete and verified. Public one-link distribution, live provider flows, and calibrated model-quality evaluation remain separate release checks; they are not represented as already verified.
 
 ## Vision
 
-Build an open-source, agent-native Product Decision OS for software teams.
+Build an open-source, agent-native Product OS for software teams.
 
 Most spec-driven systems begin with an idea or feature request, after the most important discovery questions have already been compressed or lost. Most delivery systems stop at implementation, merge, or release readiness, before the real user outcome is known.
 
-Product Decision OS begins with traceable evidence and ends with a measured product decision. It turns fragmented customer evidence into Product Bets, PRDs, Outcome Contracts, delivery context, Learnings, and team updates without requiring another product-management UI.
+Product OS begins with traceable evidence and ends with a measured product decision. It turns fragmented customer evidence into Product Bets, PRDs, Outcome Contracts, delivery context, Learnings, and team updates without requiring another product-management UI.
 
 Its purpose is not to produce more documents. Its purpose is to help teams complete more evidence-backed learning loops:
 
@@ -99,6 +101,14 @@ flowchart LR
 
 ## Artifact model
 
+### Strategy context
+
+A single readable file at `context/strategy.md` holding positioning and ICP, the current year's goal and targets, where value comes from, ordered product principles, explicit trade-offs, MUST/SHOULD/COULD/WON'T priorities for the period, competitive position, the quality bar, and the questions every PRD must answer.
+
+It is deliberately not a graph artifact: no stable ID, no schema, no relationships, no validator coverage. Evidence establishes that a problem is real; strategy context establishes why this team should act on it now. Discovery, PRD interrogation, PRD review, and Initiative read it before judging strategic fit, and record an explicit gap when it is absent or past its `review_by` date. Product workflows never write to it — changing strategy is its own human decision.
+
+One file is a constraint rather than a simplification. A strategy context that grows into a second planning database stops being read, and an unread strategy file is indistinguishable from no strategy at all.
+
 ### Signal
 
 An atomic piece of evidence describing user behavior, need, friction, request, or business impact.
@@ -134,7 +144,9 @@ The reference implementation includes a curated historical Zerion example showin
 
 ### PRD
 
-The approved product contract for one coherent problem or barrier. It contains the problem, evidence, current and desired journey, outcome, requirements, non-goals, Outcome Contract, risks, dependencies, GTM hypothesis, and links to related artifacts.
+The approved product contract for one coherent problem or barrier. Its readable contract contains the problem with a compact, explicit **why now / business reality** statement, evidence, JTBD, current and desired journey, requirements, non-goals, Outcome Contract, GTM hypothesis, risks and dependencies, separate open questions, and delivery links. Open questions may explicitly be `None`; they are not hidden inside the risk list.
+
+Competitors and alternatives, customer context, revenue context, and references are optional modules. Include them only when they change the product decision or help a reviewer verify it. For B2B work, customer and revenue context may carry the account or segment, request provenance, commercial stage and timing, and permitted ARR, expansion, pipeline, or revenue-at-risk; sensitive values remain external or use a revenue band. ARR informs the trade-off but never becomes an automatic priority score. References do not duplicate source links already clear in Evidence.
 
 A PRD defines why and what. Engineering owns implementation design.
 
@@ -142,25 +154,25 @@ A PRD defines why and what. Engineering owns implementation design.
 
 An optional downstream engineering artifact describing how an approved PRD will be implemented. Simple work does not require one. A PRD may reference zero or more plans when several codebases or independently owned technical systems are involved.
 
-The canonical name is **Implementation Plan**; teams may use “Implementation Spec,” “Technical Spec,” or “Engineering Plan” as interface aliases. It normally lives in the relevant code repository and is owned by engineering, a tech lead, or a coding agent under engineering review. Product Decision OS stores only references:
+The canonical name is **Implementation Plan**; teams may use “Implementation Spec,” “Technical Spec,” or “Engineering Plan” as interface aliases. It normally lives in the relevant code repository and is owned by engineering, a tech lead, or a coding agent under engineering review. Product OS stores only references:
 
 ```yaml
 implementation_refs:
   - repository: github.com/example/product-app
     path: specs/first-swap/plan.md
-    based_on_prd_id: prd_01JEXAMPLE
+    based_on_prd_id: prd_01JEXAMP1
     based_on_prd_version: git-commit
 ```
 
 An Implementation Plan may contain architecture, component boundaries, internal state machines, API and data contracts, migrations, rollout and rollback, observability, testing strategy, and technical trade-offs. Engineering tasks, estimates, and sequencing remain in Linear.
 
-Durable architecture decisions that must survive plan regeneration belong in linked ADRs in the code repository. Product Decision OS keeps references to them through the Implementation Plan rather than copying them into the product repository.
+Durable architecture decisions that must survive plan regeneration belong in linked ADRs in the code repository. Product OS keeps references to them through the Implementation Plan rather than copying them into the product repository.
 
 User-visible behavior, journeys, product states, acceptance scenarios, requirements, and non-goals remain in the PRD even when an Implementation Plan exists. A plan cannot redefine the target user, product outcome, scope, or Outcome Contract. If implementation discovery requires one of those changes, the agent proposes a reviewed PRD change first.
 
 When an approved PRD changes materially, the agent flags every plan based on an older PRD version for engineering review. It does not maintain a separate plan lifecycle or rewrite an external plan automatically.
 
-The absence of an Implementation Plan does not block Linear Project creation unless the team's engineering policy explicitly requires one. Product Decision OS validates the reference shape and `based_on_prd_version`, not the plan's technical correctness or approval state.
+The absence of an Implementation Plan does not block Linear Project creation unless the team's engineering policy explicitly requires one. Product OS validates the reference shape and `based_on_prd_version`, not the plan's technical correctness or approval state.
 
 ### Outcome Contract
 
@@ -204,7 +216,7 @@ outcome:
 
 The **measurement definition** is a product decision and must always include an observable baseline or current state, target outcome, method, relevant slices, guardrails, window or review date, and decision rule. The **measurement binding** connects that definition to a provider query, case set, review process, or manual result import. Its measurement anchor defines when the observation window starts: actual feature exposure when available, otherwise a verified release or explicit manual event.
 
-A PRD may be approved when its definition is complete. Delivery handoff requires the binding to be `executable`, `manual`, or `planned` with an owner and a due date no later than release. An executable binding records its query or case-set reference, definition version, verifier, and verification time. If that definition changes or cannot be verified, the binding returns to `planned` until an owner reconfirms it. Outcome Review cannot be completed until the binding is executable or a manually imported result has recorded provenance, the actual measurement anchor is recorded, and the configured window has elapsed. For a released experience, actual exposure is preferred over a project-completion date; pre-release or qualitative methods use an explicit evaluation event. Product Decision OS validates the presence and freshness of this contract metadata; it never claims to validate a provider's event taxonomy, query semantics, or underlying data correctness automatically.
+A PRD may be approved when its definition is complete. Delivery handoff requires the binding to be `executable`, `manual`, or `planned` with an owner and a due date no later than release. An executable binding records its query or case-set reference, definition version, verifier, and verification time. If that definition changes or cannot be verified, the binding returns to `planned` until an owner reconfirms it. Outcome Review cannot be completed until the binding is executable or a manually imported result has recorded provenance, the actual measurement anchor is recorded, and the configured window has elapsed. For a released experience, actual exposure is preferred over a project-completion date; pre-release or qualitative methods use an explicit evaluation event. Product OS validates the presence and freshness of this contract metadata; it never claims to validate a provider's event taxonomy, query semantics, or underlying data correctness automatically.
 
 ### Learning
 
@@ -229,11 +241,11 @@ Every persisted artifact shares a minimal envelope:
 
 ```yaml
 schema_version: 1
-id: prd_01JEXAMPLE
+id: prd_01JEXAMP1
 type: prd
 title: Example
 relationships:
-  opportunity: opportunity_01JEXAMPLE
+  opportunity: opportunity_01JEXAMP1
 ```
 
 Filenames remain human-readable and may change. Schemas constrain valid relationship types for each artifact. Relationships use stable IDs; Markdown links may be generated for navigation but are not identity. Agents maintain IDs and links rather than asking PMs to edit metadata. Git records author, time, and version.
@@ -305,7 +317,7 @@ Opportunity and outcome decisions are append-only events inside the artifact tha
 
 ```yaml
 decision_events:
-  - id: decision_01JEXAMPLE
+  - id: decision_01JEXAMP1
     kind: opportunity # opportunity | outcome
     choice: pursue
     decided_by: user-handle
@@ -355,7 +367,7 @@ Each item follows one output contract:
 
 ```yaml
 type: outcome_decision
-artifact_id: prd_01JEXAMPLE
+artifact_id: prd_01JEXAMP1
 title: First-swap onboarding
 why_now: Measurement window ended three days ago
 decision_required: [scale, iterate, hold, kill, complete]
@@ -371,11 +383,11 @@ Items are ordered without a universal score: overdue decisions and review dates;
 
 ## Prioritization and delivery boundary
 
-Product Decision OS owns product decisions and their evidence. Linear owns engineering estimates, issue breakdown, delivery priority, dependencies, cycles, and execution state.
+Product OS owns product decisions and their evidence. Linear owns engineering estimates, issue breakdown, delivery priority, dependencies, cycles, and execution state.
 
-Product Decision OS may read Linear data when comparing tradeoffs or preparing updates, but does not duplicate or override it. Before delivery begins, it verifies only that engineering feasibility was considered, delivery constraints are known, a Linear Project exists, and current estimates remain in Linear.
+Product OS may read Linear data when comparing tradeoffs or preparing updates, but does not duplicate or override it. Before delivery begins, it verifies only that engineering feasibility was considered, delivery constraints are known, a Linear Project exists, and current estimates remain in Linear.
 
-Product Decision OS may generate an engineering handoff from the approved PRD and link an externally created Implementation Plan. It does not own technical architecture, author the final plan, decompose it into tasks, or treat the plan as a second product truth.
+Product OS may generate an engineering handoff from the approved PRD and link an externally created Implementation Plan. It does not own technical architecture, author the final plan, decompose it into tasks, or treat the plan as a second product truth.
 
 Opportunity and Initiative decisions may use raw factors such as evidence strength, affected users or accounts, ARR or pipeline, strategic fit, urgency, risk, and known capacity constraints. RICE and other scoring frameworks may be added later as optional views. They never make the decision automatically.
 
@@ -414,28 +426,34 @@ Slack, support, CRM, Notion, and additional interview providers are later adapte
 
 ## Runtime boundary
 
-Product Decision OS is a domain layer, not a standalone agent runtime. It owns the product methodology, artifact schemas, canonical skills, examples, deterministic local validation, and tests. Existing agents execute the workflows; existing provider MCPs supply external capabilities.
+Product OS is a domain layer, not a standalone agent runtime. It owns the product methodology, artifact schemas, canonical skills, examples, deterministic local validation, and tests. Existing agents execute the workflows; existing provider MCPs supply external capabilities.
 
 Deterministic tooling validates only repository invariants: schemas, unique IDs, allowed relationships, broken references, append-only decision event IDs, evidence policy, obvious credentials, and generated-adapter freshness. It does not implement workflow commands for approval, synchronization, Decision Queue, or Outcome Review.
 
-The validation package may expose one entry point such as `product-os validate` with selectable checks. It is not a general Product Decision OS CLI.
+The validation package may expose one entry point such as `product-os validate` with selectable checks. It is not a general Product OS CLI.
 
 V1 does not depend on Spec Kit, APM, or another packaging ecosystem, and it does not reimplement their orchestration. Later releases may distribute the same canonical source as a compatible bundle or package when that improves installation without creating a second source of truth.
 
-Code repositories may use Spec Kit, OpenSpec, or another engineering workflow to derive an Implementation Plan and tasks from the approved PRD. Product Decision OS interoperates through Git references rather than embedding those runtimes.
+Code repositories may use Spec Kit, OpenSpec, or another engineering workflow to derive an Implementation Plan and tasks from the approved PRD. Product OS interoperates through Git references rather than embedding those runtimes.
 
 ## Repository architecture
 
-Each team uses a dedicated private Product Decision OS Git repository.
+Each team uses a dedicated private Product OS Git repository.
 
 ```text
 .product-os/
 ├── config.yaml
-├── manifest.yaml
+├── install-plan.json
+├── installed-manifest.json
+├── release-manifest.json
 ├── schemas/
 ├── templates/
 ├── skills/              # canonical agent-neutral source
-└── adapters/            # generated client metadata
+├── adapters/            # generated client metadata
+└── integrations/        # capability mappings for existing MCPs
+
+context/
+└── strategy.md         # durable company/product decision context, not a graph artifact
 
 product/
 ├── signals/
@@ -466,13 +484,13 @@ PRD and Initiative templates define a small required set of readable headings. V
 
 1. The user sends the public installation-instruction URL to an agent.
 2. The agent resolves the canonical project URL to an immutable commit and shows the origin, publisher, and commit before installation. A fork or alternate origin requires explicit confirmation.
-3. The agent asks for a private Git repository URL or offers to create one after explicit confirmation.
+3. The agent asks for an existing private Git repository URL or local path. If none exists, the user creates one and returns with its location; V1 does not create repositories.
 4. The agent previews the files it will add and does not overwrite existing content.
 5. The agent verifies the release manifest and content hashes, then installs the schemas, templates, canonical skills, and adapter for the current client.
 6. The user selects optional connectors and follows each provider MCP's existing authentication flow.
 7. The agent runs validation and read-only capability checks, shows the exact proposed commit, and commits or pushes only after confirmation.
 
-Product Decision OS implements no OAuth flow. When a connector needs authentication, the agent invokes or explains the provider MCP's existing setup. No manual editing of Product Decision OS JSON or TOML configuration is required for the reference setup.
+Product OS implements no OAuth flow. When a connector needs authentication, the agent invokes or explains the provider MCP's existing setup. No manual editing of Product OS JSON or TOML configuration is required for the reference setup.
 
 Smoke tests verify installation provenance and content hashes, Git access, schema validation, artifact relationships, skill discovery, read-only MCP availability, graceful connector degradation, and absence of credentials in proposed commits. They do not create production Linear objects or mutate analytics data. Automated self-update, migrations, and rollback orchestration are outside the initial V1 loop; hardening reinstallation comes after the product workflow is proven.
 
@@ -547,7 +565,7 @@ Setup, Decision Queue, schemas, and client adapters exist only to make those ver
 - Full transcript storage in Git.
 - Automatic product decisions.
 - Engineering task decomposition, estimation, or delivery sequencing.
-- Authoring, approving, or maintaining engineering-owned Implementation Plans inside the Product Decision OS repository.
+- Authoring, approving, or maintaining engineering-owned Implementation Plans inside the Product OS repository.
 - Mandatory RICE scoring.
 - Full GTM execution.
 - Automated self-update and schema-migration framework.
@@ -588,7 +606,7 @@ At least one real Product Bet must complete the public system end to end: eviden
 
 ### V1 release readiness
 
-A new team initializes a private repository from one instruction link and passes automated smoke tests without manually editing Product Decision OS or agent configuration files. The reference journey passes in fixtures, and the Portfolio proof passes with the Reference pilot connector profile. The pilot must preserve every evidence reference, create no duplicate Linear object during retries, make no unsupported outcome claim, and leave every human decision attributable to a person and Git version. Unavailable non-pilot adapters may remain explicitly degraded.
+A new team initializes an existing private repository from one instruction link and passes automated smoke tests without manually editing Product OS or agent configuration files. The reference journey passes in fixtures, and the Portfolio proof passes with the Reference pilot connector profile. The pilot must preserve every evidence reference, create no duplicate Linear object during retries, make no unsupported outcome claim, and leave every human decision attributable to a person and Git version. Unavailable non-pilot adapters may remain explicitly degraded.
 
 ### Reference V1 journey
 
@@ -621,7 +639,7 @@ environment-specific checks and must be reported independently.
 4. **Privacy:** Git stores evidence references by default; excerpts are opt-in and anonymized; the exact payload is shown before commit; credentials and full transcripts are blocked.
 5. **End-to-end proof:** fixtures and one real private-repository pilot complete the Reference V1 journey without lost evidence, duplicate external objects, or unattributed decisions.
 
-Detailed pass/fail cases belong in `tests/v1-acceptance-plan.md`, keeping this document focused on product and system behavior.
+The operational proof matrix lives in `docs/verification.md`; executable pass/fail cases live under `tests/`. This document stays focused on product and system behavior.
 
 ## Suggested implementation sequence
 

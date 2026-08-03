@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://productdecisionos.org/schemas/common.schema.json",
-  "title": "Product Decision OS common artifact frontmatter",
+  "title": "Product OS common artifact frontmatter",
   "type": "object",
   "required": [
     "schema_version",

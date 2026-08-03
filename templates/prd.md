@@ -13,19 +13,21 @@ relationships:
 
 ## Problem
 
-Who is blocked, what happens today, and why it matters.
+<Who is blocked, what happens today, and why it matters.>
+
+**Why now / business reality:** <Concrete trigger or named timing gap in 1–3 sentences.>
 
 ## Evidence
 
-Link the source Signals or Patterns and state the confidence and gaps. Do not paste transcripts.
+<Link the source Signals or Patterns and state confidence, contradictions, and coverage gaps. Do not paste transcripts.>
 
 ## JTBD
 
-When ..., I want ..., so that ...
+<When ..., I want ..., so that ...>
 
 ## Current and desired journey
 
-Describe the observable change without prescribing implementation.
+<Current observable journey → desired observable journey, without prescribing implementation.>
 
 ## Scope
 
@@ -39,7 +41,7 @@ Describe the observable change without prescribing implementation.
 
 ## Outcome Contract
 
-Explain in one sentence what evidence would make the Product Lead call this better.
+<One sentence explaining what evidence would make the Product Lead call this better.>
 
 ```yaml product-os:outcome
 definition:
@@ -67,12 +69,21 @@ binding:
 
 ## GTM hypothesis
 
-Audience, promise, discovery channel, adoption action, and how launch adoption will be measured. If GTM is not applicable, say why.
+<Audience, promise, discovery channel, adoption action, and launch measurement—or why GTM is not applicable.>
 
 ## Risks and dependencies
 
-- <risk, open question, or external dependency>
+- <risk or external dependency>
+
+## Open questions
+
+- <question that could change the product decision, or "None">
 
 ## Delivery
 
-Link the Linear project after handoff. Link an engineering-owned Implementation Plan only when one exists.
+<Linear project link after handoff, plus an engineering-owned Implementation Plan only when one exists. Use "Not handed off" while pending.>
+
+<!-- Optional decision context: add a separate References, Competitors and alternatives,
+Customer context, or Revenue context section only when it changes the decision or helps a
+reviewer verify it. For B2B work, Customer context may include the account/segment, request
+source, commercial stage, timing, and permitted ARR or revenue band. Do not duplicate Evidence. -->

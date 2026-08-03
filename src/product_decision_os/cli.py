@@ -1,4 +1,4 @@
-"""Command-line interface for deterministic Product Decision OS validation."""
+"""Command-line interface for deterministic Product OS validation."""
 
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ class _Parser(argparse.ArgumentParser):
 
 
 def _parser() -> argparse.ArgumentParser:
-    parser = _Parser(prog="product-os", description="Validate a Product Decision OS workspace")
+    parser = _Parser(prog="product-os", description="Validate a Product OS workspace")
     parser.add_argument("command", choices=COMMANDS)
     parser.add_argument("workspace", nargs="?", default=".")
     parser.add_argument(

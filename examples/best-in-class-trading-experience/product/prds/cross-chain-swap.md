@@ -15,6 +15,8 @@ Users cannot express a simple trade intent when the asset they own and the asset
 
 This is product friction, not an inherently separate user job. The user wants the destination asset; manually coordinating bridge and swap is incidental work.
 
+**Why now / business reality:** Cross-chain swap had become a visible market baseline while the observed Zerion journey still required manual bridging; the frequency and completion impact had not yet been measured. This barrier came from the competitive position recorded in [strategy context](../../context/strategy.md) rather than from user requests — nobody asked for it, and staying behind the baseline would have cost the prosumer positioning anyway.
+
 ## Evidence
 
 In a first-use walkthrough, a user wanted to buy HYPE on HyperEVM with funds on Ethereum. HyperEVM did not appear in the network list because the user had no balance there, mobile receive-token search was implicitly filtered by the current network, and switching networks lost the original context. The only viable path was a manual bridge.

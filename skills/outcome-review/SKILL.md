@@ -3,6 +3,8 @@ name: product-os-outcome-review
 canonical_version: 1.0.0
 description: Compare observed results with an approved Outcome Contract and draft a Learning for a human decision.
 capabilities:
+  - git.review.read
+  - git.commit.read
   - delivery.project.read
   - analytics.query
 human_gates:
@@ -17,7 +19,7 @@ Before reading artifacts, delivery state, manual input, analytics/provider resul
 
 ## Phase A — read-only query and analysis
 
-1. Resolve the single Product Bet identity (standalone PRD ID or Initiative ID) and exact Outcome Contract definition/version. Never resolve a separate `bet_` artifact. The contract must be embedded in its owner or referenced once by stable `outcome_` ID when extracted.
+1. Read `.product-os/config.yaml`, then verify the approved owner version through exactly the configured Git capability: provider mode uses `git.review.read`; solo mode uses `git.commit.read` plus the verified explicit approval trailer. Never fall back between review modes. Resolve the single Product Bet identity (standalone PRD ID or Initiative ID) and exact Outcome Contract definition/version from that approved version. Never resolve a separate `bet_` artifact. The contract must be embedded in its owner or referenced once by stable `outcome_` ID when extracted.
 2. Require a recorded actual measurement anchor: exposure event when available, otherwise verified release or explicit manual evaluation event. Never infer the anchor from Linear completion.
 3. Require either a verified executable binding or a manually imported result with provider/source, retrieval time, definition version, and explicit human-confirmed provenance.
 4. Verify the configured observation window has elapsed. Before then, report `awaiting measurement`; do not make an outcome claim.
@@ -39,6 +41,7 @@ Before reading artifacts, delivery state, manual input, analytics/provider resul
 - Manual imports preserve provenance and require confirmation; they are not silently promoted to executable bindings.
 - Analytics providers are read-only for this workflow. Never mutate provider data or implement a fallback API client.
 - Conflicting or incomplete results remain visible in the Learning draft and are not auto-resolved.
+- If the configured Git approval source is unavailable, the Outcome Contract version is unverified and no outcome claim may proceed.
 
 ## Next workflow
 

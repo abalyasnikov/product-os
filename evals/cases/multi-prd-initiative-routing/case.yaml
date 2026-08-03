@@ -1,0 +1,27 @@
+schema_version: 1
+name: multi-prd-initiative-routing
+description: A shared cross-chain outcome must route distinct barriers into child PRDs without duplicating their requirements in the Initiative.
+source_facts:
+  - id: signal_01EVALROUTE001
+    fact: A cross-chain trade required the user to reason about bridge and swap as disconnected actions.
+    confidence: directional
+  - id: signal_01EVALROUTE002
+    fact: A source-chain confirmation looked complete while destination settlement was still pending.
+    confidence: directional
+allowed_numeric_claims: []
+expected_documents:
+  - file: initiative.md
+    type: initiative
+    evidence_ids: [signal_01EVALROUTE001, signal_01EVALROUTE002]
+    open_questions_required: true
+  - file: cross-chain-swap.md
+    type: prd
+    evidence_ids: [signal_01EVALROUTE001]
+    open_questions_required: true
+  - file: bridge-progress.md
+    type: prd
+    evidence_ids: [signal_01EVALROUTE002]
+    open_questions_required: true
+routing:
+  initiative_file: initiative.md
+  child_files: [cross-chain-swap.md, bridge-progress.md]

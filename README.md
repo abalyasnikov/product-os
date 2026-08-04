@@ -4,6 +4,8 @@
 
 Product OS helps Product Leads and PMs turn customer evidence into product bets, readable PRDs, delivery context, and measured learning — without adding another product-management UI.
 
+It grew out of running product this way on a real team. [How I rebuilt product work around coding agents](https://balyasnikov.com/writing/product-work-around-coding-agents) is the field report: what broke, what replaced it, and the trading case the worked example below comes from.
+
 [![CI](https://github.com/abalyasnikov/product-os/actions/workflows/ci.yml/badge.svg)](https://github.com/abalyasnikov/product-os/actions/workflows/ci.yml)
 [![Status: V1 reference implementation](https://img.shields.io/badge/status-V1_reference_implementation-2563eb)](docs/spec/product-os.md)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776ab)](pyproject.toml)

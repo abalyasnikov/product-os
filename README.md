@@ -108,21 +108,31 @@ It does not replace Linear or Jira, analytics tools, transcript providers, code 
 
 ## Start with your agent
 
-Give Codex, Claude Code, OpenClaw, or another capable agent the installation instructions and an existing private Git repository. If needed, create the empty repository first. The agent previews the source, target, configuration, and every write before setup; optional provider connections degrade gracefully when unavailable.
+You need two repositories: this one as the source, and your own private one as the destination. Product OS installs into the second and never creates it for you.
 
 > [!IMPORTANT]
-> No release has been published yet, so one-link installation stays disabled by design. Until then the only accepted source is a local checkout at a commit you confirm yourself. The installer fails closed rather than trusting a URL it cannot pin.
+> No release has been published yet, so one-link installation stays disabled by design. Until then the only accepted source is a local checkout at a commit you confirm yourself. The installer fails closed rather than trusting a URL it cannot pin — which is why the first step is a clone you can inspect, not a link you paste.
 
-Send your agent one request:
+Clone this repository:
+
+```bash
+git clone https://github.com/abalyasnikov/product-os.git
+```
+
+Then send your agent one request, replacing both paths with real ones:
 
 ```text
-Set up Product OS from this local checkout at the exact commit I confirm,
-following INSTALL.md. Use the existing private Git repository I provide,
-preview every change, run the read-only checks, and then ask me for the
-first customer signal. Help me inspect the evidence and decide whether it
-deserves a Product Bet; continue toward a PRD, delivery, measurement, and
-Learning only as real inputs and approvals become available.
+Set up Product OS from the local checkout at <path-to-this-clone>, following
+its INSTALL.md. Show me the origin and exact commit, and wait for me to
+confirm them before writing anything. Install into my existing private Git
+repository at <path-or-url-of-your-repo>. Preview every change, run the
+read-only checks, and then ask me for the first customer signal. Help me
+inspect the evidence and decide whether it deserves a Product Bet; continue
+toward a PRD, delivery, measurement, and Learning only as real inputs and
+approvals become available.
 ```
+
+The agent previews the source, target, configuration, and every write before setup; optional provider connections degrade gracefully when unavailable.
 
 See [INSTALL.md](INSTALL.md) for the installation contract, and the [solo walkthrough](docs/getting-started.md) for the path from that first signal to a decision you can defend later — no connectors required.
 

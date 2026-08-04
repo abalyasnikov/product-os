@@ -14,7 +14,13 @@ That runs on a synthetic dataset with real local Git commits. It shows the shape
 
 ## 1. Install locally
 
-Send an agent the absolute path to `INSTALL.md` in a trusted checkout, and confirm the local origin and commit it shows you. The agent asks for the rest; solo mode without connectors settles at:
+Clone the source so it is something you can inspect rather than a link you trust:
+
+```bash
+git clone https://github.com/abalyasnikov/product-os.git
+```
+
+Send an agent the absolute path to `INSTALL.md` inside that clone, plus the path or URL of the private repository you want Product OS installed into. Confirm the origin and commit the agent shows you before it writes anything. It asks for the rest; solo mode without connectors settles at:
 
 ```yaml
 schema_version: 1

@@ -33,8 +33,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "35936a448ce2a817da90e34896069c9ec393df04fbb6fa23763ac90af679f6db",
-      "size": 10020
+      "sha256": "40817f526b015c30ba8436278d8108a14e3983c9b93ddc57adb735b0bd4fd861",
+      "size": 10343
     },
     {
       "path": "SECURITY.md",
@@ -138,8 +138,8 @@
     },
     {
       "path": "docs/getting-started.md",
-      "sha256": "f809e56b0050fbdd5d26048eeb48a9fb75795f55a68c257cabaf1dfca0b86f04",
-      "size": 4404
+      "sha256": "d93684f6fbcecb24bb15a14729e896e49e870663de2f92045dcb4aa370452520",
+      "size": 4652
     },
     {
       "path": "docs/release-checklist.md",
@@ -1102,5 +1102,5 @@
   "product": "product-os",
   "publisher": "unpublished",
   "release": "0.1.0",
-  "tree_digest": "2271e5f02ff68ea0efe79f617a709c69052400f05c5813ed45cb01b99796d443"
+  "tree_digest": "d357513181c1a69603e27739057dc13d09d041c30c778c4111eead29d896867e"
 }

@@ -108,7 +108,11 @@ It does not replace Linear or Jira, analytics tools, transcript providers, code 
 
 ## Start with your agent
 
-You need two repositories: this one as the source, and your own private one as the destination. Product OS installs into the second and never creates it for you.
+This repository is the machinery: schemas, templates, agent skills, and the checks that keep them honest. It is not where your product work goes.
+
+Your product work — strategy, evidence, PRDs, decisions, learnings — belongs in a private repository you own, and that is what the installer writes into. Keeping the two apart is the point: your evidence and strategy stay private, and you can pull a newer version of the machinery without it touching a single product decision you have made.
+
+So you clone this one to install *from*, and you supply your own to install *into*. Product OS never creates that second repository for you; if you do not have one yet, make an empty private repo first.
 
 > [!IMPORTANT]
 > No release has been published yet, so one-link installation stays disabled by design. Until then the only accepted source is a local checkout at a commit you confirm yourself. The installer fails closed rather than trusting a URL it cannot pin — which is why the first step is a clone you can inspect, not a link you paste.

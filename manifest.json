@@ -33,8 +33,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "40817f526b015c30ba8436278d8108a14e3983c9b93ddc57adb735b0bd4fd861",
-      "size": 10343
+      "sha256": "22dd126c4f5e2798678f0a680ff86b32510c440d634eed97490069059c5bd0cf",
+      "size": 10878
     },
     {
       "path": "SECURITY.md",
@@ -1102,5 +1102,5 @@
   "product": "product-os",
   "publisher": "unpublished",
   "release": "0.1.0",
-  "tree_digest": "d357513181c1a69603e27739057dc13d09d041c30c778c4111eead29d896867e"
+  "tree_digest": "8ea87241136e8dc39a038e5ddc3400b06b4e0be59b0e3d49a4adfeaeb9e33d3f"
 }

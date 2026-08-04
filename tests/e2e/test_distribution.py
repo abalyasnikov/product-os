@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import json
 import hashlib
+import os
 import re
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -138,6 +140,36 @@ def test_agent_instruction_entrypoints_are_single_source(repo_root: Path) -> Non
     assert "v1 does not create repositories" in install
     assert "do not copy files manually" in install
     assert "copy these canonical directories" not in install
+
+
+def test_manifest_verification_needs_no_third_party_dependency(repo_root: Path) -> None:
+    """Provenance must be checkable before anything is installed from the source.
+
+    CI verifies the release manifest as its first step, deliberately ahead of
+    `pip install`: you check what a source claims to be before you run its code.
+    That only works while `product_os.manifest` stays on the standard library,
+    and it is easy to break from a distance — an eager re-export in the package
+    `__init__` once pulled PyYAML in transitively and broke this on a clean
+    runner while every developer machine stayed green.
+    """
+    probe = (
+        "import sys; sys.path.insert(0, 'src');"
+        "import product_os.manifest;"
+        "leaked = sorted({'yaml', 'jsonschema'} & set(sys.modules));"
+        "print(','.join(leaked))"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", probe],
+        cwd=repo_root,
+        capture_output=True,
+        text=True,
+        env={"PATH": os.environ.get("PATH", ""), "PYTHONNOUSERSITE": "1"},
+    )
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.strip() == "", (
+        f"product_os.manifest transitively imported {result.stdout.strip()}; "
+        "manifest verification must run before dependencies are installed"
+    )
 
 
 PRD_SECTION_ORDER = [

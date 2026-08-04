@@ -463,8 +463,8 @@
     },
     {
       "path": "src/product_os/__init__.py",
-      "sha256": "f3bc73415889eb2303099d061ba9fe9010ae97e64b97f0acf1dbc115a195c7b8",
-      "size": 203
+      "sha256": "9b8f3362ed5e5bec2416b5f8f6393935df97b3ea36916080eeb09b1c58621ed9",
+      "size": 1045
     },
     {
       "path": "src/product_os/adapters.py",
@@ -593,8 +593,8 @@
     },
     {
       "path": "tests/e2e/test_distribution.py",
-      "sha256": "20d0dcf553842105c58e365a39e036cf4c3790914e0097c3abe85053a2f310c0",
-      "size": 13898
+      "sha256": "7070f0fde8611ff02b8340427762803fa2b7dfd666e583c64925a7c4d481e417",
+      "size": 15234
     },
     {
       "path": "tests/e2e/test_reference_journey.py",
@@ -1102,5 +1102,5 @@
   "product": "product-os",
   "publisher": "unpublished",
   "release": "0.1.0",
-  "tree_digest": "6c2c6cd6ba703cc01c27f3a5e037025f6f67c78b9142f48ac2c1f912debc0359"
+  "tree_digest": "2271e5f02ff68ea0efe79f617a709c69052400f05c5813ed45cb01b99796d443"
 }

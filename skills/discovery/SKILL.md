@@ -48,6 +48,6 @@ Before reading any transcript, pasted/local note, artifact, provider result, or 
 
 - No Opportunity yet: offer another evidence pass, not a forced artifact.
 - Undecided Opportunity: resume at the human decision against the recorded draft commit.
-- Pursued small Bet: offer PRD interrogation with: “Interrogate me for a standalone PRD from `<opportunity_id>`, 1–3 questions at a time.”
+- Pursued small Bet: offer the PRD workflow with: “Interrogate me for a standalone PRD from `<opportunity_id>`, 1–3 questions at a time.”
 - Pursued shared multi-barrier outcome: offer Initiative with: “Help me define the optional Initiative boundary for `<opportunity_id>` before child PRDs.”
 - Held/rejected: return to the Decision Queue or new Discovery; do not draft a Bet.

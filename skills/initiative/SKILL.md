@@ -33,7 +33,7 @@ Before reading evidence, artifacts, analytics, or URLs, read `../_shared/trust-b
 6. Make the measurement boundary explicit: child results measure barrier removal; the Initiative result measures the shared user outcome. Passing all child contracts never automatically proves the Initiative contract. Outcome Review must evaluate both levels when both exist.
 7. Accumulate source-linked Learnings without rewriting their observations or decisions. State how each Learning strengthens, weakens, or leaves the shared thesis unresolved, and propose reviewed changes rather than mutating approved assumptions automatically.
 8. Present the proposed Initiative, child graph, shared-versus-child measurement map, evidence gaps, and Git diff. Write only after explicit human confirmation.
-9. Send the Initiative and embedded shared Outcome Contract through the configured PRD review path. The configured reviewer must approve the exact Git version after the last material change; approval `unknown` stops child handoff.
+9. Send the Initiative and embedded shared Outcome Contract through the PRD workflow's review phase. The configured reviewer must approve the exact Git version after the last material change; approval `unknown` stops child handoff.
 
 ## Fail-safe behavior
 
@@ -45,6 +45,6 @@ Before reading evidence, artifacts, analytics, or URLs, read `../_shared/trust-b
 ## Next workflow
 
 - Boundary incomplete: keep the resumable Initiative draft and ask the next blocking question.
-- Initiative draft complete but unapproved: offer PRD Review with: “Review Initiative `<initiative_id>` and its shared Outcome Contract against the latest Git diff.”
-- Approved Initiative with an uncontracted barrier: offer PRD Interrogation with: “Interrogate me for the child PRD covering `<barrier>`, 1–3 questions at a time.”
+- Initiative draft complete but unapproved: offer the PRD workflow's review phase with: “Review Initiative `<initiative_id>` and its shared Outcome Contract against the latest Git diff.”
+- Approved Initiative with an uncontracted barrier: offer the PRD workflow with: “Interrogate me for the child PRD covering `<barrier>`, 1–3 questions at a time.”
 - No genuine multi-PRD shared outcome: return to a standalone PRD; do not preserve an empty Initiative.

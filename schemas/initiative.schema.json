@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://productdecisionos.org/schemas/initiative.schema.json",
   "title": "Initiative",
+  "description": "Frontmatter carries identity, graph, and fields a check executes. The shared thesis, barriers, and sequencing live in the readable Markdown sections the validator requires.",
   "allOf": [
     { "$ref": "https://productdecisionos.org/schemas/common.schema.json" },
     {
@@ -9,45 +10,12 @@
       "properties": {
         "id": { "type": "string", "pattern": "^initiative_[0-9A-HJKMNP-TV-Z]{8,32}$" },
         "type": { "const": "initiative" },
-        "opportunity_id": { "type": "string", "pattern": "^opportunity_[0-9A-HJKMNP-TV-Z]{8,32}$" },
-        "target_outcome": { "type": "string", "minLength": 1 },
-        "product_thesis": { "type": "string", "minLength": 1 },
-        "evidence_ids": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
-          "items": { "type": "string", "pattern": "^(signal|pattern|opportunity)_[0-9A-HJKMNP-TV-Z]{8,32}$" }
-        },
-        "business_impact": { "type": "string", "minLength": 1 },
-        "gtm_hypothesis": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/gtmHypothesis" },
-        "outcome": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/outcomeContract" },
-        "barriers": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/stringList" },
-        "child_prd_ids": {
-          "type": "array",
-          "minItems": 2,
-          "uniqueItems": true,
-          "items": { "type": "string", "pattern": "^prd_[0-9A-HJKMNP-TV-Z]{8,32}$" }
-        },
-        "dependencies": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/stringList" },
-        "sequencing": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/stringList" },
-        "learnings": {
-          "type": "array",
-          "uniqueItems": true,
-          "items": { "type": "string", "pattern": "^learning_[0-9A-HJKMNP-TV-Z]{8,32}$" }
-        },
+        "evidence_waiver": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/evidenceWaiver" },
         "implementation_refs": {
           "type": "array",
           "items": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/implementationReference" }
         }
-      },
-      "allOf": [
-        {
-          "if": { "required": ["outcome"] },
-          "then": {
-            "required": ["opportunity_id", "target_outcome", "product_thesis", "evidence_ids", "business_impact", "gtm_hypothesis", "barriers", "child_prd_ids", "dependencies", "learnings"]
-          }
-        }
-      ]
+      }
     }
   ],
   "unevaluatedProperties": false

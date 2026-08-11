@@ -20,7 +20,9 @@ State the product thesis and business impact without repeating child requirement
 
 ## Evidence and confidence
 
-Link the Opportunity, Signals, or Patterns. State contradictions and coverage gaps explicitly.
+Link the Opportunity, Signals, or Patterns as relative Markdown links with their stable IDs as the
+link text, for example `[opportunity_01ABCDEF](../opportunities/short-name.md)`. State contradictions
+and coverage gaps explicitly.
 
 ## Shared outcome
 
@@ -50,7 +52,7 @@ Explain how the shared outcome differs from the child PRD contracts.
 
 ```yaml product-os:outcome
 definition:
-  version: <definition-version>
+  version: "v1"   # a string, always quoted
   method: behavioral_metric
   baseline: <current value or "to establish">
   target: <target value>

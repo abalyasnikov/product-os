@@ -19,7 +19,9 @@ relationships:
 
 ## Evidence
 
-<Link the source Signals or Patterns and state confidence, contradictions, and coverage gaps. Do not paste transcripts.>
+<Name each source as a relative Markdown link with its stable ID as the link text, for example
+`[signal_01ABCDEF](../signals/short-name.md)`, then state confidence, contradictions, and coverage
+gaps. Do not paste transcripts.>
 
 ## JTBD
 
@@ -57,7 +59,7 @@ relationships:
 
 ```yaml product-os:outcome
 definition:
-  version: <definition-version>
+  version: "v1"   # a string, always quoted
   method: acceptance_journey
   baseline: <current state or "to establish">
   target: <passing state>

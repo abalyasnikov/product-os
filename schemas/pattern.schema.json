@@ -2,15 +2,15 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://productdecisionos.org/schemas/pattern.schema.json",
   "title": "Pattern",
+  "description": "Frontmatter carries only the supporting and contradicting evidence graph. Interpretation, frequency, recency, and coverage gaps live in the readable Markdown sections the validator requires.",
   "allOf": [
     { "$ref": "https://productdecisionos.org/schemas/common.schema.json" },
     {
       "type": "object",
-      "required": ["interpretation", "supporting_signal_ids", "contradictory_signal_ids", "affected_segments", "frequency_summary", "recency_summary", "coverage_gaps"],
+      "required": ["supporting_signal_ids", "contradictory_signal_ids"],
       "properties": {
         "id": { "type": "string", "pattern": "^pattern_[0-9A-HJKMNP-TV-Z]{8,32}$" },
         "type": { "const": "pattern" },
-        "interpretation": { "type": "string", "minLength": 1 },
         "supporting_signal_ids": {
           "type": "array",
           "minItems": 1,
@@ -21,12 +21,7 @@
           "type": "array",
           "uniqueItems": true,
           "items": { "type": "string", "pattern": "^signal_[0-9A-HJKMNP-TV-Z]{8,32}$" }
-        },
-        "affected_segments": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/stringList" },
-        "frequency_summary": { "type": "string", "minLength": 1 },
-        "business_weight_summary": { "type": "string", "minLength": 1 },
-        "recency_summary": { "type": "string", "minLength": 1 },
-        "coverage_gaps": { "$ref": "https://productdecisionos.org/schemas/common.schema.json#/$defs/stringList" }
+        }
       }
     }
   ],

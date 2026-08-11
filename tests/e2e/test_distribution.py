@@ -426,3 +426,21 @@ def test_real_release_rejects_config_mismatch_and_confirmed_plan_drift(
     assert install_main([*common, "--expect-plan-hash", plan.plan_hash]) == 1
     assert "differs from the confirmed" in capsys.readouterr().out
     assert not (target / ".product-os").exists()
+
+
+def test_readme_terminal_block_is_real_output(repo_root: Path) -> None:
+    """The README says this block is printed verbatim. A README that drifts from its own tool
+    is the exact failure this project argues against, so the claim is checked rather than trusted."""
+    import io, contextlib
+    from datetime import date
+    from product_os.queue import compute_queue, render
+
+    readme = (repo_root / "README.md").read_text(encoding="utf-8")
+    command = "$ product-os queue examples/receipt-follow-up --as-of 2026-09-20\n"
+    assert command in readme, "the documented command changed; update this test with it"
+    documented = readme.split(command, 1)[1].split("```", 1)[0].strip()
+
+    actual = render(
+        compute_queue(repo_root / "examples" / "receipt-follow-up", as_of=date(2026, 9, 20))
+    ).strip()
+    assert documented == actual

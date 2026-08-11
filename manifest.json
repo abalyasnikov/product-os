@@ -8,8 +8,8 @@
     },
     {
       "path": ".gitignore",
-      "sha256": "3326e3fb12262044d50f578eb717fbf658f182fbae403b74d9643af07cb62aa0",
-      "size": 119
+      "sha256": "e3b78fc1be1adb8ebe903cef33e8841a7cf113aedf0e8fb7dd857762f77fd016",
+      "size": 415
     },
     {
       "path": "AGENTS.md",
@@ -1137,5 +1137,5 @@
   "product": "product-os",
   "publisher": "unpublished",
   "release": "0.1.0",
-  "tree_digest": "c383bb8c2d02f15f5de85a326208941dd0a4e8533f9a88c3fb905369e8421e7c"
+  "tree_digest": "0d44ecb94c46f5f28f86f866c85d4acd571ad61a3f108ae409bba80a84821deb"
 }

@@ -149,8 +149,6 @@ It does not replace Linear or Jira, analytics tools, transcript providers, code 
 
 ## Worked examples
 
-**[Receipt follow-up](examples/receipt-follow-up/README.md) — the short path.** Four Signals, one Opportunity, one PRD, and nothing else: no Pattern, no Initiative, no Learning yet. It is what most bets look like, and it shows two things a large example hides — an ordered strategy rejecting the loudest customer request into a PRD's non-goals, and a `pursue` decision whose dated condition the PRD then has to answer with an explicit waiver. Its loop is open on purpose, which is the honest state of a bet on the day it is approved.
-
 **[Best-in-class trading experience](examples/best-in-class-trading-experience/README.md) — a multi-PRD bet that closed.** One company ambition becoming a single Product Bet with five focused PRDs, carrying the evidence they were argued from:
 
 ```text
@@ -165,6 +163,10 @@ Initiative: Best-in-class trading experience
 ```
 
 No two barriers surfaced the same way: consolidated support reports plus segmented telemetry found one, a first-use walkthrough another, the rest came from a moving competitive baseline and from inspecting the product's own flows. A system fed only by customer requests would have found one of the five. Personal names, private links, and exact revenue figures are omitted, and proposed measures stay proposed rather than being filled in with synthetic certainty.
+
+Most bets are smaller than that one.
+
+**[Receipt follow-up](examples/receipt-follow-up/README.md) — the short path.** Four Signals, one Opportunity, one PRD, and nothing else: no Pattern, no Initiative, no Learning yet. It shows two things the larger example hides — an ordered strategy rejecting the loudest customer request into a PRD's non-goals, and a `pursue` decision whose dated condition the PRD then has to answer with an explicit waiver. Its loop is open on purpose, which is the honest state of a bet on the day it is approved.
 
 ## Try it with your agent
 

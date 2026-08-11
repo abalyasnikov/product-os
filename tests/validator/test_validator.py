@@ -9,10 +9,19 @@ import subprocess
 
 import pytest
 import yaml
+from jsonschema import Draft202012Validator
+from referencing import Registry, Resource
 
-from product_os.validator import TYPE_CONFIG, _walk, validate_workspace
+from product_os.validator import (
+    READABLE_SECTIONS,
+    TYPE_CONFIG,
+    _safe_schema_message,
+    _walk,
+    validate_workspace,
+)
 from product_os.cli import main as cli_main
 from product_os.installer import apply_plan, plan_install
+from product_os.adapters import canonical_source_digest
 from product_os.manifest import write_manifest
 
 
@@ -50,12 +59,81 @@ def metadata(artifact_type: str = "signal", artifact_id: str = "signal_01TESTXX"
     }
 
 
-def write_artifact(workspace: Path, data: dict, name: str | None = None, body: str = "# Test\n") -> Path:
+READABLE_SECTIONS = {
+    "prd": (
+        "Problem",
+        "Evidence",
+        "JTBD",
+        "Current and desired journey",
+        "Scope",
+        "GTM hypothesis",
+        "Risks and dependencies",
+        "Open questions",
+        "Outcome Contract",
+        "Delivery",
+    ),
+    "initiative": (
+        "Vision",
+        "Why this matters",
+        "Evidence and confidence",
+        "Shared outcome",
+        "Child PRDs",
+        "Sequencing and dependencies",
+        "GTM hypothesis",
+        "Risks and open questions",
+        "Outcome Contract",
+    ),
+    "opportunity": (
+        "Blocked value",
+        "Affected users",
+        "Impact and urgency",
+        "Strategic fit",
+        "Evidence quality",
+        "Assumptions and risks",
+        "Decision question",
+    ),
+    "pattern": ("Interpretation", "Frequency and recency", "Coverage gaps", "Synthesis"),
+}
+
+
+def readable_body(data: dict, outcome: dict | None = None) -> str:
+    """Render the readable shape the validator requires, so tests exercise real documents."""
+    artifact_type = str(data["type"]).replace("-", "_")
+    sections = READABLE_SECTIONS.get(artifact_type)
+    if sections is None:
+        return f"# {data['title']}\n"
+    parts = [f"# {data['title']}", ""]
+    for section in sections:
+        parts.append(f"## {section}")
+        parts.append("")
+        if section == "Problem":
+            parts.append("Placeholder problem statement for a test artifact.")
+            parts.append("")
+            parts.append("**Why now / business reality:** Recorded for this test artifact.")
+        elif section == "Scope":
+            parts.append("### Requirements\n\n- Placeholder requirement\n\n### Non-goals\n\n- Placeholder non-goal")
+        elif section == "Outcome Contract":
+            parts.append("Better means the placeholder outcome holds.")
+            if outcome is not None:
+                block = yaml.safe_dump(outcome, sort_keys=False, width=100).rstrip()
+                parts.append("")
+                parts.append(f"```yaml product-os:outcome\n{block}\n```")
+        else:
+            parts.append(f"Placeholder {section.lower()} for a test artifact.")
+        parts.append("")
+    return "\n".join(parts)
+
+
+def write_artifact(workspace: Path, data: dict, name: str | None = None, body: str | None = None) -> Path:
     artifact_type = str(data["type"]).replace("-", "_")
     directory = TYPE_CONFIG[artifact_type][1]
     path = workspace / "product" / directory / (name or f"{data['id']}.md")
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(f"---\n{yaml.safe_dump(data, sort_keys=False)}---\n{body}", encoding="utf-8")
+    payload = dict(data)
+    outcome = payload.pop("outcome", None)
+    if body is None:
+        body = readable_body(payload, outcome if isinstance(outcome, dict) else None)
+    path.write_text(f"---\n{yaml.safe_dump(payload, sort_keys=False)}---\n{body}", encoding="utf-8")
     return path
 
 
@@ -466,20 +544,57 @@ def test_invalid_named_outcome_block_is_actionable(workspace: Path) -> None:
     assert "STRUCTURED_BLOCK_INVALID" in codes(report)
 
 
-def test_frontmatter_and_body_outcome_cannot_both_be_canonical(workspace: Path) -> None:
-    data = metadata("prd", "prd_01TESTXX")
-    data["outcome"] = complete_outcome()
-    outcome_yaml = yaml.safe_dump(complete_outcome(), sort_keys=False)
-    body = f"""# Test PRD
+def test_every_readable_type_enforces_its_sections(workspace: Path) -> None:
+    """Moving prose out of frontmatter only works if the readable section is required."""
+    for artifact_type, artifact_id in (
+        ("opportunity", "opportunity_01TESTOP"),
+        ("pattern", "pattern_01TESTPA"),
+        ("prd", "prd_01TESTPR"),
+        ("initiative", "initiative_01TESTIN"),
+    ):
+        data = metadata(artifact_type, artifact_id)
+        body = readable_body(data, complete_outcome() if artifact_type in {"prd", "initiative"} else None)
+        dropped = READABLE_SECTIONS[artifact_type][-2]
+        broken = body.replace(f"## {dropped}", "## Unrelated heading", 1)
+        write_artifact(workspace, dict(data), body=broken)
+        assert "READABLE_SECTION_MISSING" in codes(validate_workspace(workspace)), artifact_type
+        write_artifact(workspace, dict(data), body=body)
 
-## Outcome Contract
 
-```yaml product-os:outcome
-{outcome_yaml}```
-"""
-    write_artifact(workspace, data, body=body)
+def test_forbidden_frontmatter_field_names_itself(workspace: Path) -> None:
+    """An author migrating a document needs the offending key, not 'fields not allowed'."""
+    schema = json.loads((REPOSITORY_ROOT / "schemas" / "opportunity.schema.json").read_text(encoding="utf-8"))
+    common = json.loads((REPOSITORY_ROOT / "schemas" / "common.schema.json").read_text(encoding="utf-8"))
+    registry = Registry().with_resources(
+        [(str(common["$id"]), Resource.from_contents(common)), (str(schema["$id"]), Resource.from_contents(schema))]
+    )
+    data = metadata("opportunity", "opportunity_01TESTOPP")
+    data.update({"evidence_ids": ["signal_01TESTXXX"], "decision_events": [],
+                 "evidence_quality": {"contradictions": [], "coverage_gaps": []},
+                 "impact": "prose that no longer belongs in frontmatter"})
+    errors = list(Draft202012Validator(schema, registry=registry).iter_errors(data))
+    messages = [_safe_schema_message(error) for error in errors]
+    assert any("'impact'" in message for message in messages), messages
 
-    assert "OUTCOME_CONTRACT_DUPLICATED" in codes(validate_workspace(workspace))
+
+def test_outcome_contract_is_canonical_only_in_the_readable_block() -> None:
+    """One document shape: product content lives in Markdown, never in PRD frontmatter."""
+    schema = json.loads((REPOSITORY_ROOT / "schemas" / "prd.schema.json").read_text(encoding="utf-8"))
+    common = json.loads((REPOSITORY_ROOT / "schemas" / "common.schema.json").read_text(encoding="utf-8"))
+    registry = Registry().with_resources(
+        [(str(common["$id"]), Resource.from_contents(common)), (str(schema["$id"]), Resource.from_contents(schema))]
+    )
+    validator = Draft202012Validator(schema, registry=registry)
+
+    lean = metadata("prd", "prd_01TESTXX")
+    lean["relationships"] = {"opportunity": "opportunity_01TESTXX"}
+    assert list(validator.iter_errors(lean)) == []
+
+    with_frontmatter_outcome = dict(lean, outcome=complete_outcome())
+    assert list(validator.iter_errors(with_frontmatter_outcome)), "frontmatter must not carry the contract"
+
+    with_frontmatter_prose = dict(lean, problem="Users cannot compare routes.")
+    assert list(validator.iter_errors(with_frontmatter_prose)), "frontmatter must not carry product prose"
 
 
 def test_lean_prd_requires_readable_sections_and_product_bet_link(workspace: Path) -> None:
@@ -545,7 +660,9 @@ def test_references_and_context_modules_are_optional_for_lean_prd(workspace: Pat
 
 
 def test_verified_executable_binding_passes_and_unverified_fails(workspace: Path) -> None:
+    write_artifact(workspace, metadata("opportunity", "opportunity_01TESTXX"))
     data = metadata("prd", "prd_01TESTXX")
+    data["relationships"] = {"opportunity": "opportunity_01TESTXX"}
     data["outcome"] = complete_outcome("executable")
     write_artifact(workspace, data)
     assert validate_workspace(workspace).exit_code == 0
@@ -636,19 +753,8 @@ def test_implementation_refs_require_valid_named_review_state(workspace: Path) -
 
 
 def canonical_hash(root: Path) -> str:
-    digest = hashlib.sha256()
-    paths = sorted(
-        path
-        for directory in (root / "skills", root / "integrations")
-        for path in directory.rglob("*")
-        if path.is_file()
-    )
-    for path in paths:
-        digest.update(path.relative_to(root).as_posix().encode())
-        digest.update(b"\0")
-        digest.update(path.read_bytes())
-        digest.update(b"\0")
-    return digest.hexdigest()
+    """Delegates: a test that reimplements the hash cannot catch the generator drifting."""
+    return canonical_source_digest(root)
 
 
 def install_adapter(
@@ -938,8 +1044,19 @@ def test_real_installer_output_validates_and_smokes_for_each_client(tmp_path: Pa
     config.write_text(f"schema_version: 1\nselected_client: {client}\n", encoding="utf-8")
 
     plan = plan_install(source, target, client, config, allow_unpublished_local=True)
+    assert plan.document()["plan_version"] == 2
+    assert all(item["ownership"] in {"managed", "preserved", "generated"} for item in plan.document()["files"])
     apply_plan(plan)
     git(target, "init", "-b", "main")
+
+    assert (target / "AGENTS.md").is_file()
+    assert (target / "CLAUDE.md").read_text() == "@AGENTS.md\n"
+    installed = json.loads((target / ".product-os/installed-manifest.json").read_text())
+    assert installed["source_commit"] is None
+    (target / ".product-os/config.yaml").write_text(
+        f"schema_version: 1\nselected_client: {client}\n# preserved user edit\n",
+        encoding="utf-8",
+    )
 
     validate_report = validate_workspace(target)
     smoke_report = validate_workspace(target, "smoke-test")
@@ -1032,6 +1149,11 @@ def test_active_wrapper_rejects_mismatch_extra_and_symlink(workspace: Path) -> N
     report_codes = codes(validate_workspace(workspace, "smoke-test"))
     assert "ACTIVE_WRAPPER_MISMATCH" in report_codes
     assert "ACTIVE_WRAPPER_EXTRA" in report_codes
+
+    other_client = workspace / ".claude/skills/product-os-discovery/SKILL.md"
+    other_client.parent.mkdir(parents=True)
+    other_client.write_text("other client wrapper\n", encoding="utf-8")
+    assert "ACTIVE_WRAPPER_CLIENT_MISMATCH" in codes(validate_workspace(workspace, "smoke-test"))
 
     destination.unlink()
     source = workspace / "adapters" / "codex" / "skills" / "product-os-discovery" / "SKILL.md"
@@ -1148,7 +1270,6 @@ def test_typed_reference_fields_resolve_and_match_relationships(workspace: Path)
         ("opportunity_id", "signal_01EVJDENCE", "opportunity_"),
         ("initiative_id", "signal_01EVJDENCE", "initiative_"),
         ("product_bet_id", "signal_01EVJDENCE", "initiative_"),
-        ("outcome_contract_id", "signal_01EVJDENCE", "outcome_"),
     ],
 )
 def test_singular_typed_reference_prefixes_are_enforced(
@@ -1217,14 +1338,16 @@ def test_scalar_reference_contradiction_with_relationship_is_rejected(workspace:
 
 def test_outcome_contract_ref_resolves_required_and_optional_ids(workspace: Path) -> None:
     initiative = metadata("initiative", "initiative_01PWNERX")
-    initiative["relationships"] = {"outcome_contract": "outcome_01CPNTRACT"}
+    initiative["relationships"] = {"prds": ["prd_01PWNERA", "prd_01PWNERB"]}
     initiative["outcome"] = complete_outcome()
     write_artifact(workspace, initiative)
-    contract = metadata("outcome_contract", "outcome_01CPNTRACT")
-    contract["outcome"] = complete_outcome()
-    write_artifact(workspace, contract)
+    for child in ("prd_01PWNERA", "prd_01PWNERB"):
+        prd = metadata("prd", child)
+        prd["relationships"] = {"initiative": initiative["id"]}
+        prd["outcome"] = complete_outcome()
+        write_artifact(workspace, prd)
     learning = metadata("learning", "learning_01RESVMT")
-    learning["relationships"] = {"initiative": initiative["id"], "outcome_contract": contract["id"]}
+    learning["relationships"] = {"initiative": initiative["id"]}
     learning["outcome_contract_ref"] = {
         "owner_artifact_id": initiative["id"],
         "definition_version": "definition-v1",
@@ -1239,7 +1362,7 @@ def test_outcome_contract_ref_resolves_required_and_optional_ids(workspace: Path
     assert "TYPED_REFERENCE_INVALID" not in report_codes
     assert "BROKEN_TYPED_REFERENCE" not in report_codes
 
-    learning["outcome_contract_ref"]["extracted_artifact_id"] = "outcome_01MJSSJNG"
+    learning["outcome_contract_ref"]["owner_artifact_id"] = "prd_01MJSSJNG"
     write_artifact(workspace, learning)
     assert "BROKEN_TYPED_REFERENCE" in codes(validate_workspace(workspace))
 

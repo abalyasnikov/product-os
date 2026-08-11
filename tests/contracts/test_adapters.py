@@ -17,9 +17,7 @@ ROUTES = {
     "product-os-setup": "setup",
     "product-os-discovery": "discovery",
     "product-os-initiative": "initiative",
-    "product-os-prd-interrogation": "prd-interrogation",
-    "product-os-prd-review": "prd-review",
-    "product-os-prd-handoff": "prd-handoff",
+    "product-os-prd": "prd",
     "product-os-decision-queue": "decision-queue",
     "product-os-outcome-review": "outcome-review",
     "product-os-product-update": "product-update",
@@ -62,7 +60,7 @@ def test_manifests_define_exact_source_wrapper_and_destination(repo_root: Path) 
         manifest = yaml.safe_load(
             (repo_root / f"adapters/{client}/manifest.yaml").read_text(encoding="utf-8")
         )
-        assert len(manifest["projections"]) == 9
+        assert len(manifest["projections"]) == len(ROUTES)
         for item in manifest["projections"]:
             canonical_dir = ROUTES[item["name"]]
             assert item["canonical_source"] == f".product-os/skills/{canonical_dir}/SKILL.md"
@@ -71,7 +69,7 @@ def test_manifests_define_exact_source_wrapper_and_destination(repo_root: Path) 
             assert (repo_root / item["wrapper_source"]).is_file()
 
 
-def test_simulated_client_install_discovers_nine_route_only_skills(
+def test_simulated_client_install_discovers_route_only_skills(
     repo_root: Path, tmp_path: Path
 ) -> None:
     for client in CLIENTS:
@@ -86,7 +84,7 @@ def test_simulated_client_install_discovers_nine_route_only_skills(
             shutil.copyfile(repo_root / item["wrapper_source"], destination)
 
         discovered = sorted((workspace / CLIENTS[client]).glob("*/SKILL.md"))
-        assert len(discovered) == 9
+        assert len(discovered) == len(ROUTES)
         for wrapper in discovered:
             text = wrapper.read_text(encoding="utf-8")
             _, frontmatter, body = text.split("---", 2)

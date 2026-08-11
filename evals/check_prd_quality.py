@@ -27,6 +27,7 @@ from product_os.frontmatter import (  # noqa: E402
     parse_markdown,
     structured_blocks,
 )
+from product_os.validator import READABLE_SECTIONS, READABLE_SUBSECTIONS  # noqa: E402
 
 RUBRIC_PATH = Path(__file__).with_name("prd-quality-rubric.yaml")
 CASES_ROOT = Path(__file__).with_name("cases")
@@ -92,13 +93,14 @@ def _check_document(
         return violations
 
     contract = rubric["deterministic_contract"]
-    required = contract["required_sections"].get(artifact_type, [])
+    # One source of truth: the validator owns the readable-section contract.
+    required = [section.title() for section in READABLE_SECTIONS.get(str(artifact_type), ())]
     headings = _headings(document.body, H2)
     for heading in required:
         if str(heading).casefold() not in headings:
             _add(violations, "SECTION_MISSING", case_name, path, f"missing ## {heading}")
 
-    required_subsections = contract.get("required_subsections", {}).get(artifact_type, {})
+    required_subsections = READABLE_SUBSECTIONS.get(str(artifact_type), {})
     for parent, children in required_subsections.items():
         subsection_headings = _headings(_section(document.body, str(parent)), H3)
         for child in children:

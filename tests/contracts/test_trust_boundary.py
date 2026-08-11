@@ -9,9 +9,7 @@ SOURCE_READING_SKILLS = {
     "setup",
     "discovery",
     "initiative",
-    "prd-interrogation",
-    "prd-review",
-    "prd-handoff",
+    "prd",
     "decision-queue",
     "outcome-review",
     "product-update",
@@ -73,7 +71,7 @@ def test_every_source_reading_workflow_loads_the_trust_boundary(repo_root: Path)
 def test_high_risk_workflows_split_reads_from_writes(repo_root: Path) -> None:
     expected = {
         "discovery": ("## Phase A — read-only ingestion", "## Phase B — write-capable proposal"),
-        "prd-handoff": (
+        "prd": (
             "## Phase A — read-only verification and ingestion",
             "## Phase B — write-capable projection",
         ),
@@ -105,7 +103,7 @@ def test_setup_requires_validated_deterministic_preview_apply(repo_root: Path) -
 
 
 def test_approval_sources_and_solo_limitations_are_explicit(repo_root: Path) -> None:
-    review = (repo_root / "skills/prd-review/SKILL.md").read_text(encoding="utf-8").lower()
+    review = (repo_root / "skills/prd/SKILL.md").read_text(encoding="utf-8").lower()
     assert "review-state file as a cache only" in review
     assert "never proves approval" in review
     assert "immutable **full commit sha**" in review

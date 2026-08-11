@@ -1,5 +1,16 @@
 from __future__ import annotations
 
+# The route-only wrappers a client install must place, derived from the canonical skill set.
+EXPECTED_WRAPPERS = (
+    "product-os-setup",
+    "product-os-discovery",
+    "product-os-initiative",
+    "product-os-prd",
+    "product-os-decision-queue",
+    "product-os-outcome-review",
+    "product-os-product-update",
+)
+
 import json
 import hashlib
 import os
@@ -14,6 +25,7 @@ import yaml
 from jsonschema import Draft202012Validator
 
 from product_os.installer import InstallError, main as install_main, plan_install, write_plan
+from product_os.validator import markdown_link_targets
 from product_os.manifest import build, main as manifest_main, verify, write_manifest
 
 
@@ -35,6 +47,26 @@ def test_manifest_detects_changed_and_unexpected_files(tmp_path: Path) -> None:
     (root / "README.md").write_text("original\n", encoding="utf-8")
     (root / "unexpected.txt").write_text("surprise\n", encoding="utf-8")
     assert any("unexpected distributed file" in problem for problem in verify(root))
+
+
+def test_manifest_ignores_working_files(tmp_path: Path) -> None:
+    """`uv run` drops uv.lock into the checkout and drafts live in docs/plans/.
+
+    Neither is distributed behavior, so neither may fail provenance verification:
+    before this, a maintainer's plan draft — or the demo's own `uv run` — turned
+    the whole e2e suite red with an "unexpected distributed file".
+    """
+    root = tmp_path / "release"
+    root.mkdir()
+    (root / "README.md").write_text("release\n", encoding="utf-8")
+    write_manifest(root)
+    assert verify(root) == []
+
+    (root / "uv.lock").write_text("lock\n", encoding="utf-8")
+    plans = root / "docs" / "plans"
+    plans.mkdir(parents=True)
+    (plans / "draft.md").write_text("plan\n", encoding="utf-8")
+    assert verify(root) == []
 
 
 def test_manifest_is_deterministic(tmp_path: Path) -> None:
@@ -233,7 +265,7 @@ def test_repository_markdown_has_no_broken_relative_links(repo_root: Path) -> No
     for path in repo_root.rglob("*.md"):
         if any(part in {".git", ".venv", "build", "dist"} for part in path.parts):
             continue
-        for target in re.findall(r"\[[^\]]*\]\(([^)]+)\)", path.read_text(encoding="utf-8")):
+        for target in markdown_link_targets(path.read_text(encoding="utf-8")):
             if target.startswith(("#", "http://", "https://", "mailto:")):
                 continue
             relative_target = target.split("#", 1)[0]
@@ -243,10 +275,9 @@ def test_repository_markdown_has_no_broken_relative_links(repo_root: Path) -> No
 
 
 def test_solo_walkthrough_config_matches_canonical_schema(repo_root: Path) -> None:
-    walkthrough = (repo_root / "docs/getting-started.md").read_text(encoding="utf-8")
-    match = re.search(r"```yaml\n(.*?)\n```", walkthrough, re.DOTALL)
-    assert match is not None
-    config = yaml.safe_load(match.group(1))
+    """The workspace config the docs hand a reader must satisfy the shipped schema."""
+    template = (repo_root / "templates/config.yaml").read_text(encoding="utf-8")
+    config = yaml.safe_load(template)
     schema = json.loads((repo_root / "schemas/config.schema.json").read_text(encoding="utf-8"))
     assert list(Draft202012Validator(schema).iter_errors(config)) == []
 
@@ -321,7 +352,7 @@ def test_real_release_clean_install_matrix_and_installed_manifest(
     assert applied["mode"] == "applied"
 
     active_wrappers = sorted((target / wrapper_root).glob("product-os-*/SKILL.md"))
-    assert len(active_wrappers) == 9
+    assert len(active_wrappers) == len(EXPECTED_WRAPPERS)
     assert (target / ".product-os/release-manifest.json").read_bytes() == (
         source / "manifest.json"
     ).read_bytes()

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import yaml
 
-from product_os.frontmatter import parse_markdown
+from product_os.frontmatter import parse_markdown, structured_blocks
 from product_os.validator import validate_workspace
 
 
@@ -12,7 +12,11 @@ def _artifacts(workspace: Path) -> dict[str, dict[str, object]]:
     result: dict[str, dict[str, object]] = {}
     for path in sorted((workspace / "product").glob("*/*.md")):
         document = parse_markdown(path)
-        result[str(document.metadata["id"])] = document.metadata
+        metadata = dict(document.metadata)
+        outcome = structured_blocks(document).get("outcome")
+        if outcome is not None:
+            metadata["outcome"] = outcome
+        result[str(document.metadata["id"])] = metadata
     return result
 
 
@@ -29,7 +33,7 @@ def test_reference_journey_closes_the_evidence_to_learning_loop(repo_root: Path)
     assert len(opportunity["relationships"]["signals"]) == 4
 
     initiative = artifacts["initiative_01JABCDE01"]
-    assert set(initiative["child_prd_ids"]) == {"prd_01JABCDE01", "prd_01JABCDE02"}
+    assert set(initiative["relationships"]["prds"]) == {"prd_01JABCDE01", "prd_01JABCDE02"}
     assert initiative["outcome"]["definition"]["version"] == "metric-v2"
     assert initiative["outcome"]["binding"]["status"] == "executable"
 

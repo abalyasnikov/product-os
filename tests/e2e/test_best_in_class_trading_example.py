@@ -11,7 +11,32 @@ from product_os.validator import validate_workspace
 from product_os.reference_journey import REFERENCE_FIXTURE_ROOT, run_journey
 
 
-HUMAN_EXAMPLE_ROOT = Path(__file__).resolve().parents[2] / "examples" / "best-in-class-trading-experience"
+EXAMPLES_ROOT = Path(__file__).resolve().parents[2] / "examples"
+HUMAN_EXAMPLE_ROOT = EXAMPLES_ROOT / "best-in-class-trading-experience"
+SHORT_EXAMPLE_ROOT = EXAMPLES_ROOT / "receipt-follow-up"
+
+
+def test_short_path_example_stays_short_and_valid() -> None:
+    """The smallest complete shape: Signals -> Opportunity -> PRD, and nothing else."""
+    report = validate_workspace(SHORT_EXAMPLE_ROOT)
+    assert report.ok, [error.to_dict() for error in report.errors]
+
+    documents = [
+        parse_markdown(path) for path in sorted((SHORT_EXAMPLE_ROOT / "product").glob("*/*.md"))
+    ]
+    types = [str(document.metadata["type"]) for document in documents]
+    assert types.count("signal") == 4
+    assert types.count("opportunity") == 1
+    assert types.count("prd") == 1
+    assert "pattern" not in types and "initiative" not in types, "the short path stays short"
+    assert (SHORT_EXAMPLE_ROOT / "context" / "strategy.md").is_file()
+
+    by_type = {str(d.metadata["type"]): d.metadata for d in documents}
+    decision = by_type["opportunity"]["decision_events"][-1]
+    assert decision["choice"] == "pursue"
+    # A condition on a decision is data, so an unmet one can be surfaced rather than remembered.
+    assert decision["conditions"] and all("review_by" in item for item in decision["conditions"])
+    assert by_type["prd"]["evidence_waiver"]["review_date"], "the unmet condition is answered in the open"
 
 
 def test_human_trading_example_uses_lean_readable_documents() -> None:
@@ -22,12 +47,30 @@ def test_human_trading_example_uses_lean_readable_documents() -> None:
         parse_markdown(path)
         for path in sorted((HUMAN_EXAMPLE_ROOT / "product").glob("*/*.md"))
     ]
-    assert len(documents) == 7
+    assert len(documents) == 15
     assert {document.metadata["type"] for document in documents} == {
+        "signal",
+        "pattern",
+        "opportunity",
         "initiative",
         "prd",
         "learning",
     }
+
+    # AGENTS.md tells an agent to read one complete Signal -> Opportunity -> PRD -> Learning
+    # chain from this example. That instruction was unfulfillable while the example held no
+    # evidence artifacts at all, so the chain is asserted here rather than assumed.
+    by_id = {str(document.metadata["id"]): document.metadata for document in documents}
+    opportunity = by_id["opportunity_01TRADX001"]
+    assert opportunity["evidence_ids"], "the Opportunity must carry its evidence"
+    assert all(by_id.get(evidence) for evidence in opportunity["evidence_ids"])
+    assert opportunity["decision_events"][-1]["choice"] == "pursue"
+    learning = by_id["learning_01TRADX001"]
+    bet = by_id[str(learning["product_bet_id"])]
+    # The chain closes: Learning -> its Product Bet -> the Initiative the Opportunity authorized.
+    parent = bet["relationships"].get("initiative") or bet["id"]
+    assert opportunity["relationships"].get("initiative") == parent
+    assert bet["relationships"].get("signals"), "the measured bet carries its own evidence"
     assert sum(document.metadata["type"] == "prd" for document in documents) == 5
 
     narrative = [d for d in documents if d.metadata["type"] in {"initiative", "prd"}]
@@ -95,15 +138,17 @@ def test_reference_fixture_is_a_complete_multi_prd_product_bet() -> None:
     }
     initiative = by_type["initiative"][0]
     assert initiative["title"] == "Best-in-class trading experience"
-    assert len(initiative["child_prd_ids"]) == 4
-    assert set(initiative["child_prd_ids"]) == {
+    assert len(initiative["relationships"]["prds"]) == 4
+    assert set(initiative["relationships"]["prds"]) == {
         artifact["id"] for artifact in by_type["prd"]
     }
-    assert all(artifact["initiative_id"] == initiative["id"] for artifact in by_type["prd"])
+    assert all(
+        artifact["relationships"]["initiative"] == initiative["id"] for artifact in by_type["prd"]
+    )
     implementation_refs = [
         reference
         for artifact in by_type["prd"]
-        for reference in artifact["implementation_refs"]
+        for reference in artifact.get("implementation_refs", [])
     ]
     assert len(implementation_refs) == 1
     assert implementation_refs[0]["based_on_prd_id"] == "prd_01TRADX001"

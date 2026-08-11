@@ -11,9 +11,7 @@ EXPECTED_SKILLS = {
     "setup",
     "discovery",
     "initiative",
-    "prd-interrogation",
-    "prd-review",
-    "prd-handoff",
+    "prd",
     "decision-queue",
     "outcome-review",
     "product-update",
@@ -54,7 +52,7 @@ def test_mutating_skills_require_explicit_human_gates(repo_root: Path) -> None:
 
 def test_decisions_and_approval_are_never_invented(repo_root: Path) -> None:
     discovery = (repo_root / "skills/discovery/SKILL.md").read_text(encoding="utf-8").lower()
-    review = (repo_root / "skills/prd-review/SKILL.md").read_text(encoding="utf-8").lower()
+    review = (repo_root / "skills/prd/SKILL.md").read_text(encoding="utf-8").lower()
     outcome = (repo_root / "skills/outcome-review/SKILL.md").read_text(encoding="utf-8").lower()
 
     assert "never choose for the human" in discovery
@@ -63,10 +61,8 @@ def test_decisions_and_approval_are_never_invented(repo_root: Path) -> None:
 
 
 def test_prd_workflow_interrogates_then_reviews_then_hands_off(repo_root: Path) -> None:
-    interrogation = (repo_root / "skills/prd-interrogation/SKILL.md").read_text(
-        encoding="utf-8"
-    ).lower()
-    handoff = (repo_root / "skills/prd-handoff/SKILL.md").read_text(encoding="utf-8").lower()
+    prd = (repo_root / "skills/prd/SKILL.md").read_text(encoding="utf-8").lower()
+    interrogation = handoff = prd
 
     assert "do not immediately generate a prd" in interrogation
     assert "baseline/current state" in interrogation
@@ -78,9 +74,7 @@ def test_prd_workflow_interrogates_then_reviews_then_hands_off(repo_root: Path) 
 
 
 def test_prd_output_contract_is_concise_modular_and_b2b_aware(repo_root: Path) -> None:
-    interrogation = (repo_root / "skills/prd-interrogation/SKILL.md").read_text(
-        encoding="utf-8"
-    ).lower()
+    interrogation = (repo_root / "skills/prd/SKILL.md").read_text(encoding="utf-8").lower()
 
     assert "why now / business reality" in interrogation
     assert "open questions is a separate required section" in interrogation
@@ -123,13 +117,7 @@ def test_setup_collects_and_previews_review_configuration(repo_root: Path) -> No
     assert "do not silently fall back" in setup
     assert "v1 does not declare a repository-creation capability" in setup
     assert "create a repository is an external write" not in setup
-    assert set(metadata["human_gates"]) == {
-        "confirm_install_origin",
-        "confirm_target_repository",
-        "confirm_configuration",
-        "confirm_install_plan",
-        "confirm_commit_or_push",
-    }
+    assert set(metadata["human_gates"]) == {"confirm_install_origin", "confirm_apply_plan"}
 
 
 def test_shared_authoring_contract_is_complete_and_used(repo_root: Path) -> None:
@@ -142,7 +130,6 @@ def test_shared_authoring_contract_is_complete_and_used(repo_root: Path) -> None
         "product/opportunities/",
         "product/initiatives/",
         "product/prds/",
-        "product/outcome-contracts/",
         "product/learnings/",
         "product/updates/",
     ):
@@ -153,7 +140,9 @@ def test_shared_authoring_contract_is_complete_and_used(repo_root: Path) -> None
     assert "pasted_<first-24-hex>" in shared
     assert "local_<first-24-hex>" in shared
     assert "sha256:<full-64-hex>" in shared
-    assert "product-os validate <workspace>" in shared
+    # One command: the authoring loop must call the check that verifies approval versions.
+    assert "product-os check <workspace>" in shared
+    assert "product-os validate <workspace>" not in shared
     assert "repair only the fields named" in shared
 
     mutating = EXPECTED_SKILLS - {"decision-queue"}
@@ -174,9 +163,7 @@ def test_discovery_uses_two_commits_and_pasted_provenance(repo_root: Path) -> No
 
 
 def test_prd_interrogation_is_progressive_resumable_and_routes_next(repo_root: Path) -> None:
-    interrogation = (repo_root / "skills/prd-interrogation/SKILL.md").read_text(
-        encoding="utf-8"
-    ).lower()
+    interrogation = (repo_root / "skills/prd/SKILL.md").read_text(encoding="utf-8").lower()
     assert "ask only 1–3 related questions per turn" in interrogation
     assert "**confirmed**, **unknown**, and **blocking**" in interrogation
     assert "resumable draft checkpoint" in interrogation
@@ -204,7 +191,7 @@ def test_setup_verifies_real_client_and_live_capabilities(repo_root: Path) -> No
     assert ".agents/skills/<skill>/skill.md" in setup
     assert ".claude/skills/<skill>/skill.md" in setup
     assert "skills/<skill>/skill.md" in setup
-    assert "all nine generated route-only wrapper" in setup
+    assert "every generated route-only wrapper" in setup
     assert "static validator success alone is not connector success" in setup
     assert "one minimal safe live read for every enabled capability" in setup
 
@@ -213,7 +200,11 @@ def test_decision_queue_is_solo_aware_and_pm_selectable(repo_root: Path) -> None
     metadata, body = load_skill(repo_root / "skills/decision-queue/SKILL.md")
     normalized = body.lower()
     assert {"git.review.read", "git.commit.read"} <= set(metadata["capabilities"])
-    assert "select exactly its configured git capability" in normalized
+    # The git-capability rule now lives in `product-os queue`, which reads the configured mode and
+    # never falls back between provider and solo. The skill's job is to delegate rather than
+    # re-derive it; tests/validator covers the command's own behaviour.
+    assert "product-os queue" in normalized
+    assert "re-derive" in normalized and "a second derivation is how" in normalized
     assert "compact numbered list" in normalized
     assert "no product decisions need attention right now" in normalized
     assert "accept `open n`" in normalized
@@ -221,9 +212,7 @@ def test_decision_queue_is_solo_aware_and_pm_selectable(repo_root: Path) -> None
 
 def test_product_bet_and_outcome_contract_identity_rules_are_canonical(repo_root: Path) -> None:
     canonical = (repo_root / "skills/README.md").read_text(encoding="utf-8").lower()
-    interrogation = (repo_root / "skills/prd-interrogation/SKILL.md").read_text(
-        encoding="utf-8"
-    ).lower()
+    interrogation = (repo_root / "skills/prd/SKILL.md").read_text(encoding="utf-8").lower()
     outcome = (repo_root / "skills/outcome-review/SKILL.md").read_text(encoding="utf-8").lower()
 
     assert "one logical product bet identity" in canonical

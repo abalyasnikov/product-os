@@ -30,7 +30,7 @@ flowchart LR
     L --> E
 ```
 
-It grew out of running product this way on a real team. [How I rebuilt product work around coding agents](https://balyasnikov.com/writing/product-work-around-coding-agents) is the field report: what broke, what replaced it, and the trading case the worked example below comes from.
+It grew out of running product this way on a real team. [How I rebuilt product work around coding agents](https://balyasnikov.com/writing/product-work-around-coding-agents) is the field report: what broke, what replaced it, and the trading case behind the [first worked example](#worked-examples).
 
 ## Six questions that usually have no answer
 

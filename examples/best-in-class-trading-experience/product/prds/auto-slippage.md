@@ -5,6 +5,7 @@ type: prd
 title: Auto-slippage for Native Swaps and Bridges
 relationships:
   initiative: initiative_01TRADX001
+  signals: [signal_01TRADX007]
 ---
 
 # Auto-slippage for Native Swaps and Bridges

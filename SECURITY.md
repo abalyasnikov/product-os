@@ -21,4 +21,4 @@ Include the affected commit, client runtime, configured capabilities, reproducti
 - Regex and PII checks are defense in depth; human review of the exact payload remains required.
 - A manifest inside the same checkout proves integrity consistency, not publisher authenticity. Public one-link installation remains blocked until release identity is anchored outside the checkout.
 
-See [the security model](docs/security-model.md) for threats, controls, and residual risks.
+See [the security model](docs/internal/security-model.md) for threats, controls, and residual risks.

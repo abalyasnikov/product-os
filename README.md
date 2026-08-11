@@ -59,7 +59,7 @@ Six failures, and the mechanism that closes each one. The enforcement detail is 
 
 | Where the loop breaks | What closes it |
 | --- | --- |
-| **Work starts from an idea, not a problem.** By the time someone writes a PRD, the discovery questions are gone: where the request came from, how many users are behind it, who contradicts it. | Signal to Pattern to Opportunity, each carrying its source. Patterns must hold the contradicting evidence too, and a mention count is never treated as representativeness. Deciding anyway takes a dated waiver. |
+| **Work starts from an idea, not a problem.** By the time someone writes a PRD, the discovery questions are gone: where the request came from, how many users are behind it, who contradicts it. | Signal to Opportunity to PRD, each carrying its source, with an optional Pattern only when several Opportunities share one synthesis. Patterns must hold the contradicting evidence too, and a mention count is never treated as representativeness. Deciding anyway takes a dated waiver. |
 | **Well-argued work the company already declined.** Evidence proves a problem is real. It does not prove the problem is yours, or that now is when you deal with it. | One readable `context/strategy.md` that every workflow judging strategic fit has to read. Missing or stale, it becomes a named gap. One file on purpose: a strategy that grows into a second database stops being read. |
 | **Decisions cannot be reconstructed.** Six months later, why the team did this and who decided gets rebuilt from memory and chat history. | Three human decisions, each an append-only event with author, date, rationale, and the approved Git version. Approval comes from a merged review or a commit trailer, not a field anyone can edit. |
 | **Success is declared, not measured.** Shipped turns into worked, and the metric gets picked after the fact to fit the conclusion. | The Outcome Contract splits what better means from how it gets measured. The definition gates approval. Handoff needs a binding at least owned and dated; Outcome Review needs it resolved, with a recorded anchor and an elapsed window. |
@@ -83,9 +83,9 @@ Open the checkout in your agent and use the matching prompt:
 - **Claude Code:** “Show me how Product OS works using the included example. Don't install anything. Run the reference journey with `--client claude-code`.”
 
 The agent runs `uv run --directory <checkout> python scripts/run_reference_journey.py --client <own-client>`.
-If `uv` is unavailable, it reads one Signal → Opportunity → PRD → Learning from
-`examples/best-in-class-trading-experience/`. The demo ends by offering to preview one of your
-own notes as a Signal without writing it, then offers installation.
+If `uv` is unavailable, it reads the short path — four Signals, one Opportunity, one PRD — from
+`examples/receipt-follow-up/`. The demo ends by offering to preview one of your own notes as a
+Signal without writing it, then offers installation.
 
 ## Install with your agent
 
@@ -113,9 +113,54 @@ anything. The worked example is not copied into the target; it remains in this s
 `examples/best-in-class-trading-experience/`. Safe checked updates use the same plan-hash flow;
 see [Update](INSTALL.md#update).
 
-See [INSTALL.md](INSTALL.md) for the installation contract, and the
-[solo walkthrough](docs/getting-started.md) for the path from a first signal to a decision you can
-defend later, with no connectors required.
+See [INSTALL.md](INSTALL.md) for the installation contract.
+
+## Your first loop
+
+Nothing below needs a connector. A private Git repository and an agent are enough; Granola,
+Linear, and analytics workflows stay explicitly degraded rather than pretending to work.
+
+**Write down what the company is trying to do.** This is the step people skip, and skipping it is
+why agents produce well-argued PRDs for work the company already declined.
+
+```text
+Draft context/strategy.md from the template. Interview me for positioning, this year's goal,
+ordered product principles, explicit trade-offs, and the MUST/SHOULD/COULD/WON'T bands.
+Preview the file before writing it.
+```
+
+Order the principles. Unordered principles cannot settle an argument, and settling arguments is
+the only thing a principle is for.
+
+**Turn a note into evidence.** Paste a research note, a support summary, or a meeting note:
+
+```text
+Turn this into decision-relevant evidence. Store only a normalized Signal and a sha256
+fingerprint of my pasted source. Show the payload before writing it.
+```
+
+The agent derives a source ID and fingerprint, writes `product/signals/<slug>.md`, runs
+`product-os check`, and asks before committing. Raw text never enters Git.
+
+**Decide whether to pursue.** Ask `Does this evidence justify an Opportunity? Show gaps and
+contradictions first.` If it does, the agent commits the undecided draft, asks for `pursue`,
+`hold`, or `reject`, and appends your decision bound to that exact commit. `pursue` authorizes one
+Product Bet; it does not commit engineering capacity.
+
+**Draft the PRD.** Ask `Interrogate me before drafting. Ask no more than three questions at a
+time, summarize confirmed facts and unknowns, and save a resumable checkpoint.` The agent settles
+the problem, the smallest intervention, the GTM hypothesis, and an honest Outcome Contract before
+it writes anything. In solo mode approval is recorded with the configured commit trailer.
+
+**Then ask what needs you.** `Show my Decision Queue. If it is empty, tell me the next useful
+action.` The agent runs `product-os queue`, which derives the answer from your files and writes
+nothing. A missing connector or an unresolvable approval appears as a named gap, never as a
+fabricated result — an empty queue and an unchecked one must not look the same.
+
+Recovery is boring on purpose: a validation failure keeps the draft and names the field; a missing
+connector limits you to workflows with a documented manual path; an unverifiable approval stops
+delivery handoff; and a missing measurement anchor means the outcome window has not started, so no
+success claim is available yet.
 
 ## How it works
 
@@ -155,9 +200,23 @@ When implementation design needs durable detail, engineering owns a separate Imp
 
 The agent is the interface, and Git stores the product artifacts and the decision trail. Granola, Linear, Amplitude, Mixpanel, Metabase, and other existing providers keep owning their source data, and you bring those connections yourself: each is an already configured provider MCP with its own credentials. Product OS ships no server, no client, and no transport, and it never falls back to browser automation or an unofficial API client. When a provider is absent, the workflow that needed it reports a named gap instead of quietly proceeding without it.
 
-## Worked example: Best-in-class trading experience
+## Worked examples
 
-The [historical Zerion example](examples/best-in-class-trading-experience/README.md) shows one company ambition becoming a single Product Bet with five focused PRDs:
+Two, deliberately different in size.
+
+### Receipt follow-up — the short path
+
+[Read it](examples/receipt-follow-up/README.md). Four Signals, one
+Opportunity, one PRD, and nothing else. No Pattern, no Initiative, no Learning yet. It is what most
+bets look like, and it shows the two things that are hard to see in a large example: an ordered
+strategy rejecting the loudest customer request into a PRD's non-goals, and a `pursue` decision
+carrying a dated condition that the PRD then has to answer with an explicit evidence waiver. Its
+loop is open on purpose — the binding is `planned` and no anchor exists, which is the honest state
+of a bet on the day it is approved.
+
+### Best-in-class trading experience — a multi-PRD bet that closed
+
+The [historical Zerion example](examples/best-in-class-trading-experience/README.md) shows one company ambition becoming a single Product Bet with five focused PRDs, and carries the evidence those PRDs were argued from — four Signals, two Patterns, and the Opportunity that authorized the bet:
 
 ```text
 context/strategy.md                  ← what every document below was argued against
@@ -173,7 +232,7 @@ No two barriers surfaced the same way. Consolidated support reports plus segment
 
 Auto-slippage is the one that closes the loop, and its contract is the one quoted above: at the aggregate level the failure rate read as noise, and only segmentation found the asset band where it mattered. Everywhere else, proposed measures stay proposed rather than being filled in with synthetic certainty. Personal names, private links, exact revenue figures, and unsupported post-release claims are omitted.
 
-Start with the [strategy context](examples/best-in-class-trading-experience/context/strategy.md), then the [Initiative](examples/best-in-class-trading-experience/product/initiatives/best-in-class-trading-experience.md), then any child PRD.
+Start with the [strategy context](examples/best-in-class-trading-experience/context/strategy.md), then the [Opportunity](examples/best-in-class-trading-experience/product/opportunities/best-in-class-trading.md), then the [Initiative](examples/best-in-class-trading-experience/product/initiatives/best-in-class-trading-experience.md), then any child PRD.
 
 ## What it does not do
 
@@ -186,17 +245,16 @@ The reference journey is a suite of unit and contract tests for the operating mo
 Passing it means the decision trail is sound. It says nothing about whether a Product Lead made a good call, whether discovery was thorough, or whether a connector returns what it claims.
 
 > [!NOTE]
-> Synthetic technical proof is never presented as a real customer outcome, and the historical example contains no fabricated production result. See the [verification model](docs/verification.md) for the exact claim boundary.
+> Synthetic technical proof is never presented as a real customer outcome, and the historical example contains no fabricated production result. See the [verification model](docs/internal/verification.md) for the exact claim boundary.
 
 ## Project status
 
-This is a V1 reference implementation. Its release bar is an inspectable evidence-to-learning journey, not feature count. The [release checklist](docs/release-checklist.md) states plainly what CI already enforces and what still needs a human.
+This is a V1 reference implementation. Its release bar is an inspectable evidence-to-learning journey, not feature count. The [release checklist](docs/internal/release-checklist.md) states plainly what CI already enforces and what still needs a human.
 
 - [Product specification](docs/spec/product-os.md)
-- [Solo walkthrough](docs/getting-started.md) — evidence to decision without any connector
-- [Verification model](docs/verification.md) — what the suite proves, and where its coverage stops
-- [Security model](docs/security-model.md)
-- [Contributing and local verification](docs/contributing.md)
+- [Verification model](docs/internal/verification.md) — what the suite proves, and where its coverage stops
+- [Security model](docs/internal/security-model.md)
+- [Contributing and local verification](docs/internal/contributing.md)
 - [Apache 2.0 license](LICENSE)
 
-The two decisions the rest of the system rests on are recorded as ADRs: [product truth stays separate from delivery and implementation](docs/architecture/0001-boundaries.md), and [learning anchors to observation rather than project completion](docs/architecture/0002-measurement-anchor.md).
+The two decisions the rest of the system rests on are recorded as ADRs: [product truth stays separate from delivery and implementation](docs/internal/architecture/0001-boundaries.md), and [learning anchors to observation rather than project completion](docs/internal/architecture/0002-measurement-anchor.md).

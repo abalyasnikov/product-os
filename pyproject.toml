@@ -26,6 +26,7 @@ dev = ["pytest>=8,<9"]
 
 [project.scripts]
 product-os = "product_os.cli:main"
+product-os-install = "product_os.installer:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

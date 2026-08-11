@@ -4,8 +4,8 @@ Product OS is an agent-native, Git-backed product decision system. Contributions
 
 ## Sources of truth
 
-- Product behavior: [`docs/spec/product-os.md`](spec/product-os.md)
-- Verification and release claims: [`docs/verification.md`](verification.md)
+- Product behavior: [`docs/spec/product-os.md`](../spec/product-os.md)
+- Verification and release claims: [`docs/internal/verification.md`](verification.md)
 - Schemas: `schemas/`
 - Canonical skills: `skills/`
 - Generated client adapters: `adapters/`
@@ -33,8 +33,7 @@ python -m pytest
 Validate and smoke-test the compact valid workspace:
 
 ```bash
-product-os validate tests/fixtures/valid-workspace
-product-os smoke-test tests/fixtures/valid-workspace
+product-os check tests/fixtures/valid-workspace
 ```
 
 Verify the immutable distribution manifest and generated adapters:
@@ -52,7 +51,7 @@ python scripts/run_reference_journey.py --client claude-code
 python scripts/run_reference_journey.py --client openclaw
 ```
 
-These commands prove repository behavior only. They do not prove live MCP authorization, provider mutations, analytics semantics, human identity, or model judgment. Follow [`docs/verification.md`](verification.md) when describing what passed.
+These commands prove repository behavior only. They do not prove live MCP authorization, provider mutations, analytics semantics, human identity, or model judgment. Follow [`docs/internal/verification.md`](verification.md) when describing what passed.
 
 ## Repository map
 

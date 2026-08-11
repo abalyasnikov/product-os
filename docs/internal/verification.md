@@ -9,7 +9,8 @@ verified.
 Run from a provenance-verified source checkout:
 
 ```bash
-python scripts/run_reference_journey.py --client codex
+uv run --directory <checkout> python scripts/run_reference_journey.py --client codex
+uv run --directory <checkout> python scripts/run_reference_journey.py --client claude-code
 ```
 
 CI executes the same journey for Codex, Claude Code, and OpenClaw. Each run starts with an
@@ -24,7 +25,7 @@ empty directory and proves:
 7. delivery and optional Implementation Plan references bound to the same reachable approval version;
 8. an explicit measurement anchor and synthetic analytics result;
 9. pre-authored Outcome Review, Learning decision, and sourced Product Update artifacts materialized through real version boundaries;
-10. final `validate` and `smoke-test` passes.
+10. a final `product-os check` pass.
 
 For every decision or implementation handoff, the validator checks more than SHA
 reachability: the referenced commit must contain the exact artifact. Solo review additionally

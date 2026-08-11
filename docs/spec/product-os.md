@@ -6,7 +6,7 @@ Name: Product OS
 
 Category: Product decision infrastructure for agentic teams
 
-Implementation state: the local reference implementation and its deterministic evidence-to-learning journey are complete and run green, with the checks carrying the central claim asserted directly and the remainder covered indirectly by those journeys — see [verification](../verification.md) for where that coverage stops. Public one-link distribution, live provider flows, and calibrated model-quality evaluation remain separate release checks; they are not represented as already verified.
+Implementation state: the local reference implementation and its deterministic evidence-to-learning journey are complete and run green, with the checks carrying the central claim asserted directly and the remainder covered indirectly by those journeys — see [verification](../internal/verification.md) for where that coverage stops. Public one-link distribution, live provider flows, and calibrated model-quality evaluation remain separate release checks; they are not represented as already verified.
 
 ## Vision
 
@@ -70,7 +70,7 @@ Product Leads and Product Managers in software teams that:
 7. **Product intent and technical design have different owners.** Product owns why, what, constraints, and outcomes; engineering owns how.
 8. **No parallel product database.** Git owns product artifacts; external systems retain their natural responsibilities.
 9. **Minimal manual state.** Derive state from artifacts, approvals, Linear, and analytics wherever possible.
-10. **No additional UI.** Agents are the product interface.
+10. **No additional UI.** Agents are the product interface. An agent may render a disposable, unpersisted view on request; no rendered view becomes a source of truth.
 11. **No custom MCP servers.** Use existing provider MCPs.
 12. **Private by default.** Do not commit credentials, full transcripts, or sensitive customer data.
 
@@ -107,7 +107,7 @@ flowchart LR
 
 A single readable file at `context/strategy.md` holding positioning and ICP, the current year's goal and targets, where value comes from, ordered product principles, explicit trade-offs, MUST/SHOULD/COULD/WON'T priorities for the period, competitive position, the quality bar, and the questions every PRD must answer.
 
-It is deliberately not a graph artifact: no stable ID, no schema, no relationships, no validator coverage. Evidence establishes that a problem is real; strategy context establishes why this team should act on it now. Discovery, PRD interrogation, PRD review, and Initiative read it before judging strategic fit, and record an explicit gap when it is absent or past its `review_by` date. Product workflows never write to it — changing strategy is its own human decision.
+It is deliberately not a graph artifact: no stable ID, no schema, no relationships, no validator coverage. Evidence establishes that a problem is real; strategy context establishes why this team should act on it now. Discovery, the PRD workflow, and Initiative read it before judging strategic fit, and record an explicit gap when it is absent or past its `review_by` date. Product workflows never write to it — changing strategy is its own human decision.
 
 One file is a constraint rather than a simplification. A strategy context that grows into a second planning database stops being read, and an unread strategy file is indistinguishable from no strategy at all.
 
@@ -119,11 +119,11 @@ It contains a stable ID, concise summary, source reference, dates, user segment 
 
 ### Pattern
 
-A derived grouping of related Signals. It preserves supporting and contradictory evidence, affected segments, frequency, business-weight summaries, recency, and known coverage gaps. Agent interpretation remains distinguishable from source facts; a high mention count is never presented as representative without segment coverage.
+A derived grouping of related Signals, and the artifact most often created when it is not needed. Persist one when at least two Opportunities will reference the same synthesis, or when evidence must be parked before any decision exists; a single bet's contradictions already belong on its Opportunity. It preserves supporting and contradictory evidence, affected segments, frequency, business-weight summaries, recency, and known coverage gaps. Agent interpretation remains distinguishable from source facts; a high mention count is never presented as representative without segment coverage.
 
 ### Opportunity
 
-A problem worth an explicit product decision. It captures blocked user value, evidence, affected users, impact, urgency, strategic fit, assumptions, risks, and an evidence-quality summary covering source diversity, segment concentration, recency, and contradictions.
+A problem worth an explicit product decision. Its frontmatter carries the evidence IDs, the recorded contradictions and coverage gaps, and the decision events. Blocked user value, affected users, impact, urgency, strategic fit, assumptions, risks, and the evidence-quality narrative covering source diversity, segment concentration, and recency are required readable sections.
 
 The human-owned decision is recorded as an event: `pursue`, `hold`, or `reject`, with owner, rationale, and date. `pursue` authorizes creation of a product bet; it does not allocate engineering capacity. RICE is not a required field or workflow.
 
@@ -142,7 +142,7 @@ An optional meta-layer representing a multi-PRD Product Bet around one shared us
 
 It contains the target outcome, product thesis, initiative-level evidence and business impact, GTM hypothesis, initiative-level Outcome Contract, barriers, child PRDs, dependencies, sequencing, and accumulated learnings. It does not duplicate child PRD requirements.
 
-The reference implementation includes a curated historical Zerion example showing how one outcome can be decomposed into four problem-specific PRDs: Cross-chain Swap, Skip Signing Screen for Native Transactions, Transaction Toasters, and Bridge Progress Tracking. It preserves real product reasoning while omitting personal names, private workspace links, and unsupported outcome claims. It is a set of normal product documents, separate from the synthetic technical fixture. The private Zerion product repository is never a runtime dependency.
+The reference implementation includes a curated historical Zerion example showing how one outcome can be decomposed into five problem-specific PRDs: Cross-chain Swap, Auto-slippage for Native Swaps and Bridges, Skip Signing Screen for Native Transactions, Transaction Toasters, and Bridge Progress Tracking. Auto-slippage is the one that closes the loop with a recorded Learning. It preserves real product reasoning while omitting personal names, private workspace links, and unsupported outcome claims. It is a set of normal product documents, separate from the synthetic technical fixture. The private Zerion product repository is never a runtime dependency.
 
 ### PRD
 
@@ -180,7 +180,7 @@ The absence of an Implementation Plan does not block Linear Project creation unl
 
 ### Outcome Contract
 
-A logically first-class contract defining what better means, how it will be observed, and which result will trigger which product decision. It is colocated under the readable `## Outcome Contract` section of the PRD or Initiative by default, in one named machine-readable block. Large case sets or reusable contracts may use a separate linked file.
+A logically first-class contract defining what better means, how it will be observed, and which result will trigger which product decision. It lives under the readable `## Outcome Contract` section of its PRD or Initiative, in one named machine-readable block, and nowhere else. V1 has no extracted contract artifact: a second location for the same contract buys one rare case and costs a type, a schema, a directory, and a duplicated-contract failure mode.
 
 Every Product Bet requires an Outcome Contract, but the proof method depends on the work:
 
@@ -241,6 +241,14 @@ The graph is a logical model, not a requirement to create a file at every step.
 - Link an Implementation Plan only when technical choices need durable review or multiple implementation sessions need shared context. Do not create one merely because a PRD exists.
 - Create one Learning per meaningful measurement window or decision, not per analytics query.
 
+Artifacts have one shape. Frontmatter carries identity, the relationship graph, and only those
+fields a check executes: evidence IDs, decision events, recorded contradictions and coverage gaps,
+results, waivers, and external references. Everything a human reads to make the decision — blocked
+value, impact, urgency, strategic fit, assumptions, risks, interpretation — lives in required
+readable Markdown sections. A required prose field with a minimum length of one character is a
+checklist, not a check, and it belongs in a heading the validator can still require. There is no
+second, large-frontmatter shape to migrate from.
+
 Every persisted artifact shares a minimal envelope:
 
 ```yaml
@@ -276,11 +284,13 @@ Evidence storage is `reference_only` by default. Git stores the source reference
 
 If Granola is unavailable, pasted text or a local transcript may be processed transiently. Git records its source type, date, and fingerprint when available; retaining the original outside Git is the user's responsibility.
 
+Interviews and transcripts are not the only admissible evidence. Inspecting the product's own flows, a moving competitive baseline, support history, or an internal prototype produces legitimate Signals — in the worked example, three of the five barriers surfaced from product inspection rather than customer requests. Source type bounds the claim: internal observation and prototypes evidence a quality gap, feasibility, or team intent, never user demand. Such a Signal records its source accordingly, carries an interpretation confidence that reflects the missing direct user evidence, and cannot alone justify a demand claim in an Opportunity or PRD.
+
 Account names, contract values, and ARR are stored only when the team's data policy permits them in its private repository. The default schema supports an external account reference and a configurable revenue band so business weight remains usable without copying sensitive CRM data.
 
 Before commit, the agent shows the exact evidence payload: external references, any opted-in anonymized excerpts, fields removed during anonymization, and any potentially identifying fields still detected. The validator blocks known credential formats, fields forbidden by team policy, excerpts above the configured limit, and transcript-sized content. Automated detection is defense in depth, not a guarantee of complete PII detection.
 
-## PRD interrogation workflow
+## PRD workflow
 
 The PRD skill must not immediately generate a document.
 
@@ -299,11 +309,13 @@ An evidence waiver allows the Product Lead to proceed with insufficient user evi
 
 Documents do not use a long lifecycle state machine or copy review status into frontmatter. The reference review surface is the repository provider's native pull or merge request: comments, requested changes, approval, and merge provide the interaction and audit trail. The merged commit is the approved version. Solo or local-only teams may record explicit approval through the agent.
 
-The configured repository review rule identifies the approver; the PM does not maintain review metadata manually. The default approver for Initiatives and PRDs is the PM's manager. Solo teams may explicitly allow self-approval.
+The configured repository review rule identifies the approver; the PM does not maintain review metadata manually. `review.approver_rule` names that approver for Initiatives and PRDs; a team with a reviewing manager configures them there. Solo teams may explicitly allow self-approval.
 
 Document review applies to Initiatives, PRDs, and their embedded Outcome Contracts. Post-release decisions are explicit human events, not a second document-approval lifecycle. Small standalone Bets do not require an empty Initiative approval step.
 
 Approval is tied to a Git version. A material change after approval is proposed as a new reviewed change rather than mutating the approved version in place. Material areas are explicitly named: problem, target user, target outcome, requirements, non-goals, Outcome Contract target or decision rule, evidence waiver, and GTM audience or promise. The validator compares structured material fields; the agent flags changes to named Markdown sections for the reviewer. Formatting, wording inside an unchanged claim, and source-link corrections do not require review.
+
+Gate economy follows from the same discipline: a workflow asks for no more human moments than it has decisions and writes. Previews, payload hashes, and validation results attach to the confirmation they inform rather than becoming separate ceremony. The human sees a diff and answers a question; hashes remain part of the machine record.
 
 ### Human decision gates
 
@@ -313,7 +325,7 @@ There are three product decisions, recorded as immutable events rather than manu
 2. **Approve the Bet contract:** the configured reviewer approves the Initiative when present and each PRD with its Outcome Contract before delivery handoff.
 3. **Decide from results:** the Product Lead chooses `scale`, `iterate`, `hold`, `kill`, or `complete` after measurement. Teams may require an additional manager approval for high-impact decisions, but it is not the V1 default.
 
-For a small standalone PRD, the Opportunity and PRD review can be completed in one review session. Release approval remains part of the team's existing engineering process and is not duplicated here. Generated team updates require human review before publication but do not introduce another artifact lifecycle.
+For a small standalone PRD, the Opportunity and PRD review can be completed in one review session. That short path — Signal, Opportunity, PRD — is the default shape for a single bet; Pattern and Initiative are for evidence that several Opportunities share and for outcomes that need several PRDs. Release approval remains part of the team's existing engineering process and is not duplicated here. Generated team updates require human review before publication but do not introduce another artifact lifecycle.
 
 ### Machine-readable decisions
 
@@ -328,7 +340,15 @@ decision_events:
     decided_at: 2026-08-01
     rationale: Concise human rationale
     based_on_version: git-commit
+    conditions:                       # optional, and data rather than prose
+      - statement: Talk to three cardholders before requirements are fixed
+        review_by: 2026-09-15
 ```
+
+Conditions are optional. When present they are the part of a decision most easily lost: an
+oversight recorded only inside `rationale` is invisible to every later check, so a condition
+whose `review_by` has passed becomes its own queue item rather than something a reader has to
+notice.
 
 Validation permits appending an event but rejects changing or removing an existing event ID. A correction appends a superseding event that references the prior ID.
 
@@ -340,30 +360,35 @@ For solo or local-only use, the user explicitly approves a version and the agent
 
 The system derives lifecycle views instead of asking PMs to keep several status machines synchronized:
 
-- **Discovery:** a pursued Opportunity exists, but its Bet contract is not approved.
-- **Ready for delivery:** for a standalone Bet, its PRD is approved and its measurement binding is executable, manual, or planned with an owner and due date no later than release. For a multi-PRD Bet, the Initiative and the PRD being handed off meet the same approval and binding conditions.
-- **In delivery:** the linked Linear Project reports active execution.
-- **Awaiting measurement anchor:** delivery or the planned evaluation is ready, but no actual exposure, release, or manual evaluation event is recorded.
-- **Awaiting measurement:** an actual measurement anchor exists and no Learning exists for the configured window.
-- **Learning complete:** a Learning with a resulting human decision exists.
+| Derived state | Condition | Needs a human, and for what |
+|---|---|---|
+| **Undecided Opportunity** | An Opportunity exists with no decision event | Yes — `pursue`, `hold`, or `reject` |
+| **Discovery** | A pursued Opportunity exists, but no Bet contract is drafted or approved for it | Yes — draft the PRD, or supersede the decision if the bet no longer holds |
+| **Awaiting review** | A Bet contract is drafted and not approved at its current material version | Yes — review and approve |
+| **Ready for delivery** | For a standalone Bet, its PRD is approved and its measurement binding is executable, manual, or planned with an owner and due date no later than release. For a multi-PRD Bet, the Initiative and the PRD being handed off meet the same conditions | No |
+| **In delivery** | The linked delivery project reports active execution | No |
+| **No path to measurement** | A Bet is approved and its binding names a metric, query, or case set that does not exist and has no owner working on it | Yes — assign the owner or change the contract |
+| **Awaiting measurement anchor** | Delivery or the planned evaluation is ready, but no actual exposure, release, or manual evaluation event is recorded | Yes — record the anchor or say the window cannot start |
+| **Awaiting measurement** | An actual measurement anchor exists and no Learning exists for the configured window | No until the window elapses |
+| **Learning ready** | The window has elapsed and a draft Learning exists | Yes — `scale`, `iterate`, `hold`, `kill`, or `complete` |
+| **Learning complete** | A Learning with a resulting human decision exists | No |
+| **Strategy expired** | `context/strategy.md` is past its `review_by` date | Yes — one item for the workspace, never one per artifact |
+| **Unmet decision condition** | A decision event records a condition whose review date has passed or whose requirement is contradicted by a later artifact | Yes — confirm, waive, or supersede |
+
+The Decision Queue is this list filtered to the rows that need a human. It is a projection, not a
+second model: a state cannot appear in the queue without appearing here, and a state that needs a
+human cannot be silently omitted from the queue.
 
 If an integration is unavailable, the view is `unknown` with a named data gap. The agent must not guess or write a replacement status into Git.
 
 ## Decision Queue
 
-The Decision Queue is a computed view of product judgments requiring human attention. It is not a stored inbox, index, task tracker, artifact, workflow engine, or additional UI. A Product Lead asks an agent what needs attention; the agent scans repository artifacts and derives the answer from approvals, connector state, delivery state, and measurement windows.
+The Decision Queue is a computed view of product judgments requiring human attention. It is not a stored inbox, index, task tracker, artifact, workflow engine, or additional UI. A Product Lead asks an agent what needs attention; `product-os queue` derives the answer from repository truth, and the agent renders it, adds any connector state that changes it, and asks the human for the decision. Nothing about the queue is written to the repository, which is what keeps it a view rather than a second tracker.
 
-It may surface only:
-
-- an evidence gap requiring more research or an explicit waiver;
-- an Opportunity awaiting `pursue`, `hold`, or `reject`;
-- an Initiative or PRD awaiting review;
-- a material change requiring renewed review;
-- new evidence or a Learning that materially challenges an active Bet assumption;
-- a Product Bet ready to observe whose measurement anchor is missing;
-- a delivered Product Bet whose measurement window is due;
-- an Outcome Review workflow whose draft Learning is ready for `scale`, `iterate`, `hold`, `kill`, or `complete`;
-- a connector failure blocking one of those decisions.
+It surfaces exactly the derived states marked as needing a human in the table above, plus two
+things that are not states: an evidence gap or waiver awaiting research or review, and a connector
+failure blocking one of those decisions. It may surface nothing else. Keeping one list means a
+state cannot exist in the lifecycle model and be invisible to the queue.
 
 Ordinary engineering tasks, delivery status, reminders, and agent work do not belong in the Decision Queue. Selecting an item invokes the relevant workflow and preserves the underlying artifact as the source of truth.
 
@@ -384,6 +409,8 @@ recommended_next_action: Review the Learning and decide whether the missing slic
 The agent derives candidates from Git first and reads only the connectors required to resolve those candidates. It does not query analytics when no measurement is due or Linear when delivery state cannot affect the queue.
 
 Items are ordered without a universal score: overdue decisions and review dates; evidence challenging an active or in-delivery Bet; outcome decisions ready now; document reviews; Opportunity decisions; then evidence gaps and connector failures. Natural-language requests such as “What is waiting for review?” or “Which shipped work is ready for measurement?” are projections of the same queue, not separate systems.
+
+The queue may be computed unattended. A team may schedule the read-only computation through its own client's automation and receive the result as a message; scheduling stays a client capability, never a Product OS artifact, and an unattended run crosses no human gate. When rendering the queue, the agent may close with a one-line workspace summary — active Bets, Bets awaiting measurement, learning loops completed in the period — derived from the same artifacts. That summary is rendering context, not a queue item.
 
 ## Prioritization and delivery boundary
 
@@ -432,9 +459,11 @@ Slack, support, CRM, Notion, and additional interview providers are later adapte
 
 Product OS is a domain layer, not a standalone agent runtime. It owns the product methodology, artifact schemas, canonical skills, examples, deterministic local validation, and tests. Existing agents execute the workflows; existing provider MCPs supply external capabilities.
 
-Deterministic tooling validates only repository invariants: schemas, unique IDs, allowed relationships, broken references, append-only decision event IDs, evidence policy, obvious credentials, and generated-adapter freshness. It does not implement workflow commands for approval, synchronization, Decision Queue, or Outcome Review.
+Deterministic tooling covers repository invariants and read-only derivations from them: schemas, unique IDs, allowed relationships, broken references, append-only decision event IDs, approval versions, evidence policy, obvious credentials, generated-adapter freshness, and the derived lifecycle from which the Decision Queue is filtered.
 
-The validation package may expose one entry point such as `product-os validate` with selectable checks. It is not a general Product OS CLI.
+The boundary is writes and judgments, not reads. Deterministic tooling never approves, synchronizes, decides an outcome, or persists a queue; it computes and prints. Deriving the same lifecycle table twice — once in code and once in a model's head, on every request — was the alternative, and it is how the two lists in this document drifted apart in the first place.
+
+The validation package exposes two read-only entry points: `product-os check`, which runs every repository invariant in one pass, and `product-os queue`, which prints the derived decisions awaiting a human and never writes. Splitting those checks across separate commands is what previously let a fabricated approval version pass the command the authoring loop actually called. It is not a general Product OS CLI.
 
 V1 does not depend on Spec Kit, APM, or another packaging ecosystem, and it does not reimplement their orchestration. Later releases may distribute the same canonical source as a compatible bundle or package when that improves installation without creating a second source of truth.
 
@@ -465,7 +494,6 @@ product/
 ├── opportunities/
 ├── initiatives/
 ├── prds/
-├── outcome-contracts/  # only extracted large or reusable contracts
 ├── learnings/
 └── updates/            # deliberately published updates only
 
@@ -478,6 +506,8 @@ tests/fixtures/
 
 .agents/skills/          # generated adapter
 .claude/skills/          # generated adapter
+skills/                  # generated OpenClaw adapter in an installed workspace; in this source
+                         # repository the same name holds the canonical skills instead
 ```
 
 Every artifact uses a lean common YAML envelope with only `schema_version`, stable `id`, `type`, indexable `title`, and explicit `relationships` required. Git is the source of authorship, timestamps, and version history. Narrative-first artifacts—especially PRDs and Initiatives—keep product reasoning, evidence interpretation, journeys, requirements, risks, and GTM in the human-readable Markdown body. Evidence and workflow artifacts may add structured fields only when provenance, decisions, results, or cited claims must be validated mechanically. The Outcome Contract remains one named structured block inside its readable section. Generated client directories include their canonical-source version and content hash, are never hand-edited, and never become competing sources of truth.
@@ -505,6 +535,7 @@ Smoke tests verify installation provenance and content hashes, Git access, schem
 | Connector unavailable | Save local draft, record the sync gap, retry idempotently |
 | Evidence insufficient | Surface the gap; allow an explicit evidence waiver |
 | Outcome method unclear | Ask the PM to select an honest contract method; do not approve the bet without a decision rule |
+| No path to measurement | Name it as a blocking gap: the contract is approved, its metric does not exist, and no owner is assigned. Do not treat a green validation as readiness |
 | Analytics binding unavailable | Mark measurement pending; allow a provenance-preserving manual result import; make no success claim without either path |
 | Measurement anchor missing | Keep the Bet awaiting its anchor; do not start the measurement window or make an outcome claim |
 | Metric or query definition changed | Return the binding to planned until its owner verifies the new definition and provenance |
@@ -524,7 +555,7 @@ The primary interaction is natural language. A PM can start from work they want 
 1. **Setup:** initialize the workspace, configure reviewers and connectors, and run smoke tests.
 2. **Discovery:** search Granola or process pasted input, capture decision-relevant Signals, synthesize Patterns when useful, and prepare Opportunities for a human decision.
 3. **Initiative:** create or update an optional multi-PRD Product Bet and keep its child relationships current.
-4. **PRD:** create or update a PRD through interrogation, define its Outcome Contract and GTM hypothesis, manage review, perform the Linear handoff, and emit an engineering handoff when an Implementation Plan is warranted.
+4. **PRD:** one workflow in three gated phases — interrogate and draft with an Outcome Contract and GTM hypothesis, resolve review and approval, then perform the idempotent delivery handoff and emit engineering context when an Implementation Plan is warranted.
 5. **Outcome Review:** query analytics, compare behavior against the Outcome Contract, and record Learning plus the next decision.
 6. **Product Update:** generate weekly or monthly updates from approved artifacts, Linear, analytics, and Learnings.
 
@@ -554,13 +585,13 @@ Setup, Decision Queue, schemas, and client adapters exist only to make those ver
 - Granola and pasted or local transcript input.
 - Linear delivery handoff.
 - Fixture-conformant Amplitude, Mixpanel, and Metabase capability mappings, plus a provenance-preserving manual result path. The real reference pilot uses one live analytics provider.
-- PRD interrogation and method-appropriate Outcome Contracts.
+- PRD interrogation, review, and handoff as one gated workflow, with method-appropriate Outcome Contracts.
 - Optional Initiatives, reviews, and evidence waivers.
 - Computed Decision Queue for human attention.
 - On-demand source-linked context projections for downstream audiences.
 - `implementation_refs` plus an engineering-handoff projection for optional code-repository plans.
 - Post-release analysis and product updates.
-- A curated, anonymized historical multi-PRD reference journey with explicitly synthetic measurement results.
+- A curated, anonymized historical multi-PRD example whose figures are approximate and reconstructed from private analysis, never fabricated, and a separate deterministic fixture whose measurement results are explicitly synthetic and labelled as such.
 
 ### Out of scope
 
@@ -644,11 +675,11 @@ environment-specific checks and must be reported independently.
 4. **Privacy:** Git stores evidence references by default; excerpts are opt-in and anonymized; the exact payload is shown before commit; credentials and full transcripts are blocked.
 5. **End-to-end proof:** fixtures and one real private-repository pilot complete the Reference V1 journey without lost evidence, duplicate external objects, or unattributed decisions.
 
-The operational proof matrix lives in `docs/verification.md`; executable pass/fail cases live under `tests/`. This document stays focused on product and system behavior.
+The operational proof matrix lives in `docs/internal/verification.md`; executable pass/fail cases live under `tests/`. This document stays focused on product and system behavior.
 
 ## Suggested implementation sequence
 
-1. **Methodology works by hand:** schemas, validator, example Product Bet, Discovery and PRD interrogation, Outcome Contract, Learning, and pasted or local evidence.
+1. **Methodology works by hand:** schemas, validator, example Product Bet, Discovery and the PRD workflow, Outcome Contract, Learning, and pasted or local evidence.
 2. **Real commitment loop:** Git-provider review, merged-version approval, Linear handoff and idempotency, optional Implementation Plan references, reference-only evidence, and commit preview.
 3. **Outcome loop:** one live analytics binding or manual result import, measurement anchor, Outcome Review, and Product Update.
 4. **Intelligence layer:** Decision Queue, lazy connector reads, new-evidence impact scan, and material-change summary over Git diff.

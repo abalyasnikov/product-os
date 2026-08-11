@@ -2,14 +2,126 @@
 
 **Product decision infrastructure for agentic teams.**
 
-Product OS helps Product Leads and PMs turn customer evidence into product bets, readable PRDs, delivery context, and measured learning — without adding another product-management UI.
+AI made documents and code cheap. It did not make good decisions cheap. Teams can now ship faster than they can work out what is worth shipping, or whether the last thing worked.
+
+Product OS turns the path from evidence to bet to contract to delivery to measured learning into an inspectable trail rather than an oral tradition. It is built for a Product Lead whose team already writes code with agents, and whose evidence is scattered across meeting notes, the delivery tracker, analytics, and people's heads. It adds no product-management UI.
+
+The goal is not more documents. It is more completed **evidence-backed learning loops**.
+
+[![CI](https://github.com/abalyasnikov/product-os/actions/workflows/ci.yml/badge.svg)](https://github.com/abalyasnikov/product-os/actions/workflows/ci.yml)
+[![Status: V1, unreleased](https://img.shields.io/badge/status-V1_unreleased-2563eb)](docs/spec/product-os.md)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776ab)](pyproject.toml)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-0f766e)](LICENSE)
 
 It grew out of running product this way on a real team. [How I rebuilt product work around coding agents](https://balyasnikov.com/writing/product-work-around-coding-agents) is the field report: what broke, what replaced it, and the trading case the worked example below comes from.
 
-[![CI](https://github.com/abalyasnikov/product-os/actions/workflows/ci.yml/badge.svg)](https://github.com/abalyasnikov/product-os/actions/workflows/ci.yml)
-[![Status: V1 reference implementation](https://img.shields.io/badge/status-V1_reference_implementation-2563eb)](docs/spec/product-os.md)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776ab)](pyproject.toml)
-[![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-0f766e)](LICENSE)
+## What it produces
+
+Product artifacts in Git, where the rule for judging success is written down before delivery and the result is checked against it afterwards. This is the Outcome Contract carried by the worked example's PRD, its binding still `planned` and due before release:
+
+```yaml
+definition:
+  baseline: approximately 15% of initiated trades failing in the low-market-cap segment;
+    the aggregate rate reads as noise and must not be used as the baseline
+  metric: eligible native swaps and bridges failing because the accepted slippage tolerance was exceeded
+  window: 14 days after measurable controlled exposure
+  guardrails: [median_execution_delta_from_quote, trading_revenue_per_eligible_transaction]
+  decision_rule: Scale only when eligible failure rate improves and neither guardrail
+    materially regresses; otherwise revise the technical hypothesis or stop.
+binding:
+  status: planned
+  owner: product-lead
+  due_before: release
+```
+
+And this is the Learning recorded against it after the change shipped:
+
+```yaml
+results:
+  by_slice:
+    low_market_cap_assets: "~15% to ~2%"
+    aggregate_all_assets: "No material movement; at this scale the aggregate failure rate looked like noise both before and after"
+  guardrails:
+    median_execution_delta_from_quote: null
+    trading_revenue_per_eligible_transaction: null
+decision_events:
+  - kind: outcome
+    choice: iterate
+```
+
+The number the team cared about went from roughly 15% to roughly 2%, and the recorded decision is still `iterate` rather than `scale`. The two guardrails its author committed to were never recovered, and the decision rule written before shipping does not permit `scale` without them. The contract decides what counts as a win, not the person who wrote it.
+
+Both blocks are excerpts from real files: [the PRD](examples/best-in-class-trading-experience/product/prds/auto-slippage.md) and [the Learning](examples/best-in-class-trading-experience/product/learnings/auto-slippage-failure-rate.md).
+
+## Where the product loop breaks
+
+Six failures, and the mechanism that closes each one. The enforcement detail is in the [specification](docs/spec/product-os.md).
+
+| Where the loop breaks | What closes it |
+| --- | --- |
+| **Work starts from an idea, not a problem.** By the time someone writes a PRD, the discovery questions are gone: where the request came from, how many users are behind it, who contradicts it. | Signal to Pattern to Opportunity, each carrying its source. Patterns must hold contradicting evidence, and Opportunities state evidence quality outright: diversity, concentration, recency, contradictions. A mention count is not representativeness. Deciding without evidence takes a dated waiver naming the assumption and the risk. |
+| **Well-argued work the company already declined.** Evidence proves a problem is real. It does not prove the problem is yours, or that now is when you deal with it. | One readable `context/strategy.md` holding positioning, the year's goal, ordered principles, and MUST/WON'T bands. Every workflow judging strategic fit has to read it; absent or past its `review_by`, it becomes a named gap. One file on purpose: a strategy that grows into a second database stops being read. |
+| **Decisions cannot be reconstructed.** Six months later, why the team did this and who decided gets rebuilt from memory and chat history. | Three human decisions, each an append-only event carrying author, date, rationale, and the approved Git version. Events are superseded, never rewritten. Approval is a merged reviewed change or an explicit commit trailer, so nobody can type it into a status field. |
+| **Success is declared, not measured.** Shipped turns into worked, and the metric gets picked after the fact to fit the conclusion. | The Outcome Contract splits the product definition from its technical binding. Approval needs the definition; handoff needs the binding resolved, or at minimum owned with a due date no later than release; Outcome Review stays shut until the binding resolves, a real measurement anchor exists, and the window has elapsed. |
+| **Context dies at handoff.** Engineering and coding agents get a ticket title. Intent, constraints, and non-goals stay in the PM's head. | The delivery project is created idempotently from the approved Git version and carries versioned context. Product owns why, what, and outcome; engineering owns how, in an Implementation Plan that lives in the code repository and cannot silently redefine the PRD. |
+| **The PM tool becomes a second tracker.** Every system promising order demands hand-maintained statuses that go stale and inboxes that pile up. | Lifecycle is derived from artifacts, approvals, and connectors rather than maintained. The Decision Queue is computed on request, never stored, and lists only human decisions. An artifact exists when a decision needs it. |
+
+## Try with your agent
+
+Prerequisites: macOS or Linux, `git`, and [`uv`](https://docs.astral.sh/uv/getting-started/installation/).
+Windows is deferred because the installer relies on POSIX file-safety primitives.
+
+Clone this repository:
+
+```bash
+git clone https://github.com/abalyasnikov/product-os.git
+```
+
+Open the checkout in your agent and use the matching prompt:
+
+- **Codex:** “Show me how Product OS works using the included example. Don't install anything. Run the reference journey with `--client codex`.”
+- **Claude Code:** “Show me how Product OS works using the included example. Don't install anything. Run the reference journey with `--client claude-code`.”
+
+The agent runs `uv run --directory <checkout> python scripts/run_reference_journey.py --client <own-client>`.
+If `uv` is unavailable, it reads one Signal → Opportunity → PRD → Learning from
+`examples/best-in-class-trading-experience/`. The demo ends by offering to preview one of your
+own notes as a Signal without writing it, then offers installation.
+
+## Install with your agent
+
+This repository is the machinery: schemas, templates, agent skills, and the checks that keep them
+honest. It is not where your product work goes. Strategy, evidence, PRDs, decisions, and learnings
+belong in a private repository you own, and that is what the installer writes into. Keeping the two
+apart is the point: your evidence and strategy stay private, and you can pull a newer version of the
+machinery without it touching a single product decision you have made. Product OS never creates that
+second repository for you, so make an empty private repo first if you do not have one.
+
+> [!IMPORTANT]
+> No release has been published yet, so one-link installation stays disabled by design. The only
+> accepted source is a local checkout at a commit you confirm yourself. The installer fails closed
+> rather than trusting a URL it cannot pin, which is why the first step is a clone you can inspect
+> rather than a link you paste.
+
+The natural install session is the same trusted source-checkout session. Give your agent the
+target private repository and ask it to follow `INSTALL.md`:
+
+- **Codex:** “Install Product OS from this checkout into `<target>`, with Codex selected. Show the short plan preview and wait for confirmation.”
+- **Claude Code:** “Install Product OS from this checkout into `<target>`, with Claude Code selected. Show the short plan preview and wait for confirmation.”
+
+The agent shows you the origin, commit, target, configuration, and every write before it touches
+anything. The worked example is not copied into the target; it remains in this source clone at
+`examples/best-in-class-trading-experience/`. Safe checked updates use the same plan-hash flow;
+see [Update](INSTALL.md#update).
+
+See [INSTALL.md](INSTALL.md) for the installation contract, and the
+[solo walkthrough](docs/getting-started.md) for the path from a first signal to a decision you can
+defend later, with no connectors required.
+
+## How it works
+
+Most spec-driven systems begin with an idea or feature request, and most delivery systems end at
+merge or release. Product OS starts earlier and stops later: where the problem came from and how
+representative the evidence is, through to the observed user outcome and the updated product thesis.
 
 ```mermaid
 flowchart LR
@@ -25,24 +137,23 @@ flowchart LR
     L --> E
 ```
 
-## Who it is for
+Evidence establishes that a problem is real. Strategy context establishes that it is yours to act on now. A loop running on evidence alone will produce a well-argued case for work the company has already decided against.
 
-Product Leads and PMs in software teams where:
+A small Product Bet is represented by one PRD. When one outcome requires several independent interventions, an optional Initiative groups the child PRDs and owns the shared Outcome Contract. Product Bet is a decision and learning unit, not another mandatory file.
 
-- AI coding agents have made implementation faster;
-- customer interviews, meeting notes, analytics, and delivery context live in different tools;
-- the constraint has moved from writing documents to making sound, traceable product decisions;
-- engineering, leadership, and agents need the same product intent without repeated handoffs.
+Three judgments remain human-owned:
 
-The agent is the interface. Git stores the product artifacts and decision trail. Granola, Linear, Amplitude, Mixpanel, Metabase, and other existing providers keep owning their source data.
+- pursue, hold, or reject an Opportunity;
+- approve the Product Bet contract before delivery handoff;
+- scale, iterate, hold, kill, or complete after Outcome Review.
 
-## Why it is different
+Agents investigate, question, draft, link, measure, and recommend between those decisions.
 
-Most spec-driven systems begin with an idea or feature request. Product OS begins earlier: where the problem came from, how representative the evidence is, and why the team chose to act.
+A PRD here is a concise product contract rather than an implementation specification. It carries the problem and its business reality, evidence and confidence including gaps and contradictions, the JTBD and the current to desired journey, requirements and non-goals, the Outcome Contract, the GTM hypothesis, risks and open questions, and links into the configured delivery system. See [the template](templates/prd.md).
 
-Most delivery systems end at implementation, merge, or release. Product OS continues until the team observes the user outcome and updates its product thesis.
+When implementation design needs durable detail, engineering owns a separate Implementation Plan in the relevant code repository. It may define architecture, APIs, rollout, and technical trade-offs, but it cannot replace or silently redefine the approved PRD.
 
-The goal is not more documents. The goal is more completed **evidence-backed learning loops**.
+The agent is the interface, and Git stores the product artifacts and the decision trail. Granola, Linear, Amplitude, Mixpanel, Metabase, and other existing providers keep owning their source data, and you bring those connections yourself: each is an already configured provider MCP with its own credentials. Product OS ships no server, no client, and no transport, and it never falls back to browser automation or an unofficial API client. When a provider is absent, the workflow that needed it reports a named gap instead of quietly proceeding without it.
 
 ## Worked example: Best-in-class trading experience
 
@@ -58,89 +169,15 @@ Initiative: Best-in-class trading experience
   → Bridge Progress Tracking
 ```
 
-Each barrier surfaced a different way: one from support, one from a moving competitive baseline, three from inspecting the product's own flows. That mix is the argument for the structure — a system fed only by customer requests would have found one of the five.
+No two barriers surfaced the same way. Consolidated support reports plus segmented telemetry found one. A first-use walkthrough found another. The rest came from a moving competitive baseline, from inspecting the product's own flows, and from reviewing what another PRD in the same bet depended on. That mix is the argument for the structure: a system fed only by customer requests would have found one of the five.
 
-One of them closes the loop. Auto-slippage carries a real baseline, a measured result, and a Learning. At the aggregate level its failure rate read as noise; only segmentation revealed roughly 15% of trades failing in one asset band, which the fix took to about 2%. It closes honestly rather than triumphantly: execution-quality guardrail results were never recovered, so the recorded decision is `iterate`, not `scale`. The contract refuses to let its own author declare victory.
-
-Everywhere else, proposed measures stay proposed rather than being filled in with synthetic certainty. Personal names, private links, exact revenue figures, and unsupported post-release claims are omitted.
+Auto-slippage is the one that closes the loop, and its contract is the one quoted above: at the aggregate level the failure rate read as noise, and only segmentation found the asset band where it mattered. Everywhere else, proposed measures stay proposed rather than being filled in with synthetic certainty. Personal names, private links, exact revenue figures, and unsupported post-release claims are omitted.
 
 Start with the [strategy context](examples/best-in-class-trading-experience/context/strategy.md), then the [Initiative](examples/best-in-class-trading-experience/product/initiatives/best-in-class-trading-experience.md), then any child PRD.
-
-## The jobs it does
-
-1. **Find where user value is blocked.** Turn interviews and notes into inspectable evidence without losing provenance, contradictions, segment coverage, or business weight.
-2. **Decide what deserves investment.** Make the pursue, hold, or reject decision explicit before a feature request silently becomes a commitment.
-3. **Create a product contract.** Interrogate the PM until the problem, journey, scope, Outcome Contract, risks, and GTM hypothesis are clear enough to review.
-4. **Carry intent into delivery.** Give Linear, engineering, and coding agents the approved context, not only a ticket title.
-5. **Learn after release.** Compare actual behavior with the baseline and decision rule, then record whether to scale, iterate, hold, kill, or complete the bet.
-6. **Communicate without reconstruction.** Produce team and leadership updates from linked decisions, delivery state, and measured outcomes.
-
-## The product loop
-
-Evidence establishes that a problem is real. Strategy context establishes that it is yours to act on now. A loop running on evidence alone will produce a well-argued case for work the company has already decided against.
-
-A small Product Bet is represented by one PRD. When one outcome requires several independent interventions, an optional Initiative groups the child PRDs and owns the shared Outcome Contract. Product Bet is a decision and learning unit, not another mandatory file.
-
-Three judgments remain human-owned:
-
-- pursue, hold, or reject an Opportunity;
-- approve the Product Bet contract before delivery handoff;
-- scale, iterate, hold, kill, or complete after Outcome Review.
-
-Agents can investigate, question, draft, link, measure, and recommend between those decisions.
-
-## What a PRD contains
-
-A Product OS PRD is a concise product contract, not an implementation specification. It keeps the reasoning needed to review the bet and preserve intent through delivery:
-
-- the **problem**, why it matters now, and the business reality;
-- **evidence and confidence**, including gaps and contradictions;
-- the **JTBD** and current → desired user journey;
-- **requirements and non-goals**;
-- an **Outcome Contract** defining what better means, how it will be observed, and what decision follows each result;
-- the **GTM hypothesis** considered while shaping the product;
-- **risks, open questions, and references**;
-- links to the configured delivery system (Linear in the reference V1).
-
-When implementation design needs durable detail, engineering owns a separate **Implementation Plan** in the relevant code repository. It may define architecture, APIs, rollout, observability, and technical trade-offs, but it does not replace or silently redefine the approved PRD.
 
 ## What it does not do
 
 It does not replace Linear or Jira, analytics tools, transcript providers, code repositories, engineering planning, or GTM execution. It ships no additional UI and no custom MCP server. Every one of those systems keeps owning its own data; Product OS owns the decision trail that runs between them.
-
-## Start with your agent
-
-This repository is the machinery: schemas, templates, agent skills, and the checks that keep them honest. It is not where your product work goes.
-
-Your product work — strategy, evidence, PRDs, decisions, learnings — belongs in a private repository you own, and that is what the installer writes into. Keeping the two apart is the point: your evidence and strategy stay private, and you can pull a newer version of the machinery without it touching a single product decision you have made.
-
-So you clone this one to install *from*, and you supply your own to install *into*. Product OS never creates that second repository for you; if you do not have one yet, make an empty private repo first.
-
-> [!IMPORTANT]
-> No release has been published yet, so one-link installation stays disabled by design. Until then the only accepted source is a local checkout at a commit you confirm yourself. The installer fails closed rather than trusting a URL it cannot pin — which is why the first step is a clone you can inspect, not a link you paste.
-
-Clone this repository:
-
-```bash
-git clone https://github.com/abalyasnikov/product-os.git
-```
-
-Then send your agent one request, replacing both paths with real ones:
-
-```text
-Set up Product OS from the local checkout at <path-to-this-clone>, following
-its INSTALL.md. Show me the origin and exact commit, and wait for me to
-confirm them before writing anything. Install into my existing private Git
-repository at <path-or-url-of-your-repo>. Preview every change, run the
-read-only checks, and then ask me for the first customer signal. Help me
-inspect the evidence and decide whether it deserves a Product Bet; continue
-toward a PRD, delivery, measurement, and Learning only as real inputs and
-approvals become available.
-```
-
-The agent previews the source, target, configuration, and every write before setup; optional provider connections degrade gracefully when unavailable.
-
-See [INSTALL.md](INSTALL.md) for the installation contract, and the [solo walkthrough](docs/getting-started.md) for the path from that first signal to a decision you can defend later — no connectors required.
 
 ## Verification boundaries
 

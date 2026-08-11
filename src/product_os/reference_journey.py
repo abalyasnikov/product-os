@@ -346,7 +346,8 @@ def run_journey(target: Path, client: str) -> dict[str, Any]:
     learning = next(
         document for document in final_documents if document.metadata.get("type") == "learning"
     )
-    child_prds = initiative.metadata.get("child_prd_ids", [])
+    relationships = initiative.metadata.get("relationships") or {}
+    child_prds = relationships.get("prds", [])
     final_decision = learning.metadata.get("decision_events", [])[-1].get("choice")
     if len(child_prds) != 4 or final_decision not in {"scale", "iterate", "complete"}:
         raise JourneyError("reference journey did not close the intended multi-PRD learning loop")

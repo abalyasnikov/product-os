@@ -11,10 +11,17 @@ from typing import Sequence
 
 import yaml
 
+from datetime import date
+
+from .queue import compute_queue, render as render_queue
 from .validator import ValidationReport, validate_workspace
 
 
-COMMANDS = ("validate", "smoke-test", "adapter-check")
+# `check` verifies the repository; `queue` reads it. Neither writes. The three older check names
+# stay accepted so existing scripts keep working, but they are not advertised: splitting the
+# checks is what let a fabricated approval version pass the command the authoring loop called.
+COMMANDS = ("check", "queue", "validate", "smoke-test", "adapter-check")
+DEPRECATED_COMMANDS = {"validate", "smoke-test", "adapter-check"}
 
 
 class _Parser(argparse.ArgumentParser):
@@ -23,12 +30,20 @@ class _Parser(argparse.ArgumentParser):
 
 
 def _parser() -> argparse.ArgumentParser:
-    parser = _Parser(prog="product-os", description="Validate a Product OS workspace")
-    parser.add_argument("command", choices=COMMANDS)
+    parser = _Parser(
+        prog="product-os",
+        description="Check a Product OS workspace: schemas, graph, append-only decisions, "
+        "approval versions, evidence policy, and generated adapters.",
+    )
+    parser.add_argument("command", choices=COMMANDS, metavar="{check,queue}")
     parser.add_argument("workspace", nargs="?", default=".")
     parser.add_argument(
         "--base-ref",
         help="Git commit or branch used to verify append-only decision events (default: workspace config or HEAD)",
+    )
+    parser.add_argument(
+        "--as-of",
+        help="queue only: the date review dates are judged against (default: today, UTC)",
     )
     return parser
 
@@ -58,6 +73,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     args_list = [arg for arg in args_list if arg != "--json"]
     try:
         args = _parser().parse_args(args_list)
+        if args.command == "queue":
+            # Computed on request and printed. Nothing here writes to the workspace.
+            queue = compute_queue(
+                Path(args.workspace),
+                as_of=date.fromisoformat(args.as_of) if args.as_of else None,
+            )
+            print(json.dumps(queue.to_dict(), indent=2, sort_keys=True) if json_output else render_queue(queue))
+            return 0
         report = validate_workspace(Path(args.workspace), command=args.command, base_ref=args.base_ref)
     except (ValueError, OSError, UnicodeError, json.JSONDecodeError, yaml.YAMLError, subprocess.SubprocessError) as exc:
         workspace = Path(".").resolve()
@@ -65,7 +88,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         report.error(
             "INVOCATION_ERROR",
             " ".join(str(exc).split())[:400],
-            hint="Use: product-os {validate,smoke-test,adapter-check} [workspace] [--json] [--base-ref REF]",
+            hint="Use: product-os {check,queue} [workspace] [--json] [--base-ref REF] [--as-of DATE]",
         )
     except Exception as exc:  # keep the CLI machine-readable at trust boundaries
         workspace = Path(".").resolve()

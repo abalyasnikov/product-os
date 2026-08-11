@@ -16,6 +16,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import SchemaError, ValidationError
 from referencing import Registry, Resource
 
+from .adapters import canonical_source_digest, canonical_source_files
 from .frontmatter import (
     FrontmatterError,
     MarkdownDocument,
@@ -33,11 +34,59 @@ TYPE_CONFIG: dict[str, tuple[str, str]] = {
     "opportunity": ("opportunity_", "opportunities"),
     "initiative": ("initiative_", "initiatives"),
     "prd": ("prd_", "prds"),
-    "outcome_contract": ("outcome_", "outcome-contracts"),
     "learning": ("learning_", "learnings"),
     "product_update": ("update_", "updates"),
 }
 PREFIX_TO_TYPE = {prefix: artifact_type for artifact_type, (prefix, _) in TYPE_CONFIG.items()}
+
+# The one list of readable sections each artifact type must carry. Declared in reading order;
+# the Outcome Contract sits near the end because its payload is machine-readable and interrupts
+# the product argument it exists to conclude. The eval harness imports this rather than keeping
+# a second copy that can drift.
+READABLE_SECTIONS: dict[str, tuple[str, ...]] = {
+    "prd": (
+        "problem",
+        "evidence",
+        "jtbd",
+        "current and desired journey",
+        "scope",
+        "gtm hypothesis",
+        "risks and dependencies",
+        "open questions",
+        "outcome contract",
+        "delivery",
+    ),
+    "initiative": (
+        "vision",
+        "why this matters",
+        "evidence and confidence",
+        "shared outcome",
+        "child prds",
+        "sequencing and dependencies",
+        "gtm hypothesis",
+        "risks and open questions",
+        "outcome contract",
+    ),
+    "opportunity": (
+        "blocked value",
+        "affected users",
+        "impact and urgency",
+        "strategic fit",
+        "evidence quality",
+        "assumptions and risks",
+        "decision question",
+    ),
+    "pattern": (
+        "interpretation",
+        "frequency and recency",
+        "coverage gaps",
+        "synthesis",
+    ),
+}
+READABLE_SUBSECTIONS: dict[str, dict[str, tuple[str, ...]]] = {
+    "prd": {"scope": ("Requirements", "Non-goals")},
+}
+
 RELATIONSHIP_TARGETS: dict[str, str] = {
     "signal": "signal_",
     "signals": "signal_",
@@ -49,8 +98,6 @@ RELATIONSHIP_TARGETS: dict[str, str] = {
     "initiatives": "initiative_",
     "prd": "prd_",
     "prds": "prd_",
-    "outcome_contract": "outcome_",
-    "outcome_contracts": "outcome_",
     "learning": "learning_",
     "learnings": "learning_",
     "update": "update_",
@@ -59,6 +106,15 @@ RELATIONSHIP_TARGETS: dict[str, str] = {
 INTERNAL_ID_RE = re.compile(
     r"^(?:signal|pattern|opportunity|initiative|prd|outcome|learning|update)_[0-9A-HJKMNP-TV-Z]{8,32}$"
 )
+MARKDOWN_LINK_RE = re.compile(r"\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
+FENCED_BLOCK_RE = re.compile(r"(?ms)^```.*?^```\s*$")
+INLINE_CODE_RE = re.compile(r"`[^`\n]*`")
+
+
+def markdown_link_targets(text: str) -> list[str]:
+    """Link targets outside code. A link shown as an example inside backticks is not a link."""
+    stripped = INLINE_CODE_RE.sub("", FENCED_BLOCK_RE.sub("", text))
+    return MARKDOWN_LINK_RE.findall(stripped)
 SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
 SPEAKER_LINE_RE = re.compile(
     r"(?im)^(?:\[?\d{1,2}:\d{2}(?::\d{2})?\]?\s*)?(?:speaker\s*\d+|interviewer|participant|host|guest|[A-Z][\w .'-]{1,35}):\s+"
@@ -171,7 +227,7 @@ def _normalize_type(value: Any) -> str | None:
     if not isinstance(value, str):
         return None
     normalized = value.strip().lower().replace("-", "_").replace(" ", "_")
-    aliases = {"outcome": "outcome_contract", "update": "product_update"}
+    aliases = {"update": "product_update"}
     return aliases.get(normalized, normalized)
 
 
@@ -239,6 +295,10 @@ def _bounded_message(message: str, limit: int = 400) -> str:
     return compact if len(compact) <= limit else compact[: limit - 1] + "…"
 
 
+# Root composition failures are suppressed whenever a more specific error exists: when an
+# inner subschema fails, the root unevaluatedProperties error lists legitimately allowed keys
+# too, so showing it would misdirect the author. When it is the only error it is accurate, and
+# _safe_schema_message then names the exact offending keys.
 _TOP_LEVEL_SCHEMA_WRAPPERS = frozenset({"anyOf", "oneOf", "unevaluatedProperties", "additionalProperties"})
 
 
@@ -292,6 +352,18 @@ def _safe_schema_message(error: ValidationError) -> str:
         expected = error.validator_value
         names = ", ".join(str(item) for item in expected) if isinstance(expected, list) else str(expected)
         return f"Value must have the required type: {names}."
+    if error.validator in {"additionalProperties", "unevaluatedProperties"}:
+        # Name the offending keys. Field names are the author's own frontmatter keys, never
+        # instance values, so this stays inside the no-value-reflection rule — and an error
+        # that says only "fields not allowed" leaves the author guessing which ones.
+        offending = sorted(re.findall(r"'([^']+)'(?=[^)]*(?:was|were) unexpected)", error.message))
+        if offending:
+            listed = ", ".join(f"'{name}'" for name in offending)
+            return (
+                f"Field(s) not allowed here: {listed}. Product prose belongs in the readable "
+                "Markdown sections, not in frontmatter."
+            )
+        return "Object contains fields not allowed by the schema."
     messages = {
         "enum": "Value must be one of the schema's allowed choices.",
         "const": "Value must match the schema's required constant.",
@@ -332,6 +404,11 @@ class WorkspaceValidator:
         self._fixture_synthetic_cache: bool | None = None
         self.empty_workspace = False
 
+    @property
+    def _runs_full_checks(self) -> bool:
+        """`check` is the one command; the older names remain accepted aliases."""
+        return self.command in {"check", "smoke-test"}
+
     def run(self) -> ValidationReport:
         if not self.workspace.exists():
             self.report.configuration_error = True
@@ -352,12 +429,12 @@ class WorkspaceValidator:
             )
             return self.report
 
-        if self.command in {"validate", "smoke-test"}:
-            self._validate_configuration(required=self.command == "smoke-test")
+        if self.command in {"check", "validate", "smoke-test"}:
+            self._validate_configuration(required=self._runs_full_checks)
             self._validate_artifacts()
-        if self.command in {"adapter-check", "smoke-test"}:
+        if self.command in {"check", "adapter-check", "smoke-test"}:
             self._validate_adapters()
-        if self.command == "smoke-test":
+        if self._runs_full_checks:
             self._smoke_checks()
         self.report.sort_issues()
         return self.report
@@ -587,9 +664,10 @@ class WorkspaceValidator:
         before = len(self.report.errors)
         for document in self.documents:
             artifact_type = _normalize_type(document.metadata.get("type"))
-            if artifact_type in {"prd", "initiative"}:
+            if artifact_type in READABLE_SECTIONS:
                 self._validate_readable_document_contract(document)
-            if artifact_type in {"prd", "initiative", "outcome_contract"}:
+            self._validate_body_links(document)
+            if artifact_type in {"prd", "initiative"}:
                 self._validate_outcome(document)
             if artifact_type == "learning":
                 self._validate_learning_anchor(document)
@@ -966,7 +1044,6 @@ class WorkspaceValidator:
             ("opportunity_id", ("opportunity_",), ("opportunity", "opportunities")),
             ("initiative_id", ("initiative_",), ("initiative", "initiatives")),
             ("product_bet_id", ("initiative_", "prd_"), ("initiative", "initiatives", "prd", "prds")),
-            ("outcome_contract_id", ("outcome_",), ("outcome_contract", "outcome_contracts")),
         )
         list_specs: tuple[tuple[str, tuple[str, ...]], ...] = (
             ("evidence_ids", ("signal_", "pattern_", "opportunity_")),
@@ -1070,27 +1147,14 @@ class WorkspaceValidator:
                     )
                 else:
                     owner = outcome_ref.get("owner_artifact_id")
-                    extracted = outcome_ref.get("extracted_artifact_id")
                     self._validate_reference(
                         document, "outcome_contract_ref.owner_artifact_id", owner, ("initiative_", "prd_")
                     )
-                    if extracted is not None:
-                        self._validate_reference(
-                            document, "outcome_contract_ref.extracted_artifact_id", extracted, ("outcome_",)
-                        )
                     if isinstance(owner, str):
                         prefix = "initiative_" if owner.startswith("initiative_") else "prd_"
                         keys = ("initiative", "initiatives") if prefix == "initiative_" else ("prd", "prds")
                         self._check_relationship_consistency(
                             document, "outcome_contract_ref.owner_artifact_id", [owner], keys, prefix
-                        )
-                    if isinstance(extracted, str):
-                        self._check_relationship_consistency(
-                            document,
-                            "outcome_contract_ref.extracted_artifact_id",
-                            [extracted],
-                            ("outcome_contract", "outcome_contracts"),
-                            "outcome_",
                         )
             if _normalize_type(metadata.get("type")) == "product_update":
                 self._validate_update_sources(document)
@@ -1099,8 +1163,7 @@ class WorkspaceValidator:
         for document in self.documents:
             metadata = document.metadata
             artifact_type = _normalize_type(metadata.get("type"))
-            legacy_fields = {"outcome", "outcome_contract", "problem", "product_thesis", "child_prd_ids"}
-            if artifact_type not in {"prd", "initiative"} or legacy_fields.intersection(metadata):
+            if artifact_type not in {"prd", "initiative"}:
                 continue
             relationships = metadata.get("relationships")
             if not isinstance(relationships, Mapping):
@@ -1170,41 +1233,36 @@ class WorkspaceValidator:
                             hint="Keep Initiative and child PRD relationships bidirectional.",
                         )
 
+    def _validate_body_links(self, document: MarkdownDocument) -> None:
+        """A relative link in an artifact is how a human walks the graph; a dead one is a defect."""
+        path = _relative(document.path, self.workspace)
+        artifact_id = document.metadata.get("id")
+        for target in markdown_link_targets(document.body):
+            cleaned = target.strip().split("#", 1)[0].strip()
+            if not cleaned or ":" in cleaned.split("/", 1)[0] or cleaned.startswith(("/", "<")):
+                continue  # absolute URLs, schemes, and anchors are out of scope
+            try:
+                resolved = (document.path.parent / cleaned).resolve()
+            except (OSError, ValueError):
+                resolved = None
+            if resolved is None or not resolved.exists():
+                self.report.error(
+                    "BROKEN_MARKDOWN_LINK",
+                    f"Relative link target does not exist: {_bounded_message(cleaned)}",
+                    path=path,
+                    artifact_id=artifact_id if isinstance(artifact_id, str) else None,
+                    field="body.links",
+                    hint="Point the link at the referenced artifact's file, or drop the link and keep the stable ID.",
+                )
+
     def _validate_readable_document_contract(self, document: MarkdownDocument) -> None:
         metadata = document.metadata
         artifact_type = _normalize_type(metadata.get("type"))
-        legacy_fields = {"outcome", "outcome_contract", "problem", "product_thesis", "child_prd_ids"}
-        if legacy_fields.intersection(metadata):
-            return  # backward-compatible large-frontmatter artifact
         # Declared in reading order. The Outcome Contract sits near the end
         # because it is the one section a human does not read: its payload is a
         # machine-readable block, and in the middle of the document it interrupts
         # the product argument it is supposed to conclude.
-        required_sections = {
-            "prd": (
-                "problem",
-                "evidence",
-                "jtbd",
-                "current and desired journey",
-                "scope",
-                "gtm hypothesis",
-                "risks and dependencies",
-                "open questions",
-                "outcome contract",
-                "delivery",
-            ),
-            "initiative": (
-                "vision",
-                "why this matters",
-                "evidence and confidence",
-                "shared outcome",
-                "child prds",
-                "sequencing and dependencies",
-                "gtm hypothesis",
-                "risks and open questions",
-                "outcome contract",
-            ),
-        }.get(artifact_type, ())
+        required_sections = READABLE_SECTIONS.get(artifact_type, ())
         sections = markdown_sections(document)
         path = _relative(document.path, self.workspace)
         artifact_id = metadata.get("id")
@@ -1323,7 +1381,7 @@ class WorkspaceValidator:
                     )
                 local_ids.add(event_id)
                 seen_event_ids[event_id] = str(artifact_id)
-                if self.command == "smoke-test" and self._git_commit_available():
+                if self._runs_full_checks and self._git_commit_available():
                     based_on = event.get("based_on_version")
                     reachable = False
                     if isinstance(based_on, str) and re.fullmatch(r"[0-9a-fA-F]{40}|[0-9a-fA-F]{64}", based_on):
@@ -1717,13 +1775,8 @@ class WorkspaceValidator:
                 )
 
     def _outcome_container(self, document: MarkdownDocument) -> Mapping[str, Any] | None:
+        """Resolve the one Outcome Contract, which lives in the readable section's named block."""
         metadata = document.metadata
-        legacy: Mapping[str, Any] | None = None
-        for key in ("outcome", "outcome_contract"):
-            value = metadata.get(key)
-            if isinstance(value, Mapping):
-                legacy = value
-                break
         try:
             value = structured_blocks(document).get("outcome")
         except FrontmatterError as exc:
@@ -1735,64 +1788,26 @@ class WorkspaceValidator:
                 field="body.product-os:outcome",
                 hint="Keep one valid YAML object in the named Outcome Contract block.",
             )
-            return legacy
-        if legacy is not None and isinstance(value, Mapping):
-            self.report.error(
-                "OUTCOME_CONTRACT_DUPLICATED",
-                "Outcome Contract exists in both frontmatter and the Markdown body.",
-                path=_relative(document.path, self.workspace),
-                artifact_id=str(metadata.get("id", "")) or None,
-                field="body.product-os:outcome",
-                hint="Keep one canonical Outcome Contract; prefer the named block in the readable section.",
-            )
-            return legacy
-        if legacy is not None:
-            return legacy
-        if isinstance(value, Mapping):
-            return value
-        return None
+            return None
+        return value if isinstance(value, Mapping) else None
 
     def _validate_outcome(self, document: MarkdownDocument) -> None:
         metadata = document.metadata
         artifact_type = _normalize_type(metadata.get("type"))
         path = _relative(document.path, self.workspace)
         artifact_id = metadata.get("id")
-        if artifact_type == "outcome_contract":
-            found = self._outcome_container(document)
-            if found is None and ("definition" in metadata or "binding" in metadata):
-                # Validate legacy/invalid standalone shapes deeply enough to return the
-                # actionable binding error in addition to the canonical schema error.
-                found = metadata
-            if found is None:
-                self.report.error(
-                    "OUTCOME_CONTRACT_MISSING",
-                    "Standalone Outcome Contract requires an outcome object.",
-                    path=path,
-                    artifact_id=artifact_id if isinstance(artifact_id, str) else None,
-                    field="outcome",
-                    hint="Add outcome.definition and outcome.binding.",
-                )
-                return
-            outcome = found
-        else:
-            found = self._outcome_container(document)
-            if found is None:
-                relationships = metadata.get("relationships")
-                linked = isinstance(relationships, Mapping) and bool(
-                    relationships.get("outcome_contract") or relationships.get("outcome_contracts")
-                )
-                if linked:
-                    return
-                self.report.error(
-                    "OUTCOME_CONTRACT_MISSING",
-                    f"Every {artifact_type} Product Bet requires an embedded or linked Outcome Contract.",
-                    path=path,
-                    artifact_id=artifact_id if isinstance(artifact_id, str) else None,
-                    field="body.product-os:outcome",
-                    hint="Add an Outcome Contract block to the Markdown body, or link an extracted Outcome Contract.",
-                )
-                return
-            outcome = found
+        found = self._outcome_container(document)
+        if found is None:
+            self.report.error(
+                "OUTCOME_CONTRACT_MISSING",
+                f"Every {artifact_type} Product Bet requires an Outcome Contract in its readable section.",
+                path=path,
+                artifact_id=artifact_id if isinstance(artifact_id, str) else None,
+                field="body.product-os:outcome",
+                hint="Add the named product-os:outcome block under '## Outcome Contract'.",
+            )
+            return
+        outcome = found
         schemas = self._load_schemas()
         common_schema = schemas.get("common")
         if isinstance(common_schema, Mapping) and isinstance(common_schema.get("$defs"), Mapping):
@@ -2206,23 +2221,9 @@ class WorkspaceValidator:
                 )
 
     def _canonical_adapter_hash(self, root: Path) -> tuple[str, int]:
-        digest = hashlib.sha256()
-        count = 0
-        paths = sorted(
-            candidate
-            for directory in (root / "skills", root / "integrations")
-            if directory.is_dir()
-            for candidate in directory.rglob("*")
-            if candidate.is_file()
-        )
-        for path in paths:
-            relative = path.relative_to(root).as_posix().encode("utf-8")
-            digest.update(relative)
-            digest.update(b"\0")
-            digest.update(path.read_bytes())
-            digest.update(b"\0")
-            count += 1
-        return digest.hexdigest(), count
+        """One implementation, shared with the generator so the two can never disagree."""
+        files = canonical_source_files(root)
+        return canonical_source_digest(root), len(files)
 
     def _validate_adapters(self) -> None:
         before = len(self.report.errors)
@@ -2387,7 +2388,11 @@ class WorkspaceValidator:
                         f"Connector '{capability}' names provider '{provider}' without an installed descriptor.",
                         path=_relative(descriptor, self.workspace) if descriptor else "integrations/providers",
                         field=f"connectors.{capability}",
-                        hint=f"Install integrations/providers/{provider}.yaml or correct the configured provider name.",
+                        hint=(
+                        "Re-run the installer as an update: enabling a connector changes what the "
+                        "workspace installs, and the update plans exactly that descriptor. Do not copy the "
+                        "file in by hand. If the provider name is wrong, correct it in config instead."
+                    ),
                     )
         self.report.warning(
             "LIVE_MCP_CHECKS_AGENT_OWNED",
@@ -2595,6 +2600,21 @@ class WorkspaceValidator:
                         path=_relative(candidate, self.workspace),
                         hint="Remove stale generated wrappers not declared by the selected adapter manifest.",
                     )
+        client_roots = {
+            "codex": self.workspace / ".agents/skills",
+            "claude-code": self.workspace / ".claude/skills",
+            "openclaw": self.workspace / "skills",
+        }
+        for other_client, other_root in client_roots.items():
+            if other_client == selected or not other_root.is_dir():
+                continue
+            if any(other_root.glob("product-os-*/SKILL.md")):
+                self.report.error(
+                    "ACTIVE_WRAPPER_CLIENT_MISMATCH",
+                    f"Product OS wrappers for {other_client} exist but selected_client is {selected}.",
+                    path=_relative(other_root, self.workspace),
+                    hint="V1 client switching is uninstall plus reinstall with the new selected client.",
+                )
 
     def _validate_release_provenance(self) -> None:
         installed_path = self.workspace / ".product-os" / "installed-manifest.json"
@@ -2777,11 +2797,13 @@ class WorkspaceValidator:
             )
             return None
         result: dict[str, tuple[str, int]] = {}
+        installed_manifest = manifest.get("manifest_kind") == "installed_workspace"
         digest = hashlib.sha256()
         for index, entry in enumerate(entries):
             relative = entry.get("path")
             expected_hash = entry.get("sha256")
             expected_size = entry.get("size")
+            ownership = entry.get("ownership")
             if (
                 not isinstance(relative, str)
                 or not relative
@@ -2792,6 +2814,8 @@ class WorkspaceValidator:
                 or not SHA256_RE.fullmatch(expected_hash)
                 or not isinstance(expected_size, int)
                 or expected_size < 0
+                or (ownership is not None and ownership not in {"managed", "preserved", "generated"})
+                or (installed_manifest and "source_commit" in manifest and ownership is None)
             ):
                 self.report.error(
                     "PROVENANCE_MANIFEST_INVALID",
@@ -2804,7 +2828,7 @@ class WorkspaceValidator:
             digest.update(b"\0")
             digest.update(expected_hash.lower().encode("ascii"))
             digest.update(b"\0")
-            if verify_files:
+            if verify_files and ownership != "preserved":
                 target = self.workspace / relative
                 if not target.exists() and not target.is_symlink():
                     self.report.error(
@@ -2914,8 +2938,9 @@ class WorkspaceValidator:
         if plan is None:
             return
         plan_files = plan.get("files")
+        plan_version = plan.get("plan_version")
         if (
-            plan.get("plan_version") != 1
+            plan_version not in {1, 2}
             or plan.get("client") != client
             or plan.get("release_tree_digest") != release.get("tree_digest")
             or not isinstance(plan_files, list)
@@ -2926,13 +2951,26 @@ class WorkspaceValidator:
                 path=_relative(plan_path, self.workspace),
             )
             return
+        if plan_version == 2:
+            baseline_digest = plan.get("baseline_tree_digest")
+            if baseline_digest is not None and (
+                not isinstance(baseline_digest, str) or not SHA256_RE.fullmatch(baseline_digest)
+            ):
+                self.report.error(
+                    "INSTALL_PLAN_INVALID",
+                    "Plan v2 baseline_tree_digest must be null or a SHA-256 digest.",
+                    path=_relative(plan_path, self.workspace),
+                )
+                return
         canonical_payload = {
-            "plan_version": 1,
+            "plan_version": plan_version,
             "client": client,
             "release_tree_digest": plan.get("release_tree_digest"),
             "config_sha256": plan.get("config_sha256"),
             "files": plan_files,
         }
+        if plan_version == 2:
+            canonical_payload["baseline_tree_digest"] = plan.get("baseline_tree_digest")
         computed_plan_hash = hashlib.sha256(
             json.dumps(canonical_payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
         ).hexdigest()
@@ -2961,13 +2999,16 @@ class WorkspaceValidator:
                 and not Path(source).is_absolute()
                 and ".." not in Path(source).parts
             )
+            action = item.get("action")
+            ownership = item.get("ownership")
             if (
                 not source_safe
                 or not isinstance(destination, str)
                 or not destination
                 or Path(destination).is_absolute()
                 or ".." in Path(destination).parts
-                or item.get("action") != "create"
+                or action not in ({"create"} if plan_version == 1 else {"create", "update", "delete", "unchanged"})
+                or (plan_version == 2 and ownership not in {"managed", "preserved", "generated"})
                 or not isinstance(sha256, str)
                 or not SHA256_RE.fullmatch(sha256)
                 or not isinstance(size, int)
@@ -2977,7 +3018,8 @@ class WorkspaceValidator:
                 self.report.error("INSTALL_PLAN_INVALID", f"Install plan file entry {index} is invalid.")
                 return
             ordered_destinations.append(destination)
-            destinations[destination] = (sha256.lower(), size)
+            if action != "delete":
+                destinations[destination] = (sha256.lower(), size)
         if ordered_destinations != sorted(ordered_destinations):
             self.report.error(
                 "INSTALL_PLAN_INVALID",
@@ -2988,14 +3030,37 @@ class WorkspaceValidator:
             path: value for path, value in installed_entries.items()
             if path != ".product-os/install-plan.json"
         }
-        if destinations != scoped_without_plan:
+        scope_mismatch = (
+            destinations != scoped_without_plan
+            if plan_version == 1
+            else any(scoped_without_plan.get(path) != value for path, value in destinations.items())
+            or any(
+                isinstance(item, Mapping)
+                and item.get("action") == "delete"
+                and item.get("destination") in scoped_without_plan
+                for item in plan_files
+            )
+        )
+        if plan_version == 2:
+            ownership_by_path = {
+                entry.get("path"): entry.get("ownership")
+                for entry in installed.get("files", [])
+                if isinstance(entry, Mapping)
+            }
+            unplanned = set(scoped_without_plan) - set(destinations)
+            scope_mismatch = scope_mismatch or any(
+                ownership_by_path.get(path) != "preserved" for path in unplanned
+            )
+        if scope_mismatch:
             self.report.error(
                 "INSTALL_PLAN_SCOPE_MISMATCH",
                 "Planned destination/hash/size pairs do not match scoped installed provenance.",
                 path=_relative(plan_path, self.workspace),
             )
         config_entry = installed_entries.get(".product-os/config.yaml")
-        if config_entry is None or plan.get("config_sha256") != config_entry[0]:
+        if config_entry is None or (
+            plan_version == 1 and plan.get("config_sha256") != config_entry[0]
+        ):
             self.report.error(
                 "INSTALL_PLAN_CONFIG_MISMATCH",
                 "Install plan config hash does not match installed config provenance.",
@@ -3009,7 +3074,7 @@ def validate_workspace(
     *,
     base_ref: str | None = None,
 ) -> ValidationReport:
-    if command not in {"validate", "smoke-test", "adapter-check"}:
+    if command not in {"check", "validate", "smoke-test", "adapter-check"}:
         report = ValidationReport(command=command, workspace=Path(workspace).resolve(), configuration_error=True)
         report.error("COMMAND_UNKNOWN", f"Unknown command: {command!r}.")
         return report

@@ -21,8 +21,11 @@ IGNORED_PARTS = {
     "build",
     "dist",
 }
-IGNORED_NAMES = {"manifest.json", ".DS_Store"}
+IGNORED_NAMES = {"manifest.json", ".DS_Store", "uv.lock"}
 IGNORED_SUFFIXES = {".pyc", ".pyo"}
+# Working files, not distributed behavior: plans are drafts the maintainer edits
+# between releases, and `uv run` writes uv.lock into the checkout as a side effect.
+IGNORED_RELATIVE_PREFIXES = (("docs", "plans"),)
 RELEASE_RE = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$")
 
 
@@ -35,6 +38,7 @@ def _is_ignored_relative(path: Path) -> bool:
         path.name in IGNORED_NAMES
         or path.suffix in IGNORED_SUFFIXES
         or any(part in IGNORED_PARTS or part.endswith(".egg-info") for part in path.parts)
+        or any(path.parts[: len(prefix)] == prefix for prefix in IGNORED_RELATIVE_PREFIXES)
     )
 
 

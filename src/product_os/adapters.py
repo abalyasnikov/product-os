@@ -26,15 +26,26 @@ class AdapterGenerationError(ValueError):
     """Raised when generated adapter inputs do not satisfy their contract."""
 
 
-def canonical_source_digest(root: Path) -> str:
-    files = sorted(
+def canonical_source_files(root: Path) -> list[Path]:
+    """The files an adapter projects: the skills and the capability contract.
+
+    Provider descriptors are data behind those capabilities, not part of the projection, and a
+    workspace installs only the ones it connected. Including them would make the freshness check
+    fail for every workspace that did not take all of them.
+    """
+    return sorted(
         path
         for base in (root / "skills", root / "integrations")
+        if base.is_dir()
         for path in base.rglob("*")
-        if path.is_file()
+        if path.is_file() and "providers" not in path.relative_to(root).parts
     )
+
+
+def canonical_source_digest(root: Path) -> str:
+    """The one implementation. The validator and the tests call this rather than restating it."""
     digest = hashlib.sha256()
-    for path in files:
+    for path in canonical_source_files(root):
         digest.update(path.relative_to(root).as_posix().encode("utf-8"))
         digest.update(b"\0")
         digest.update(path.read_bytes())

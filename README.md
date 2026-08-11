@@ -121,7 +121,7 @@ Yours, readable without any tool, and unremarkable in a diff:
 ```text
 README.md                       what this repository holds
 AGENTS.md, CLAUDE.md            routing for your agent, yours to edit after install
-context/strategy.md             positioning, this year's goal, ordered principles, MUST/WON'T
+context/strategy.md             the one file every strategic-fit judgment has to read
 product/
   signals/                      one falsifiable observation each, with its source
   opportunities/                problems worth a decision, with the decision appended to them

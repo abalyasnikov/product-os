@@ -2,6 +2,10 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
+# `uv run` writes this into the checkout as a side effect, including when a reader follows the
+# README to try the reference journey. Untracked files in the source tree are what an install
+# verifies against the release manifest, so leaving it visible turns a demo into a failed install.
+uv.lock
 dist/
 build/
 *.egg-info/

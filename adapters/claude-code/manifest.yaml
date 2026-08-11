@@ -4,7 +4,7 @@ client: claude-code
 canonical_source:
   version: 1.0.0
   hash_algorithm: sha256
-  content_hash: f258e7b94087dcefe2923d93bed83822d96e9974aa050dd6a8bfcce1b7645fee
+  content_hash: c359dfc46f952109510b18af587b3cd961bc5080b2100bd3d2b0527586fb79fa
   includes: [skills/**, integrations/**]
 projection:
   client_skill_location: .claude/skills
@@ -16,9 +16,7 @@ projections:
   - {name: product-os-setup, canonical_source: .product-os/skills/setup/SKILL.md, wrapper_source: adapters/_shared/skills/product-os-setup/SKILL.md, destination: .claude/skills/product-os-setup/SKILL.md}
   - {name: product-os-discovery, canonical_source: .product-os/skills/discovery/SKILL.md, wrapper_source: adapters/_shared/skills/product-os-discovery/SKILL.md, destination: .claude/skills/product-os-discovery/SKILL.md}
   - {name: product-os-initiative, canonical_source: .product-os/skills/initiative/SKILL.md, wrapper_source: adapters/_shared/skills/product-os-initiative/SKILL.md, destination: .claude/skills/product-os-initiative/SKILL.md}
-  - {name: product-os-prd-interrogation, canonical_source: .product-os/skills/prd-interrogation/SKILL.md, wrapper_source: adapters/_shared/skills/product-os-prd-interrogation/SKILL.md, destination: .claude/skills/product-os-prd-interrogation/SKILL.md}
-  - {name: product-os-prd-review, canonical_source: .product-os/skills/prd-review/SKILL.md, wrapper_source: adapters/_shared/skills/product-os-prd-review/SKILL.md, destination: .claude/skills/product-os-prd-review/SKILL.md}
-  - {name: product-os-prd-handoff, canonical_source: .product-os/skills/prd-handoff/SKILL.md, wrapper_source: adapters/_shared/skills/product-os-prd-handoff/SKILL.md, destination: .claude/skills/product-os-prd-handoff/SKILL.md}
+  - {name: product-os-prd, canonical_source: .product-os/skills/prd/SKILL.md, wrapper_source: adapters/_shared/skills/product-os-prd/SKILL.md, destination: .claude/skills/product-os-prd/SKILL.md}
   - {name: product-os-decision-queue, canonical_source: .product-os/skills/decision-queue/SKILL.md, wrapper_source: adapters/_shared/skills/product-os-decision-queue/SKILL.md, destination: .claude/skills/product-os-decision-queue/SKILL.md}
   - {name: product-os-outcome-review, canonical_source: .product-os/skills/outcome-review/SKILL.md, wrapper_source: adapters/_shared/skills/product-os-outcome-review/SKILL.md, destination: .claude/skills/product-os-outcome-review/SKILL.md}
   - {name: product-os-product-update, canonical_source: .product-os/skills/product-update/SKILL.md, wrapper_source: adapters/_shared/skills/product-os-product-update/SKILL.md, destination: .claude/skills/product-os-product-update/SKILL.md}

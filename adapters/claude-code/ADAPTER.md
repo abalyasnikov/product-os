@@ -1,4 +1,4 @@
-<!-- GENERATED: canonical_version=1.0.0 canonical_sha256=f258e7b94087dcefe2923d93bed83822d96e9974aa050dd6a8bfcce1b7645fee -->
+<!-- GENERATED: canonical_version=1.0.0 canonical_sha256=c359dfc46f952109510b18af587b3cd961bc5080b2100bd3d2b0527586fb79fa -->
 # Claude Code adapter
 
 Install every generated `adapters/_shared/skills/<skill>/SKILL.md` wrapper at `.claude/skills/<skill>/SKILL.md` exactly as listed in `manifest.yaml`. Claude Code discovers the wrapper metadata; the wrapper then reads its named `.product-os/skills/<canonical-skill>/SKILL.md`. Canonical files remain authoritative and wrappers add no client-specific decision logic.
